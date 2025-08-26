@@ -1,0 +1,24 @@
+[submodule "wiki-index"]
+	path = wiki-index
+	url = https://github.com/simonhansedasi/wiki-index.git
+[submodule "tree/wiki-index"]
+	path = tree/wiki-index
+	url = https://github.com/simonhansedasi/wiki-index.git
+[submodule "tree/blackjack"]
+	path = tree/blackjack
+	url = https://github.com/simonhansedasi/blackjack.git
+[submodule "tree/char_gen"]
+	path = tree/char_gen
+	url = https://github.com/simonhansedasi/char_gen.git
+[submodule "tree/commuting"]
+	path = tree/commuting
+	url = https://github.com/simonhansedasi/commuting.git
+[submodule "tree/game_ranking"]
+	path = tree/game_ranking
+	url = https://github.com/simonhansedasi/game_ranking.git
+[submodule "tree/glacier_prethicktor"]
+	path = tree/glacier_prethicktor
+	url = https://github.com/simonhansedasi/glacier_prethicktor.git
+[submodule "tree/timer"]
+	path = tree/timer
+	url = https://github.com/simonhansedasi/timer.git
