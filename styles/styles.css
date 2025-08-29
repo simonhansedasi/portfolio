@@ -6,70 +6,97 @@ body {
     line-height: 1.6;
 }
 
-h1 {
-    text-align: center;
-    color: #ffffff;
-}
-
 ul, li {
     list-style: none;
-    padding-left: 1rem;
+    margin: 0;
+    padding: 0;
 }
 
+/* Folder labels */
 .folder {
     cursor: pointer;
     font-weight: bold;
     color: #8ab4f8; /* blue-ish for folders */
+    display: flex;
+    align-items: center;
 }
 
+/* File links */
 li a {
     text-decoration: none;
     color: #a5d6ff; /* lighter blue for files */
 }
-
 li a:hover {
     text-decoration: underline;
     color: #ffffff;
 }
 
+/* Highlighted search */
 mark {
-    background-color: #ffd54f; /* highlighted search */
+    background-color: #ffd54f;
     color: #000000;
 }
-
 
 /* Tree container */
 #fileTree ul {
     list-style: none;
-    padding-left: 20px; /* indentation */
-    margin: 0;
+    padding-left: 0.5em; /* smaller indentation for nested levels */
     position: relative;
 }
 
 /* Vertical guide line for nested folders/files */
 #fileTree ul::before {
     content: '';
-    border-left: 1px solid #ccc;
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 10px; /* aligns with padding-left */
+    left: 0.05em; /* closer to the triangle */
+    border-left: 1px solid #555;
 }
 
-/* Remove the line for the top-level root */
-#fileTree > ul::before {
+/* Remove vertical line for top-level folders */
+#fileTree > div > ul::before {
     border-left: none;
 }
 
-/* Folder labels */
-#fileTree .folder {
-    cursor: pointer;
-    position: relative;
-    padding-left: 5px;
-}
-
-/* Optional spacing for file items */
+/* List items */
 #fileTree li {
     position: relative;
-    padding-left: 15px;
+    padding-left: 1em; /* space for triangle */
+}
+
+
+/* Vertical guide line for nested folders/files */
+#fileTree ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.05em; /* aligns with triangle */
+    border-left: 1px solid #555;
+}
+
+/* Remove vertical line for top-level folders */
+#fileTree > div > ul::before {
+    border-left: none;
+}
+
+/* List items */
+#fileTree li {
+    position: relative;
+    padding-left: 1.5em; /* space for triangle */
+}
+
+/* Triangles */
+.triangle {
+    display: inline-block;
+    width: 1ch;           /* fixed width to align lines */
+    font-family: monospace;
+    transition: transform 0.2s;
+    margin-right: 0.2em;
+}
+
+/* Rotate triangle when folder is open */
+.triangle.open {
+    transform: rotate(90deg);
 }
