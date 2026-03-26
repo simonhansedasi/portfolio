@@ -1,79 +1,180 @@
-// generate file tree
-function createTextTree(container, obj) {
-    const ul = document.createElement('ul');
+const ORDER = [
+  'dada_science',
+  'glacier_prethicktor',
+  'sf_majick',
+  'gov_inertia',
+  'encounterMCMC',
+  'game_ranking',
+  'crm',
+  'GrapeExpectations',
+  'blackjack',
+  'pyopoly',
+  'alphabet_soup',
+  'gcp_analysis',
+  'commuting',
+  'char_gen',
+  'rejection_matrix',
+  'wiki-index',
+  'drawing',
+  'trivia',
+  'timer',
+];
 
-    for (const key in obj) {
-        if (key === 'files') {
-            obj.files.forEach(file => {
-                const li = document.createElement('li');
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('cards');
 
-                // Make file name a clickable link to GitHub
-                const a = document.createElement('a');
-                a.href = file.actions.view_github;
-                a.textContent = file.name;
-                a.target = "_blank"; // open in new tab
-                li.appendChild(a);
+  const sorted = ORDER.filter(k => k in fileStructure)
+    .concat(Object.keys(fileStructure).filter(k => !ORDER.includes(k)).sort());
 
-                ul.appendChild(li);
-            });
-        } else if (typeof obj[key] === 'object') {
-            const li = document.createElement('li');
+  for (const key of sorted) {
+    container.appendChild(buildCard(fileStructure[key]));
+  }
+});
 
-            // Folder header
-            const folderSpan = document.createElement('span');
-            folderSpan.innerHTML = `<span class="triangle">▶</span> ${key}`;
-            folderSpan.style.fontWeight = 'bold';
-            folderSpan.style.cursor = 'pointer';
-            li.appendChild(folderSpan);
+function buildCard(proj) {
+  const card = document.createElement('div');
+  card.className = 'card';
 
-            // Child tree
-            const childUl = createTextTree(document.createElement('div'), obj[key]);
-            childUl.style.marginLeft = '20px';
-            childUl.style.display = 'none'; // start collapsed
-            li.appendChild(childUl);
+  // ── Face ──────────────────────────────────────────
+  const face = document.createElement('div');
+  face.className = 'card-face';
 
-            // Toggle display with rotation
-            folderSpan.addEventListener('click', () => {
-                const isHidden = childUl.style.display === 'none';
-                childUl.style.display = isHidden ? 'block' : 'none';
-                folderSpan.querySelector('.triangle').classList.toggle('open', isHidden);
-            });
+  // Top row: name + github link
+  const top = document.createElement('div');
+  top.className = 'card-top';
 
-            ul.appendChild(li);
-        }
+  const name = document.createElement('h2');
+  name.className = 'card-name';
+  name.textContent = proj.name;
+  top.appendChild(name);
+
+  if (proj.github) {
+    const gh = document.createElement('a');
+    gh.className = 'github-link';
+    gh.href = proj.github;
+    gh.target = '_blank';
+    gh.rel = 'noopener';
+    gh.textContent = 'GitHub ↗';
+    top.appendChild(gh);
+  }
+  face.appendChild(top);
+
+  // Description
+  if (proj.description) {
+    const desc = document.createElement('p');
+    desc.className = 'card-desc';
+    desc.textContent = proj.description;
+    face.appendChild(desc);
+  }
+
+  // Bottom row: tech pills + expand button
+  const bottom = document.createElement('div');
+  bottom.className = 'card-bottom';
+
+  const tags = document.createElement('div');
+  tags.className = 'tags';
+  (proj.tech || []).forEach(t => {
+    const pill = document.createElement('span');
+    pill.className = 'tag';
+    pill.textContent = t;
+    tags.appendChild(pill);
+  });
+  bottom.appendChild(tags);
+
+  const btn = document.createElement('button');
+  btn.className = 'expand-btn';
+  btn.innerHTML = '<span class="arrow">▶</span> details';
+  btn.addEventListener('click', () => {
+    card.classList.toggle('open');
+    btn.innerHTML = card.classList.contains('open')
+      ? '<span class="arrow">▶</span> collapse'
+      : '<span class="arrow">▶</span> details';
+  });
+  bottom.appendChild(btn);
+
+  face.appendChild(bottom);
+  card.appendChild(face);
+
+  // ── Expanded body ─────────────────────────────────
+  const body = document.createElement('div');
+  body.className = 'card-body';
+
+  // README
+  if (proj.readme) {
+    const readmeSection = document.createElement('div');
+    readmeSection.className = 'readme-section';
+    try {
+      readmeSection.innerHTML = marked.parse(proj.readme);
+    } catch (e) {
+      readmeSection.textContent = proj.readme;
     }
+    body.appendChild(readmeSection);
+  }
 
-    container.appendChild(ul);
-    return ul;
+  // File tree
+  if (proj.tree) {
+    const treeSection = document.createElement('div');
+    treeSection.className = 'tree-section';
+
+    const label = document.createElement('div');
+    label.className = 'tree-section-label';
+    label.textContent = 'Files';
+    treeSection.appendChild(label);
+
+    const treeEl = document.createElement('div');
+    treeEl.className = 'tree';
+    treeEl.appendChild(buildTree(proj.tree, proj.github, proj.branch, ''));
+    treeSection.appendChild(treeEl);
+
+    body.appendChild(treeSection);
+  }
+
+  card.appendChild(body);
+  return card;
 }
 
-// initialize tree
-document.addEventListener("DOMContentLoaded", () => {
-    const treeContainer = document.getElementById('fileTree');
+function buildTree(node, github, branch, pathPrefix) {
+  const ul = document.createElement('ul');
 
-    for (const project in fileStructure) {
-        const projectDiv = document.createElement('div');
+  // Directories first
+  const dirs = node.dirs || {};
+  for (const dirName of Object.keys(dirs).sort()) {
+    const li = document.createElement('li');
+    const childPath = pathPrefix ? `${pathPrefix}/${dirName}` : dirName;
 
-        // Project header with triangle
-        const projectHeader = document.createElement('span');
-        projectHeader.innerHTML = `<span class="triangle">▶</span> ${project}`;
-        projectHeader.style.fontWeight = 'bold';
-        projectHeader.style.cursor = 'pointer';
-        projectDiv.appendChild(projectHeader);
+    const label = document.createElement('span');
+    label.className = 'dir-label';
+    label.innerHTML = `<span class="tri">▶</span> ${dirName}`;
 
-        // Project tree container
-        const projectTreeDiv = document.createElement('div');
-        projectTreeDiv.style.display = 'none'; // start collapsed
-        createTextTree(projectTreeDiv, fileStructure[project].tree);
-        projectDiv.appendChild(projectTreeDiv);
+    const children = document.createElement('div');
+    children.className = 'dir-children';
+    children.appendChild(buildTree(dirs[dirName], github, branch, childPath));
 
-        // Toggle project display
-        projectHeader.addEventListener('click', () => {
-            const isHidden = projectTreeDiv.style.display === 'none';
-            projectTreeDiv.style.display = isHidden ? 'block' : 'none';
-            projectHeader.querySelector('.triangle').classList.toggle('open', isHidden);
-        });
+    label.addEventListener('click', () => {
+      label.classList.toggle('open');
+      children.classList.toggle('open');
+    });
 
-        treeContainer.appendChild(projectDiv);
-    }
-});
+    li.appendChild(label);
+    li.appendChild(children);
+    ul.appendChild(li);
+  }
+
+  // Files
+  const files = node.files || [];
+  for (const fileName of files) {
+    const li = document.createElement('li');
+    const filePath = pathPrefix ? `${pathPrefix}/${fileName}` : fileName;
+    const href = github ? `${github}/blob/${branch}/${filePath}` : '#';
+
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = fileName;
+    li.appendChild(a);
+    ul.appendChild(li);
+  }
+
+  return ul;
+}

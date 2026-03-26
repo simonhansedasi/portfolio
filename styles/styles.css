@@ -1,102 +1,281 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 2rem;
-    background-color: #1e1e1e; /* dark background */
-    color: #cfcfcf;            /* light text */
-    line-height: 1.6;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 2rem;
+  background: #1a1a1a;
+  color: #d0d0d0;
+  line-height: 1.6;
 }
 
-ul, li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+/* ── Header ── */
+header {
+  max-width: 900px;
+  margin: 0 auto 2rem;
 }
 
-/* Folder labels */
-.folder {
-    cursor: pointer;
-    font-weight: bold;
-    color: #8ab4f8; /* blue-ish for folders */
-    display: flex;
-    align-items: center;
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  color: #ffffff;
 }
 
-/* File links */
-li a {
-    text-decoration: none;
-    color: #a5d6ff; /* lighter blue for files */
-}
-li a:hover {
-    text-decoration: underline;
-    color: #ffffff;
+.subtitle {
+  margin: 0;
+  color: #888;
+  font-size: 1rem;
 }
 
-/* Highlighted search */
-mark {
-    background-color: #ffd54f;
-    color: #000000;
+/* ── Card grid ── */
+#cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Tree container */
-#fileTree ul {
-    list-style: none;
-    padding-left: 0.5em; /* smaller indentation for nested levels */
-    position: relative;
+/* ── Card ── */
+.card {
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s;
 }
 
-/* Vertical guide line for nested folders/files */
-#fileTree ul::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0.05em; /* closer to the triangle */
-    border-left: 1px solid #555;
+.card:hover {
+  border-color: #555;
 }
 
-/* Remove vertical line for top-level folders */
-#fileTree > div > ul::before {
-    border-left: none;
+.card-face {
+  padding: 1.25rem 1.25rem 1rem;
 }
 
-/* List items */
-#fileTree li {
-    position: relative;
-    padding-left: 1em; /* space for triangle */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-
-/* Vertical guide line for nested folders/files */
-#fileTree ul::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0.05em; /* aligns with triangle */
-    border-left: 1px solid #555;
+.card-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
 }
 
-/* Remove vertical line for top-level folders */
-#fileTree > div > ul::before {
-    border-left: none;
+.github-link {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: #7ab3f5;
+  text-decoration: none;
+  border: 1px solid #3a5a8a;
+  border-radius: 4px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  transition: background 0.15s;
 }
 
-/* List items */
-#fileTree li {
-    position: relative;
-    padding-left: 1.5em; /* space for triangle */
+.github-link:hover {
+  background: #2a3f5a;
+  color: #a5d6ff;
 }
 
-/* Triangles */
-.triangle {
-    display: inline-block;
-    width: 1ch;           /* fixed width to align lines */
-    font-family: monospace;
-    transition: transform 0.2s;
-    margin-right: 0.2em;
+.card-desc {
+  font-size: 0.88rem;
+  color: #b0b0b0;
+  margin: 0 0 0.75rem;
 }
 
-/* Rotate triangle when folder is open */
-.triangle.open {
-    transform: rotate(90deg);
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Tech pills ── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #1e3a2f;
+  color: #6fcf97;
+  border: 1px solid #2a5a3f;
+  white-space: nowrap;
+}
+
+/* ── Expand toggle ── */
+.expand-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+
+.expand-btn:hover { color: #ccc; }
+
+.expand-btn .arrow {
+  display: inline-block;
+  transition: transform 0.2s;
+  font-size: 0.7rem;
+}
+
+.card.open .expand-btn .arrow {
+  transform: rotate(90deg);
+}
+
+/* ── Expanded body ── */
+.card-body {
+  display: none;
+  border-top: 1px solid #333;
+}
+
+.card.open .card-body {
+  display: block;
+}
+
+/* ── README section ── */
+.readme-section {
+  padding: 1.25rem;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 0.85rem;
+  color: #c0c0c0;
+  overflow: hidden;
+}
+
+.readme-section h1 { display: none; } /* hide the title — already shown on card */
+
+.readme-section h2 {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin: 1rem 0 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.readme-section h3, .readme-section h4 {
+  font-size: 0.85rem;
+  color: #bbb;
+  margin: 0.75rem 0 0.2rem;
+}
+
+.readme-section p { margin: 0.4rem 0; }
+
+.readme-section a {
+  color: #7ab3f5;
+  text-decoration: none;
+}
+
+.readme-section a:hover { text-decoration: underline; }
+
+.readme-section code {
+  background: #1a1a1a;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.82rem;
+  color: #e0c06a;
+}
+
+.readme-section pre {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+
+.readme-section pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ── File tree section ── */
+.tree-section {
+  padding: 1rem 1.25rem;
+}
+
+.tree-section-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.2em;
+  border-left: 1px solid #333;
+}
+
+.tree > ul {
+  padding-left: 0;
+  border-left: none;
+}
+
+.tree li {
+  padding: 1px 0;
+  font-size: 0.82rem;
+}
+
+.tree .dir-label {
+  cursor: pointer;
+  color: #bbb;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tree .dir-label:hover { color: #fff; }
+
+.tree .dir-label .tri {
+  display: inline-block;
+  font-size: 0.6rem;
+  transition: transform 0.15s;
+  color: #666;
+}
+
+.tree .dir-label.open .tri {
+  transform: rotate(90deg);
+}
+
+.tree .dir-children {
+  display: none;
+}
+
+.tree .dir-children.open {
+  display: block;
+}
+
+.tree a {
+  color: #7ab3f5;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+}
+
+.tree a:hover {
+  color: #a5d6ff;
+  text-decoration: underline;
 }
