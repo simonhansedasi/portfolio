@@ -20,7 +20,7 @@ SKIP_EXTENSIONS = {
 
 SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io'}
 
-# Recruiter-facing order: published research → production systems → domain tools → fun projects
+# Recruiter-facing order: flagship research → published research → production systems → domain tools → fun projects
 REPO_ORDER = [
     'GrapeExpectations',
     'glacier_prethicktor',
