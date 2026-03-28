@@ -1,13 +1,24 @@
 const fileStructure = {
   "GrapeExpectations": {
     "name": "GrapeExpectations",
-    "description": "Vineyard analysis toolkit \u2014 computes field geometry and fiber length from acreage and row spacing, with machine learning experiments on grape quality data.",
+    "description": "Precision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and map microclimate frost risk at meter resolution. Includes a stacked ensemble ML model (R\u00b2 = 0.967) and a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.",
     "tech": [
-      "Python"
+      "Python",
+      "scikit-learn",
+      "XGBoost",
+      "Google Earth Engine",
+      "rasterstats",
+      "rasterio",
+      "geopandas",
+      "GDAL",
+      "pandas",
+      "NumPy",
+      "matplotlib",
+      "Jupyter"
     ],
     "github": "https://github.com/simonhansedasi/GrapeExpectations",
     "branch": "main",
-    "readme": "# GrapeExpectations\n\nVineyard analysis toolkit \u2014 computes field geometry and fiber length from acreage and row spacing, with machine learning experiments on grape quality data.\n\n## What it does\n\nTakes measured vineyard dimensions (acreage, row spacing, vine spacing) and calculates row counts, total vine counts, and fiber/wire lengths needed for trellis installation. A separate ML pipeline applies ridge regression to predict grape quality metrics from sensing data.\n\n## Tech\n\nPython \u2014 `numpy`, `pandas`, `scikit-learn`, Jupyter\n\n## Run\n\n```bash\njupyter notebook Untitled.ipynb         # field geometry calculations\njupyter notebook RegressionRidge/       # ML experiments\n```\n",
+    "readme": "# GrapeExpectations\n\nPrecision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and map microclimate frost risk at meter resolution. Includes a stacked ensemble ML model (R\u00b2 = 0.967) and a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.\n\n## What it does\n\nThe pipeline ingests five geospatial data sources, engineers a 100+ feature matrix across 3,598 hexagonal plot cells, and trains multi-output ensemble models to predict 8-week NDVI trajectories from environmental conditions alone.\n\n### Data pipeline (6-stage)\n\n| Stage | Notebook | What it does |\n|---|---|---|\n| 00 | `subsample_polygons` | Subdivide vineyard blocks into 3,598 hexagonal cells (~1,000 m\u00b2 each) for spatial variance |\n| 01 | `clip_dem` | Clip USGS 1m DEM to vineyard extent; reproject to UTM |\n| 02 | `breakdown_dem` | Zonal statistics per cell: elevation, slope, aspect (cos/sin), profile/plan curvature, local relief |\n| 03 | `get_temp_data` | Extract 9-year daily PRISM climate grid (tmin/tmax, precip, VPD, GDD) |\n| 04 | `ndvi_smol` | Sentinel-2 composites via Google Earth Engine; compute NDVI, EVI, NDWI, SAVI, RENDVI, MCARI2; smooth and interpolate |\n| 05 | `soil` | Clip USGS gSSURGO soil database to vineyard; extract sand/silt/clay %, AWC, CEC7, organic matter, pH, EC |\n| 06 | `assemble_data` | Join all layers into 100+ feature matrix; 3,598 samples \u00d7 9 years = 32,382 rows |\n\n### Machine learning (4 pipelines)\n\n**Stacked Ensemble** (`ML/forest_ensemble.ipynb`) \u2014 Multi-output regression predicting NDVI for weeks 36\u201343 simultaneously.\n- Base learners: Random Forest, Extra Trees, Gradient Boosting, XGBoost, KNN (distance-weighted)\n- Meta-learner: ElasticNetCV (\u03b1 and L1 ratio tuned via 5-fold CV)\n- Performance: **R\u00b2 = 0.967**, RMSE = 0.00033 on tune set\n\n**Spatial Clustering** (`ML/clustering.ipynb`) \u2014 Identifies 3 distinct management zones using gradient boosting leaf embeddings + PCA + k-means. Clusters reveal which soil and topographic variables drive canopy variability across the vineyard.\n\n**Time-Series Regression** (`ML/time_series.ipynb`) \u2014 Per-plot OLS on NDVI trajectory for anomaly detection and yield trend monitoring.\n\n**Frost Risk Map** (`assess_frost_risk.ipynb`) \u2014 Composite microclimate score (slope drainage \u00d7 elevation deviation \u00d7 NDVI vigor \u00d7 plot area) mapped to a raster overlay for targeted frost protection decisions.\n\n### DTS research proposal\n\n`docs/GrapeExpectations.tex` is a research proposal for deploying Distributed Temperature Sensing (DTS) fiber-optic cables across vineyard rows \u2014 1m spatial resolution, sub-minute temporal resolution, continuous canopy temperature monitoring at field scale. Pilot planned in collaboration with Washington State University.\n\n## Data sources\n\n| Source | Layer | Resolution | Coverage |\n|---|---|---|---|\n| USGS National Map | DEM | 1 m | ~5 km\u00b2 |\n| ESA Sentinel-2 (Earth Engine) | NDVI + 5 indices | 10 m | 9 years, 2016\u20132025 |\n| PRISM Oregon State | Daily weather | 4 km grid | 9 years, 2016\u20132025 |\n| USGS gSSURGO | Soil properties | Map unit | Regional |\n| Google Earth | Vineyard boundaries | Vector (KML) | Regression Ridge block |\n\n## Tech\n\nPython, scikit-learn, XGBoost, Google Earth Engine, rasterstats, rasterio, geopandas, GDAL, pandas, NumPy, matplotlib, Jupyter\n\n## Status\n\nActive research. Stacked ensemble and frost risk pipeline complete. DTS fiber-optic deployment proposal under review for funding. Pilot in planning with Washington State University.\n",
     "tree": {
       "dirs": {
         "RegressionRidge": {
