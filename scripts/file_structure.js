@@ -136,287 +136,51 @@ const fileStructure = {
       ]
     }
   },
-  "OmaElu": {
-    "name": "OmaElu",
-    "description": "Life organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.",
+  "glacier_prethicktor": {
+    "name": "glacier_prethicktor",
+    "description": "Published: Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" Journal of Glaciology 72, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123",
     "tech": [
-      "Flask",
-      "SQLite",
-      "Python",
-      "Click",
-      "Rich",
-      "questionary",
-      "Google Calendar API",
-      "Raspberry Pi",
-      "Tailscale",
-      "systemd",
-      "ntfy (push notifications)",
-      "cron"
-    ],
-    "github": "https://github.com/simonhansedasi/OmaElu",
-    "branch": "main",
-    "readme": "# OmaElu\n\nLife organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.\n\n---\n\n## Sub-projects\n\n### `scheduling/` \u2014 Weekly Planner CLI\nInteractive CLI for planning the week ahead. Pulls Google Calendar events, adds activities with time/location/tags/notes, pushes back to Calendar. Designed around a toddler nap window and weekly themed days.\n\n**Run:**\n```bash\npython plan.py show week\npython plan.py add\npython plan.py push\n```\n\n### `personal_tracker/` \u2014 Personal Health Tracker\nMobile-first Flask app running on a Raspberry Pi (port 5001). Logs wake/sleep, mood, energy, food, exercise, substances, hydration, and naps. Accessible via Tailscale from anywhere.\n\n**Access:**\n- Home: `http://192.168.88.9:5001`\n- Away: `http://100.93.132.118:5001`\n\n---\n\n## Tech\n\nFlask, SQLite, Python, Click, Rich, questionary, Google Calendar API, Raspberry Pi, Tailscale, systemd, ntfy (push notifications), cron\n\n---\n\n## Infrastructure\n\nBoth tools are deployed on a Raspberry Pi (HST timezone) via rsync + systemd services. Push notifications via [ntfy.sh](https://ntfy.sh) \u2014 topic `remember_dummy` for personal reminders.\n",
-    "tree": {
-      "dirs": {
-        "personal_tracker": {
-          "dirs": {
-            "static": {
-              "dirs": {},
-              "files": [
-                "style.css"
-              ]
-            },
-            "templates": {
-              "dirs": {},
-              "files": [
-                "base.html",
-                "edit.html",
-                "exercise.html",
-                "food.html",
-                "index.html",
-                "substance.html",
-                "today.html"
-              ]
-            }
-          },
-          "files": [
-            "INSTRUCTIONS.md",
-            "README.md",
-            "analysis.py",
-            "app.py",
-            "remind_personal.py",
-            "schema.sql",
-            "simon_analysis.ipynb"
-          ]
-        },
-        "scheduling": {
-          "dirs": {
-            "archive": {
-              "dirs": {},
-              "files": [
-                "waikoloa.json"
-              ]
-            },
-            "credentials": {
-              "dirs": {},
-              "files": [
-                "client_secret.json",
-                "token.json"
-              ]
-            },
-            "weeks": {
-              "dirs": {},
-              "files": [
-                "2026-W13.json",
-                "2026-W14.json"
-              ]
-            }
-          },
-          "files": [
-            "CONTEXT.md",
-            "README.md",
-            "config.json",
-            "gcal.py",
-            "plan.py",
-            "requirements.txt"
-          ]
-        }
-      },
-      "files": [
-        "README.md"
-      ]
-    }
-  },
-  "alphabet_soup": {
-    "name": "alphabet_soup",
-    "description": "Finds the smallest set of words where every word uses only unique letters and together they cover all 26 letters of the alphabet.",
-    "tech": [
-      "Python 3"
-    ],
-    "github": "https://github.com/simonhansedasi/alphabet_soup",
-    "branch": "main",
-    "readme": "# alphabet_soup\n\nFinds the smallest set of words where every word uses only unique letters and together they cover all 26 letters of the alphabet.\n\n## What it does\n\nGiven a word dictionary, filters for words with no repeated letters, then uses bitmask encoding and a recursive search (prioritizing rarest letters first) to find minimal covering sets. Results are cached with pickle to avoid re-running the expensive search.\n\n## Tech\n\nPython 3 \u2014 `requests`, `pickle`, `collections`\n\n## Run\n\n```bash\npython untitled.py\n```\n\nDownloads a word list on first run and caches results to `alphabet_soup_scrabble.pkl`.\n",
-    "tree": {
-      "dirs": {},
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "Untitled.ipynb",
-        "untitled.py"
-      ]
-    }
-  },
-  "blackjack": {
-    "name": "blackjack",
-    "description": "Blackjack simulator that compares basic play against a Hi-Lo card counting strategy across thousands of simulated hands.",
-    "tech": [
-      "Python"
-    ],
-    "github": "https://github.com/simonhansedasi/blackjack",
-    "branch": "main",
-    "readme": "# blackjack\n\nBlackjack simulator that compares basic play against a Hi-Lo card counting strategy across thousands of simulated hands.\n\n## What it does\n\nImplements a full blackjack game engine (dealing, hitting, standing, bust detection) with two player strategies: naive play and Hi-Lo card counting. Runs large-scale simulations and plots win rate distributions to quantify the edge that counting gives.\n\n## Tech\n\nPython \u2014 `random`, `collections`, `tqdm`, `matplotlib`, `pandas`, Jupyter\n\n## Run\n\nOpen `simulation.ipynb` in Jupyter, or import `blackjack.py` directly:\n\n```python\nfrom blackjack import simulate\nsimulate(n_hands=10000, strategy='hilo')\n```\n",
-    "tree": {
-      "dirs": {},
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "blackjack.py",
-        "simulation.ipynb"
-      ]
-    }
-  },
-  "char_gen": {
-    "name": "char_gen",
-    "description": "D&D 5e character generator \u2014 rolls stats, picks race, background, and class optimally, with a web UI and stored character history.",
-    "tech": [
-      "Python",
-      "Flask",
-      "SQLite",
-      "HTML/CSS/JS"
-    ],
-    "github": "https://github.com/simonhansedasi/char_gen",
-    "branch": "main",
-    "readme": "# char_gen\n\nD&D 5e character generator \u2014 rolls stats, picks race, background, and class optimally, with a web UI and stored character history.\n\n## What it does\n\nRolls ability scores using the 4d6-drop-lowest method, then selects species, background, and class based on which option best matches the rolled stats. Characters are saved to a SQLite database. Includes analysis notebooks for exploring stat distributions and class balance.\n\n## Tech\n\nPython, Flask, SQLite, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # web UI on http://localhost:5000\n```\n\nOr generate a character from the command line:\n\n```bash\npython chargen.py\n```\n",
-    "tree": {
-      "dirs": {
-        "js": {
-          "dirs": {},
-          "files": [
-            "character-loader.js"
-          ]
-        },
-        "templates": {
-          "dirs": {},
-          "files": [
-            "index.html"
-          ]
-        }
-      },
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "analysis.ipynb",
-        "app.py",
-        "attribute_class.ipynb",
-        "attribute_correlation.ipynb",
-        "chargen.py",
-        "config.txt",
-        "gen.py",
-        "index.html",
-        "requirements.txt",
-        "simulation.ipynb",
-        "style.css",
-        "tables.py"
-      ]
-    }
-  },
-  "commuting": {
-    "name": "commuting",
-    "description": "Analyzes how rain and weather conditions affect commute times across different transport modes.",
-    "tech": [
-      "Python",
-      "Flask",
-      "SQLite",
+      "Python 3.8",
+      "TensorFlow/Keras 2.12",
       "pandas",
+      "NumPy",
+      "geopy",
       "matplotlib",
-      "scipy",
-      "HTML/CSS/JS"
+      "tqdm",
+      "Pillow",
+      "Jupyter"
     ],
-    "github": "https://github.com/simonhansedasi/commuting",
+    "github": "https://github.com/simonhansedasi/glacier_prethicktor",
     "branch": "main",
-    "readme": "# commuting\n\nAnalyzes how rain and weather conditions affect commute times across different transport modes.\n\n## What it does\n\nCollects commute log entries (mode, duration, weather, road conditions) stored in SQLite. Runs statistical analysis (confidence intervals via scipy) and generates comparative visualizations \u2014 pie charts and stacked bars \u2014 showing transit time distributions across weather conditions.\n\n## Tech\n\nPython, Flask, SQLite, pandas, matplotlib, scipy, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py\n```\n\nOpen the web dashboard to log commutes and view charts.\n",
+    "readme": "# glacier_prethicktor\n\n[![DOI](https://zenodo.org/badge/459624562.svg)](https://zenodo.org/doi/10.5281/zenodo.11105541)\n\n**Published:** Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" *Journal of Glaciology* **72**, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123\n\nA data-driven pipeline to estimate glacier thicknesses globally using a shallow neural network, and to quantify how ice\u2013ocean and ice\u2013lake interactions shape glacier volume at a planetary scale.\n\nRather than relying on ice-flow physics, we treat thickness estimation as a regression problem: train on glacier-averaged thickness measurements from GlaThiDa, predict for all glaciers in the RGI, then compare models trained with and without water-terminating glaciers to isolate the volumetric imprint of tidewater and lake termini.\n\n---\n\n## Key Finding\n\nTidewater and lake-terminating glaciers are systematically thicker than land-terminating glaciers. Globally, this effect accounts for approximately **20% of non-ice-sheet glacier volume** \u2014 equivalent to ~6 cm of sea level rise. The result is consistent with height-above-buoyancy mechanics: water pressure at the ice front permits thicker termini than are stable in air, setting a different boundary condition for equilibrium glacier geometry.\n\n---\n\n## Data\n\n| Dataset | Content | n |\n|---------|---------|---|\n| GlaThiDa 3.1.0 (T dataset) | Glacier-averaged (mean scale) thickness measurements | 500 unique glaciers |\n| RGI 6.0 | Surface attributes: latitude, longitude, area, slope, elevation, max length | 216,501 glaciers (globally complete) |\n| Farinotti et al. 2019 | Consensus physics-based thickness estimates (reference benchmark) | All RGI glaciers |\n\nOnly the 'T' dataset from GlaThiDa is used \u2014 glacier-averaged thicknesses, not point measurements.\n\n---\n\n## Pipeline\n\nRun notebooks in order. Set `home_path` in `path_manager.py` first.\n\n| Notebook | What it does |\n|----------|-------------|\n| `00-install_packages.ipynb` | Install TensorFlow, verify versions |\n| `01-acquire_data.ipynb` | Download RGI, GlaThiDa, Farinotti; extract data files |\n| `02-match_glacier_centroids.ipynb` | Co-register GlaThiDa to nearest RGI centroid; produce `matched.pkl` |\n| `1-coregistration_testing.ipynb` | Test 4 distance thresholds (T = 999, 0.75, 0.5, 0.25 \u2192 400/273/202/105 labels); select T = 0.75 |\n| `2-LOO_archtesting.ipynb` | Architecture search over neuron counts and loss functions |\n| `3-LOO_archselection.ipynb` | Rank and select best model |\n| `4-LOO.ipynb` | Leave-one-out CV: train 273 models, one glacier held out per iteration |\n| `5-vol_confidence_interval.ipynb` | Glacier volume \u00d7 uncertainty; global volume estimate |\n| `6-LOO_analysis.ipynb` | Residuals, Farinotti comparison, regional breakdown |\n\nSupplementary analysis: `P1\u2013P5` (plots), `T1\u2013T2` (results tables), `permutation_test.ipynb`, `global_sum_differences.ipynb`.\n\n---\n\n## Model\n\n**Architecture** (Shallow Neural Network):\n```\nInput (6 features) \u2192 Normalization (z-score) \u2192 Dense(6, ReLU) \u2192 Dropout(0.1) \u2192 Dense(2, ReLU) \u2192 Dense(1)\n```\n- Optimizer: Adam (lr=0.01), validation split: 0.2\n- Loss: MAE and MSE (both evaluated)\n- Early stopping: patience=10, min_delta=0.001, up to 500 epochs, restore best weights\n- Seed: `SEED=378`, deterministic via `set_global_determinism()`\n\n**Validation**: Leave-one-out CV over N_j = 273 co-registered glaciers \u2014 every glacier is held out once and trained on many times, producing a full distribution of predictions for uncertainty quantification.\n\n**Uncertainty sources** (three components per glacier):\n1. Measurement uncertainty from GlaThiDa (power law fit: \u221aVar \u2248 0.07 \u00d7 h^0.8)\n2. LOO variance (spread of predictions across iterations)\n3. Model residual uncertainty (power law fit: \u221aVar \u2248 0.04 \u00d7 h^0.6)\n\n---\n\n## Results\n\n| Model | Global volume |\n|-------|--------------|\n| This study (excluding ice-shelf terminating from training) | 136 \u00b1 2 \u00d7 10\u00b3 km\u00b3 |\n| This study (also excluding ocean- and lake-terminating) | 126.1 \u00b1 3.3 \u00d7 10\u00b3 km\u00b3 |\n| Farinotti et al. 2019 | 158 \u00b1 16 \u00d7 10\u00b3 km\u00b3 |\n\nThe ~20% difference between the land-terminating-only model and the full dataset is driven by a small number of glaciers: 70% of the discrepancy comes from just 0.4% of RGI glaciers (~1,000 glaciers), concentrated in Antarctic/Subantarctic, North Canadian Arctic, Iceland, Svalbard, and the Russian Arctic.\n\nThickness residual: \u22123 \u00b1 28 m (this study) vs. 3 \u00b1 33 m (F19).\n\n---\n\n## Setup\n\n```bash\nconda create -n glacierml python=3.8.10\nconda activate glacierml\npip install ipykernel\npython -m ipykernel install --user --name=glacierml --display-name=\"glacierml (Python 3.8.10)\"\npip install tensorflow==2.12.0 pandas numpy geopy tqdm requests matplotlib scikit-learn pillow\n```\n\nEdit `path_manager.py` and set `home_path` to your working directory.\n\n---\n\n## Tech\n\nPython 3.8, TensorFlow/Keras 2.12, pandas, NumPy, geopy, matplotlib, tqdm, Pillow, Jupyter\n\n---\n\n## Citation\n\n```\nEdasi SH and Lipovsky BP (2026) Tidewater and lake-terminating glaciers are\nsystematically thicker. Journal of Glaciology 72, e28, 1\u20138.\nhttps://doi.org/10.1017/jog.2026.10123\n```\n\nCode archived at: https://zenodo.org/records/11106415\n\n## References\n\n- Farinotti et al. 2019 \u2014 \"A consensus estimate for the ice thickness distribution of all glaciers on Earth.\" *Nature Geoscience* 12, 168\u2013173. https://doi.org/10.1038/s41561-019-0300-3\n- RGI Consortium (2017). Randolph Glacier Inventory, Version 6. https://doi.org/10.7265/4m1f-gd79\n- Welty et al. 2020 \u2014 GlaThiDa v3.1.0. *Earth System Science Data* 12, 3039\u20133055. https://doi.org/10.5194/essd-12-3039-2020\n",
     "tree": {
-      "dirs": {
-        "js": {
-          "dirs": {},
-          "files": [
-            "commute_form.js",
-            "get_images.js",
-            "get_user_images.js",
-            "login.js"
-          ]
-        }
-      },
+      "dirs": {},
       "files": [
+        "00-install_packages.ipynb",
+        "01-acquire_data.ipynb",
+        "02-match_glacier_centroids.ipynb",
+        "1-coregistration_testing.ipynb",
+        "2-LOO_archtesting.ipynb",
+        "3-LOO_archselection.ipynb",
+        "4-LOO.ipynb",
+        "5-vol_confidence_interval.ipynb",
+        "6-LOO_analysis.ipynb",
         "CONTEXT.md",
-        "Gemfile",
-        "Gemfile.lock",
+        "P1-coregistration_plot.ipynb",
+        "P2-residuals.ipynb",
+        "P3-scatter_plot.ipynb",
+        "P4-discrepancy_boxplot.ipynb",
+        "P5-variance_analysis.ipynb",
         "README.md",
-        "_config.yml",
-        "app.py",
-        "commute_analysis.py",
-        "config.txt",
-        "dash.html",
-        "index.html",
-        "styles.css"
-      ]
-    }
-  },
-  "crm": {
-    "name": "crm",
-    "description": "Lightweight local CRM for tracking contacts, companies, deals, and notes \u2014 built for paint booth parts sales.",
-    "tech": [
-      "Python",
-      "Flask",
-      "SQLAlchemy",
-      "SQLite",
-      "YAML",
-      "HTML/CSS/JS"
-    ],
-    "github": "https://github.com/simonhansedasi/crm",
-    "branch": "main",
-    "readme": "# crm\n\nLightweight local CRM for tracking contacts, companies, deals, and notes \u2014 built for paint booth parts sales.\n\n## What it does\n\nFlask backend with a vanilla JS frontend backed by SQLite. Supports a configurable sales pipeline (stages defined in `config.yaml`), contact/company management, deal tracking, notes, and tags. Everything runs locally with no external dependencies beyond Python packages.\n\n## Tech\n\nPython, Flask, SQLAlchemy, SQLite, YAML, HTML/CSS/JS\n\n## Run\n\n```bash\npip install -r requirements.txt\npython app.py\n```\n\nOpens at `http://localhost:5000`. Pipeline stages, custom fields, and tags are configured in `config.yaml`.\n",
-    "tree": {
-      "dirs": {
-        "frontend": {
-          "dirs": {},
-          "files": [
-            "app.js",
-            "index.html",
-            "style.css"
-          ]
-        },
-        "models": {
-          "dirs": {},
-          "files": [
-            "__init__.py",
-            "contact.py",
-            "deal.py",
-            "note.py",
-            "part.py",
-            "tag.py"
-          ]
-        },
-        "routes": {
-          "dirs": {},
-          "files": [
-            "__init__.py",
-            "contacts.py",
-            "deals.py",
-            "import_routes.py",
-            "notes.py",
-            "parts.py",
-            "tags.py"
-          ]
-        },
-        "tests": {
-          "dirs": {},
-          "files": [
-            "__init__.py",
-            "conftest.py",
-            "test_contacts.py",
-            "test_deals.py",
-            "test_notes.py"
-          ]
-        }
-      },
-      "files": [
-        "CLAUDE.md",
-        "CONTEXT.md",
-        "README.md",
-        "app.py",
-        "config.yaml",
-        "requirements.txt"
+        "T1-results_table.ipynb",
+        "T2-table_plot.ipynb",
+        "calls.json",
+        "glacierml.py",
+        "global_sum_differences.ipynb",
+        "listener.py",
+        "model_coregistration.txt",
+        "path_manager.py",
+        "permutation_test.ipynb"
       ]
     }
   },
@@ -508,200 +272,6 @@ const fileStructure = {
         "potty_training.py",
         "snack_sugar_content.py",
         "winter_spring_transition.py"
-      ]
-    }
-  },
-  "drawing": {
-    "name": "drawing",
-    "description": "Generative art experiments \u2014 tie-dye patterns, trigonometric drawings, and interactive canvas sketching.",
-    "tech": [
-      "Python"
-    ],
-    "github": "https://github.com/simonhansedasi/drawing",
-    "branch": "function_listener",
-    "readme": "# drawing\n\nGenerative art experiments \u2014 tie-dye patterns, trigonometric drawings, and interactive canvas sketching.\n\n## What it does\n\nA collection of visual experiments using matplotlib and numpy. Includes parametric trig art, procedural tie-dye color fields, and an event-driven listener for interactive drawing input.\n\n## Tech\n\nPython \u2014 `matplotlib`, `numpy`, Jupyter notebooks\n\n## Run\n\nOpen any notebook in Jupyter:\n\n```bash\njupyter notebook TieDyes.ipynb\njupyter notebook trig_art.ipynb\n```\n\nOr run the interactive listener:\n\n```bash\npython listener.py\n```\n",
-    "tree": {
-      "dirs": {
-        "function_art": {
-          "dirs": {},
-          "files": [
-            "char_gen_simulation_calls.json",
-            "gov_inertia_run_simulation_calls.json"
-          ]
-        }
-      },
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "TieDyes.ipynb",
-        "Untitled.ipynb",
-        "Untitled1.ipynb",
-        "Untitled2.ipynb",
-        "listener.py",
-        "trig_art.ipynb"
-      ]
-    }
-  },
-  "game_ranking": {
-    "name": "game_ranking",
-    "description": "Leaderboard tracker for daily word puzzle games (Wordle, Connections, Strands) \u2014 scores arrive via SMS and are ranked automatically.",
-    "tech": [
-      "Python",
-      "Flask",
-      "SQLite",
-      "matplotlib",
-      "numpy",
-      "Twilio API",
-      "HTML/CSS/JS"
-    ],
-    "github": "https://github.com/simonhansedasi/game_ranking",
-    "branch": "main",
-    "readme": "# game_ranking\n\nLeaderboard tracker for daily word puzzle games (Wordle, Connections, Strands) \u2014 scores arrive via SMS and are ranked automatically.\n\n## What it does\n\nPlayers text their puzzle results to a Twilio number. The Flask backend parses the pasted score blocks, stores results in SQLite, and serves a ranked leaderboard with performance charts. Supports multiple games with per-game scoring logic.\n\n## Tech\n\nPython, Flask, SQLite, matplotlib, numpy, Twilio API, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # starts on port 5005\n```\n\nSet up a Twilio webhook pointing to `/sms` to receive scores via text message.\n",
-    "tree": {
-      "dirs": {
-        "js": {
-          "dirs": {},
-          "files": [
-            "fetch_ranking.js",
-            "sess_id.js",
-            "submit_score.js"
-          ]
-        }
-      },
-      "files": [
-        "CONTEXT.md",
-        "Gemfile",
-        "README.md",
-        "Untitled.ipynb",
-        "app.py",
-        "config.txt",
-        "game_ranking.py",
-        "index.html",
-        "scrape_data.ipynb",
-        "styles.css",
-        "wordle_scoring.ipynb",
-        "wordle_scoring_n_players.ipynb"
-      ]
-    }
-  },
-  "glacier_prethicktor": {
-    "name": "glacier_prethicktor",
-    "description": "Published: Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" Journal of Glaciology 72, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123",
-    "tech": [
-      "Python 3.8",
-      "TensorFlow/Keras 2.12",
-      "pandas",
-      "NumPy",
-      "geopy",
-      "matplotlib",
-      "tqdm",
-      "Pillow",
-      "Jupyter"
-    ],
-    "github": "https://github.com/simonhansedasi/glacier_prethicktor",
-    "branch": "main",
-    "readme": "# glacier_prethicktor\n\n[![DOI](https://zenodo.org/badge/459624562.svg)](https://zenodo.org/doi/10.5281/zenodo.11105541)\n\n**Published:** Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" *Journal of Glaciology* **72**, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123\n\nA data-driven pipeline to estimate glacier thicknesses globally using a shallow neural network, and to quantify how ice\u2013ocean and ice\u2013lake interactions shape glacier volume at a planetary scale.\n\nRather than relying on ice-flow physics, we treat thickness estimation as a regression problem: train on glacier-averaged thickness measurements from GlaThiDa, predict for all glaciers in the RGI, then compare models trained with and without water-terminating glaciers to isolate the volumetric imprint of tidewater and lake termini.\n\n---\n\n## Key Finding\n\nTidewater and lake-terminating glaciers are systematically thicker than land-terminating glaciers. Globally, this effect accounts for approximately **20% of non-ice-sheet glacier volume** \u2014 equivalent to ~6 cm of sea level rise. The result is consistent with height-above-buoyancy mechanics: water pressure at the ice front permits thicker termini than are stable in air, setting a different boundary condition for equilibrium glacier geometry.\n\n---\n\n## Data\n\n| Dataset | Content | n |\n|---------|---------|---|\n| GlaThiDa 3.1.0 (T dataset) | Glacier-averaged (mean scale) thickness measurements | 500 unique glaciers |\n| RGI 6.0 | Surface attributes: latitude, longitude, area, slope, elevation, max length | 216,501 glaciers (globally complete) |\n| Farinotti et al. 2019 | Consensus physics-based thickness estimates (reference benchmark) | All RGI glaciers |\n\nOnly the 'T' dataset from GlaThiDa is used \u2014 glacier-averaged thicknesses, not point measurements.\n\n---\n\n## Pipeline\n\nRun notebooks in order. Set `home_path` in `path_manager.py` first.\n\n| Notebook | What it does |\n|----------|-------------|\n| `00-install_packages.ipynb` | Install TensorFlow, verify versions |\n| `01-acquire_data.ipynb` | Download RGI, GlaThiDa, Farinotti; extract data files |\n| `02-match_glacier_centroids.ipynb` | Co-register GlaThiDa to nearest RGI centroid; produce `matched.pkl` |\n| `1-coregistration_testing.ipynb` | Test 4 distance thresholds (T = 999, 0.75, 0.5, 0.25 \u2192 400/273/202/105 labels); select T = 0.75 |\n| `2-LOO_archtesting.ipynb` | Architecture search over neuron counts and loss functions |\n| `3-LOO_archselection.ipynb` | Rank and select best model |\n| `4-LOO.ipynb` | Leave-one-out CV: train 273 models, one glacier held out per iteration |\n| `5-vol_confidence_interval.ipynb` | Glacier volume \u00d7 uncertainty; global volume estimate |\n| `6-LOO_analysis.ipynb` | Residuals, Farinotti comparison, regional breakdown |\n\nSupplementary analysis: `P1\u2013P5` (plots), `T1\u2013T2` (results tables), `permutation_test.ipynb`, `global_sum_differences.ipynb`.\n\n---\n\n## Model\n\n**Architecture** (Shallow Neural Network):\n```\nInput (6 features) \u2192 Normalization (z-score) \u2192 Dense(6, ReLU) \u2192 Dropout(0.1) \u2192 Dense(2, ReLU) \u2192 Dense(1)\n```\n- Optimizer: Adam (lr=0.01), validation split: 0.2\n- Loss: MAE and MSE (both evaluated)\n- Early stopping: patience=10, min_delta=0.001, up to 500 epochs, restore best weights\n- Seed: `SEED=378`, deterministic via `set_global_determinism()`\n\n**Validation**: Leave-one-out CV over N_j = 273 co-registered glaciers \u2014 every glacier is held out once and trained on many times, producing a full distribution of predictions for uncertainty quantification.\n\n**Uncertainty sources** (three components per glacier):\n1. Measurement uncertainty from GlaThiDa (power law fit: \u221aVar \u2248 0.07 \u00d7 h^0.8)\n2. LOO variance (spread of predictions across iterations)\n3. Model residual uncertainty (power law fit: \u221aVar \u2248 0.04 \u00d7 h^0.6)\n\n---\n\n## Results\n\n| Model | Global volume |\n|-------|--------------|\n| This study (excluding ice-shelf terminating from training) | 136 \u00b1 2 \u00d7 10\u00b3 km\u00b3 |\n| This study (also excluding ocean- and lake-terminating) | 126.1 \u00b1 3.3 \u00d7 10\u00b3 km\u00b3 |\n| Farinotti et al. 2019 | 158 \u00b1 16 \u00d7 10\u00b3 km\u00b3 |\n\nThe ~20% difference between the land-terminating-only model and the full dataset is driven by a small number of glaciers: 70% of the discrepancy comes from just 0.4% of RGI glaciers (~1,000 glaciers), concentrated in Antarctic/Subantarctic, North Canadian Arctic, Iceland, Svalbard, and the Russian Arctic.\n\nThickness residual: \u22123 \u00b1 28 m (this study) vs. 3 \u00b1 33 m (F19).\n\n---\n\n## Setup\n\n```bash\nconda create -n glacierml python=3.8.10\nconda activate glacierml\npip install ipykernel\npython -m ipykernel install --user --name=glacierml --display-name=\"glacierml (Python 3.8.10)\"\npip install tensorflow==2.12.0 pandas numpy geopy tqdm requests matplotlib scikit-learn pillow\n```\n\nEdit `path_manager.py` and set `home_path` to your working directory.\n\n---\n\n## Tech\n\nPython 3.8, TensorFlow/Keras 2.12, pandas, NumPy, geopy, matplotlib, tqdm, Pillow, Jupyter\n\n---\n\n## Citation\n\n```\nEdasi SH and Lipovsky BP (2026) Tidewater and lake-terminating glaciers are\nsystematically thicker. Journal of Glaciology 72, e28, 1\u20138.\nhttps://doi.org/10.1017/jog.2026.10123\n```\n\nCode archived at: https://zenodo.org/records/11106415\n\n## References\n\n- Farinotti et al. 2019 \u2014 \"A consensus estimate for the ice thickness distribution of all glaciers on Earth.\" *Nature Geoscience* 12, 168\u2013173. https://doi.org/10.1038/s41561-019-0300-3\n- RGI Consortium (2017). Randolph Glacier Inventory, Version 6. https://doi.org/10.7265/4m1f-gd79\n- Welty et al. 2020 \u2014 GlaThiDa v3.1.0. *Earth System Science Data* 12, 3039\u20133055. https://doi.org/10.5194/essd-12-3039-2020\n",
-    "tree": {
-      "dirs": {},
-      "files": [
-        "00-install_packages.ipynb",
-        "01-acquire_data.ipynb",
-        "02-match_glacier_centroids.ipynb",
-        "1-coregistration_testing.ipynb",
-        "2-LOO_archtesting.ipynb",
-        "3-LOO_archselection.ipynb",
-        "4-LOO.ipynb",
-        "5-vol_confidence_interval.ipynb",
-        "6-LOO_analysis.ipynb",
-        "CONTEXT.md",
-        "P1-coregistration_plot.ipynb",
-        "P2-residuals.ipynb",
-        "P3-scatter_plot.ipynb",
-        "P4-discrepancy_boxplot.ipynb",
-        "P5-variance_analysis.ipynb",
-        "README.md",
-        "T1-results_table.ipynb",
-        "T2-table_plot.ipynb",
-        "calls.json",
-        "glacierml.py",
-        "global_sum_differences.ipynb",
-        "listener.py",
-        "model_coregistration.txt",
-        "path_manager.py",
-        "permutation_test.ipynb"
-      ]
-    }
-  },
-  "gov_inertia": {
-    "name": "gov_inertia",
-    "description": "Agent-based simulation of government growth, taxation, and organizational inertia over time.",
-    "tech": [
-      "Python"
-    ],
-    "github": "https://github.com/simonhansedasi/gov_inertia",
-    "branch": "main",
-    "readme": "# gov_inertia\n\nAgent-based simulation of government growth, taxation, and organizational inertia over time.\n\n## What it does\n\nModels a population of citizens and a government that taxes, enforces compliance, redistributes wealth, and accumulates bureaucratic overhead. Simulates how surplus allocation, corruption, and inertia shape long-run government size and citizen welfare. Results are exported to JSON and visualized in notebooks.\n\n## Tech\n\nPython \u2014 `numpy`, `copy`, `tqdm`, Jupyter\n\n## Run\n\n```bash\npython gov_inertia.py\n```\n\nOr open `simulation.ipynb` for an interactive walkthrough with visualizations.\n",
-    "tree": {
-      "dirs": {},
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "calls.json",
-        "failure_condition.ipynb",
-        "gov_inertia.py",
-        "run_simulation.ipynb",
-        "setup.ipynb",
-        "simulation.ipynb"
-      ]
-    }
-  },
-  "pyopoly": {
-    "name": "pyopoly",
-    "description": "Terminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.",
-    "tech": [
-      "Python"
-    ],
-    "github": "https://github.com/simonhansedasi/pyopoly",
-    "branch": "main",
-    "readme": "# pyopoly\n\n### A game for slumlords.\n\nTerminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.\n\n## What it does\n\nImplements Monopoly in Python with human vs. AI players. Features property ownership, building houses/hotels, custom card decks (Chance/Community Chest), jail mechanics, and a color-coded terminal UI.\n\n- **CPU AI** \u2014 automated buy, build, mortgage, and trade decisions\n- **Trading** \u2014 humans can propose trades with any player; CPUs proactively seek trades to complete monopolies (CPU-to-CPU and CPU-to-human)\n- **Auctions** \u2014 properties declined by the landing player go to open auction\n- **Jail** \u2014 pay bail, roll for doubles, or burn a Get Out of Jail Free card\n- **Mortgaging** \u2014 mortgage/unmortgage properties from the in-turn menu\n\n## Tech\n\nPython \u2014 stdlib only (`random`, `time`, ANSI color codes)\n\n## Run\n\n```bash\npython pyopoly.py\n```\n",
-    "tree": {
-      "dirs": {},
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "gamefile.py",
-        "pyopoly.py"
-      ]
-    }
-  },
-  "rejection_matrix": {
-    "name": "rejection_matrix",
-    "description": "Two CLI tools:",
-    "tech": [],
-    "github": "https://github.com/simonhansedasi/rejection_matrix",
-    "branch": "main",
-    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n| `--variant` | no | Resume variant used (e.g. `geo`, `research`, `simulation`) |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"PNNL\" \"Research Scientist\" --source LinkedIn --location Remote --variant research\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS] [--variant VARIANT]\n```\n\nEvery update is written to the audit log with a timestamp. `--status` changes the application status; `--variant` updates which resume was used. Both are recorded with old/new values.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n\n# Update the resume variant (e.g. if you forgot to set it on add)\npython3 src/rm.py update 5 \"switched to geo resume\" --variant geo\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary and resume variant are shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
-    "tree": {
-      "dirs": {
-        "data": {
-          "dirs": {},
-          "files": [
-            "resume_ds_analyst.tex",
-            "resume_remote_sensing_ds.tex"
-          ]
-        },
-        "src": {
-          "dirs": {},
-          "files": [
-            "rm.py",
-            "search.py"
-          ]
-        }
-      },
-      "files": [
-        "CONTEXT.md",
-        "README.md",
-        "WORKFLOW.md"
       ]
     }
   },
@@ -802,43 +372,175 @@ const fileStructure = {
       ]
     }
   },
-  "timer": {
-    "name": "timer",
-    "description": "Browser-based time tracker for logging work sessions by project and task \u2014 no server required.",
+  "gov_inertia": {
+    "name": "gov_inertia",
+    "description": "Agent-based simulation of government growth, taxation, and organizational inertia over time.",
     "tech": [
-      "HTML5",
-      "CSS3",
-      "JavaScript (vanilla)"
+      "Python"
     ],
-    "github": "https://github.com/simonhansedasi/timer",
+    "github": "https://github.com/simonhansedasi/gov_inertia",
     "branch": "main",
-    "readme": "# timer\n\nBrowser-based time tracker for logging work sessions by project and task \u2014 no server required.\n\n## What it does\n\nStart, pause, and end work sessions with a single click. Tracks elapsed time per project/task, auto-saves sessions to `localStorage`, and exports daily logs as CSV. Fully self-contained in a single HTML file.\n\n## Tech\n\nHTML5, CSS3, JavaScript (vanilla)\n\n## Run\n\nOpen `index.html` in any browser. No install or server needed.\n",
+    "readme": "# gov_inertia\n\nAgent-based simulation of government growth, taxation, and organizational inertia over time.\n\n## What it does\n\nModels a population of citizens and a government that taxes, enforces compliance, redistributes wealth, and accumulates bureaucratic overhead. Simulates how surplus allocation, corruption, and inertia shape long-run government size and citizen welfare. Results are exported to JSON and visualized in notebooks.\n\n## Tech\n\nPython \u2014 `numpy`, `copy`, `tqdm`, Jupyter\n\n## Run\n\n```bash\npython gov_inertia.py\n```\n\nOr open `simulation.ipynb` for an interactive walkthrough with visualizations.\n",
     "tree": {
       "dirs": {},
       "files": [
         "CONTEXT.md",
         "README.md",
-        "index.html"
+        "calls.json",
+        "failure_condition.ipynb",
+        "gov_inertia.py",
+        "run_simulation.ipynb",
+        "setup.ipynb",
+        "simulation.ipynb"
       ]
     }
   },
-  "trivia": {
-    "name": "trivia",
-    "description": "Web-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.",
+  "rejection_matrix": {
+    "name": "rejection_matrix",
+    "description": "Two CLI tools:",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/rejection_matrix",
+    "branch": "main",
+    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n| `--variant` | no | Resume variant used (e.g. `geo`, `research`, `simulation`) |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"PNNL\" \"Research Scientist\" --source LinkedIn --location Remote --variant research\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS] [--variant VARIANT]\n```\n\nEvery update is written to the audit log with a timestamp. `--status` changes the application status; `--variant` updates which resume was used. Both are recorded with old/new values.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n\n# Update the resume variant (e.g. if you forgot to set it on add)\npython3 src/rm.py update 5 \"switched to geo resume\" --variant geo\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary and resume variant are shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
+    "tree": {
+      "dirs": {
+        "data": {
+          "dirs": {},
+          "files": [
+            "resume_ds_analyst.tex",
+            "resume_remote_sensing_ds.tex"
+          ]
+        },
+        "src": {
+          "dirs": {},
+          "files": [
+            "rm.py",
+            "search.py"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "WORKFLOW.md"
+      ]
+    }
+  },
+  "OmaElu": {
+    "name": "OmaElu",
+    "description": "Life organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.",
+    "tech": [
+      "Flask",
+      "SQLite",
+      "Python",
+      "Click",
+      "Rich",
+      "questionary",
+      "Google Calendar API",
+      "Raspberry Pi",
+      "Tailscale",
+      "systemd",
+      "ntfy (push notifications)",
+      "cron"
+    ],
+    "github": "https://github.com/simonhansedasi/OmaElu",
+    "branch": "main",
+    "readme": "# OmaElu\n\nLife organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.\n\n---\n\n## Sub-projects\n\n### `scheduling/` \u2014 Weekly Planner CLI\nInteractive CLI for planning the week ahead. Pulls Google Calendar events, adds activities with time/location/tags/notes, pushes back to Calendar. Designed around a toddler nap window and weekly themed days.\n\n**Run:**\n```bash\npython plan.py show week\npython plan.py add\npython plan.py push\n```\n\n### `personal_tracker/` \u2014 Personal Health Tracker\nMobile-first Flask app running on a Raspberry Pi (port 5001). Logs wake/sleep, mood, energy, food, exercise, substances, hydration, and naps. Accessible via Tailscale from anywhere.\n\n**Access:**\n- Home: `http://192.168.88.9:5001`\n- Away: `http://100.93.132.118:5001`\n\n---\n\n## Tech\n\nFlask, SQLite, Python, Click, Rich, questionary, Google Calendar API, Raspberry Pi, Tailscale, systemd, ntfy (push notifications), cron\n\n---\n\n## Infrastructure\n\nBoth tools are deployed on a Raspberry Pi (HST timezone) via rsync + systemd services. Push notifications via [ntfy.sh](https://ntfy.sh) \u2014 topic `remember_dummy` for personal reminders.\n",
+    "tree": {
+      "dirs": {
+        "personal_tracker": {
+          "dirs": {
+            "static": {
+              "dirs": {},
+              "files": [
+                "style.css"
+              ]
+            },
+            "templates": {
+              "dirs": {},
+              "files": [
+                "base.html",
+                "edit.html",
+                "exercise.html",
+                "food.html",
+                "index.html",
+                "substance.html",
+                "today.html"
+              ]
+            }
+          },
+          "files": [
+            "INSTRUCTIONS.md",
+            "README.md",
+            "analysis.py",
+            "app.py",
+            "remind_personal.py",
+            "schema.sql",
+            "simon_analysis.ipynb"
+          ]
+        },
+        "scheduling": {
+          "dirs": {
+            "archive": {
+              "dirs": {},
+              "files": [
+                "waikoloa.json"
+              ]
+            },
+            "credentials": {
+              "dirs": {},
+              "files": [
+                "client_secret.json",
+                "token.json"
+              ]
+            },
+            "weeks": {
+              "dirs": {},
+              "files": [
+                "2026-W13.json",
+                "2026-W14.json"
+              ]
+            }
+          },
+          "files": [
+            "CONTEXT.md",
+            "README.md",
+            "config.json",
+            "gcal.py",
+            "plan.py",
+            "requirements.txt"
+          ]
+        }
+      },
+      "files": [
+        "README.md"
+      ]
+    }
+  },
+  "commuting": {
+    "name": "commuting",
+    "description": "Analyzes how rain and weather conditions affect commute times across different transport modes.",
     "tech": [
       "Python",
       "Flask",
+      "SQLite",
+      "pandas",
+      "matplotlib",
+      "scipy",
       "HTML/CSS/JS"
     ],
-    "github": "https://github.com/simonhansedasi/trivia",
+    "github": "https://github.com/simonhansedasi/commuting",
     "branch": "main",
-    "readme": "# trivia\n\nWeb-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.\n\n## What it does\n\nLoads a large JSON question bank and serves random questions via a Flask API. The frontend displays questions with multiple-choice options and a reveal-answer button. Questions are shuffled on each load.\n\n## Tech\n\nPython, Flask, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # starts on port 5005\n```\n\nOpen `http://localhost:5005` in your browser.\n",
+    "readme": "# commuting\n\nAnalyzes how rain and weather conditions affect commute times across different transport modes.\n\n## What it does\n\nCollects commute log entries (mode, duration, weather, road conditions) stored in SQLite. Runs statistical analysis (confidence intervals via scipy) and generates comparative visualizations \u2014 pie charts and stacked bars \u2014 showing transit time distributions across weather conditions.\n\n## Tech\n\nPython, Flask, SQLite, pandas, matplotlib, scipy, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py\n```\n\nOpen the web dashboard to log commutes and view charts.\n",
     "tree": {
       "dirs": {
         "js": {
           "dirs": {},
           "files": [
-            "fetch_question.js"
+            "commute_form.js",
+            "get_images.js",
+            "get_user_images.js",
+            "login.js"
           ]
         }
       },
@@ -847,11 +549,142 @@ const fileStructure = {
         "Gemfile",
         "Gemfile.lock",
         "README.md",
+        "_config.yml",
+        "app.py",
+        "commute_analysis.py",
+        "config.txt",
+        "dash.html",
+        "index.html",
+        "styles.css"
+      ]
+    }
+  },
+  "game_ranking": {
+    "name": "game_ranking",
+    "description": "Leaderboard tracker for daily word puzzle games (Wordle, Connections, Strands) \u2014 scores arrive via SMS and are ranked automatically.",
+    "tech": [
+      "Python",
+      "Flask",
+      "SQLite",
+      "matplotlib",
+      "numpy",
+      "Twilio API",
+      "HTML/CSS/JS"
+    ],
+    "github": "https://github.com/simonhansedasi/game_ranking",
+    "branch": "main",
+    "readme": "# game_ranking\n\nLeaderboard tracker for daily word puzzle games (Wordle, Connections, Strands) \u2014 scores arrive via SMS and are ranked automatically.\n\n## What it does\n\nPlayers text their puzzle results to a Twilio number. The Flask backend parses the pasted score blocks, stores results in SQLite, and serves a ranked leaderboard with performance charts. Supports multiple games with per-game scoring logic.\n\n## Tech\n\nPython, Flask, SQLite, matplotlib, numpy, Twilio API, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # starts on port 5005\n```\n\nSet up a Twilio webhook pointing to `/sms` to receive scores via text message.\n",
+    "tree": {
+      "dirs": {
+        "js": {
+          "dirs": {},
+          "files": [
+            "fetch_ranking.js",
+            "sess_id.js",
+            "submit_score.js"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "Gemfile",
+        "README.md",
+        "Untitled.ipynb",
         "app.py",
         "config.txt",
+        "game_ranking.py",
         "index.html",
-        "main.py",
-        "trivia.py"
+        "scrape_data.ipynb",
+        "styles.css",
+        "wordle_scoring.ipynb",
+        "wordle_scoring_n_players.ipynb"
+      ]
+    }
+  },
+  "crm": {
+    "name": "crm",
+    "description": "Lightweight local CRM for tracking contacts, companies, deals, and notes \u2014 built for paint booth parts sales.",
+    "tech": [
+      "Python",
+      "Flask",
+      "SQLAlchemy",
+      "SQLite",
+      "YAML",
+      "HTML/CSS/JS"
+    ],
+    "github": "https://github.com/simonhansedasi/crm",
+    "branch": "main",
+    "readme": "# crm\n\nLightweight local CRM for tracking contacts, companies, deals, and notes \u2014 built for paint booth parts sales.\n\n## What it does\n\nFlask backend with a vanilla JS frontend backed by SQLite. Supports a configurable sales pipeline (stages defined in `config.yaml`), contact/company management, deal tracking, notes, and tags. Everything runs locally with no external dependencies beyond Python packages.\n\n## Tech\n\nPython, Flask, SQLAlchemy, SQLite, YAML, HTML/CSS/JS\n\n## Run\n\n```bash\npip install -r requirements.txt\npython app.py\n```\n\nOpens at `http://localhost:5000`. Pipeline stages, custom fields, and tags are configured in `config.yaml`.\n",
+    "tree": {
+      "dirs": {
+        "frontend": {
+          "dirs": {},
+          "files": [
+            "app.js",
+            "index.html",
+            "style.css"
+          ]
+        },
+        "models": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "contact.py",
+            "deal.py",
+            "note.py",
+            "part.py",
+            "tag.py"
+          ]
+        },
+        "routes": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "contacts.py",
+            "deals.py",
+            "import_routes.py",
+            "notes.py",
+            "parts.py",
+            "tags.py"
+          ]
+        },
+        "tests": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "conftest.py",
+            "test_contacts.py",
+            "test_deals.py",
+            "test_notes.py"
+          ]
+        }
+      },
+      "files": [
+        "CLAUDE.md",
+        "CONTEXT.md",
+        "README.md",
+        "app.py",
+        "config.yaml",
+        "requirements.txt"
+      ]
+    }
+  },
+  "alphabet_soup": {
+    "name": "alphabet_soup",
+    "description": "Finds the smallest set of words where every word uses only unique letters and together they cover all 26 letters of the alphabet.",
+    "tech": [
+      "Python 3"
+    ],
+    "github": "https://github.com/simonhansedasi/alphabet_soup",
+    "branch": "main",
+    "readme": "# alphabet_soup\n\nFinds the smallest set of words where every word uses only unique letters and together they cover all 26 letters of the alphabet.\n\n## What it does\n\nGiven a word dictionary, filters for words with no repeated letters, then uses bitmask encoding and a recursive search (prioritizing rarest letters first) to find minimal covering sets. Results are cached with pickle to avoid re-running the expensive search.\n\n## Tech\n\nPython 3 \u2014 `requests`, `pickle`, `collections`\n\n## Run\n\n```bash\npython untitled.py\n```\n\nDownloads a word list on first run and caches results to `alphabet_soup_scrabble.pkl`.\n",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "Untitled.ipynb",
+        "untitled.py"
       ]
     }
   },
@@ -909,6 +742,173 @@ const fileStructure = {
         "index.html",
         "indexer.py",
         "viewer.html"
+      ]
+    }
+  },
+  "timer": {
+    "name": "timer",
+    "description": "Browser-based time tracker for logging work sessions by project and task \u2014 no server required.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript (vanilla)"
+    ],
+    "github": "https://github.com/simonhansedasi/timer",
+    "branch": "main",
+    "readme": "# timer\n\nBrowser-based time tracker for logging work sessions by project and task \u2014 no server required.\n\n## What it does\n\nStart, pause, and end work sessions with a single click. Tracks elapsed time per project/task, auto-saves sessions to `localStorage`, and exports daily logs as CSV. Fully self-contained in a single HTML file.\n\n## Tech\n\nHTML5, CSS3, JavaScript (vanilla)\n\n## Run\n\nOpen `index.html` in any browser. No install or server needed.\n",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "index.html"
+      ]
+    }
+  },
+  "blackjack": {
+    "name": "blackjack",
+    "description": "Blackjack simulator that compares basic play against a Hi-Lo card counting strategy across thousands of simulated hands.",
+    "tech": [
+      "Python"
+    ],
+    "github": "https://github.com/simonhansedasi/blackjack",
+    "branch": "main",
+    "readme": "# blackjack\n\nBlackjack simulator that compares basic play against a Hi-Lo card counting strategy across thousands of simulated hands.\n\n## What it does\n\nImplements a full blackjack game engine (dealing, hitting, standing, bust detection) with two player strategies: naive play and Hi-Lo card counting. Runs large-scale simulations and plots win rate distributions to quantify the edge that counting gives.\n\n## Tech\n\nPython \u2014 `random`, `collections`, `tqdm`, `matplotlib`, `pandas`, Jupyter\n\n## Run\n\nOpen `simulation.ipynb` in Jupyter, or import `blackjack.py` directly:\n\n```python\nfrom blackjack import simulate\nsimulate(n_hands=10000, strategy='hilo')\n```\n",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "blackjack.py",
+        "simulation.ipynb"
+      ]
+    }
+  },
+  "char_gen": {
+    "name": "char_gen",
+    "description": "D&D 5e character generator \u2014 rolls stats, picks race, background, and class optimally, with a web UI and stored character history.",
+    "tech": [
+      "Python",
+      "Flask",
+      "SQLite",
+      "HTML/CSS/JS"
+    ],
+    "github": "https://github.com/simonhansedasi/char_gen",
+    "branch": "main",
+    "readme": "# char_gen\n\nD&D 5e character generator \u2014 rolls stats, picks race, background, and class optimally, with a web UI and stored character history.\n\n## What it does\n\nRolls ability scores using the 4d6-drop-lowest method, then selects species, background, and class based on which option best matches the rolled stats. Characters are saved to a SQLite database. Includes analysis notebooks for exploring stat distributions and class balance.\n\n## Tech\n\nPython, Flask, SQLite, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # web UI on http://localhost:5000\n```\n\nOr generate a character from the command line:\n\n```bash\npython chargen.py\n```\n",
+    "tree": {
+      "dirs": {
+        "js": {
+          "dirs": {},
+          "files": [
+            "character-loader.js"
+          ]
+        },
+        "templates": {
+          "dirs": {},
+          "files": [
+            "index.html"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "analysis.ipynb",
+        "app.py",
+        "attribute_class.ipynb",
+        "attribute_correlation.ipynb",
+        "chargen.py",
+        "config.txt",
+        "gen.py",
+        "index.html",
+        "requirements.txt",
+        "simulation.ipynb",
+        "style.css",
+        "tables.py"
+      ]
+    }
+  },
+  "trivia": {
+    "name": "trivia",
+    "description": "Web-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.",
+    "tech": [
+      "Python",
+      "Flask",
+      "HTML/CSS/JS"
+    ],
+    "github": "https://github.com/simonhansedasi/trivia",
+    "branch": "main",
+    "readme": "# trivia\n\nWeb-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.\n\n## What it does\n\nLoads a large JSON question bank and serves random questions via a Flask API. The frontend displays questions with multiple-choice options and a reveal-answer button. Questions are shuffled on each load.\n\n## Tech\n\nPython, Flask, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # starts on port 5005\n```\n\nOpen `http://localhost:5005` in your browser.\n",
+    "tree": {
+      "dirs": {
+        "js": {
+          "dirs": {},
+          "files": [
+            "fetch_question.js"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "Gemfile",
+        "Gemfile.lock",
+        "README.md",
+        "app.py",
+        "config.txt",
+        "index.html",
+        "main.py",
+        "trivia.py"
+      ]
+    }
+  },
+  "drawing": {
+    "name": "drawing",
+    "description": "Generative art experiments \u2014 tie-dye patterns, trigonometric drawings, and interactive canvas sketching.",
+    "tech": [
+      "Python"
+    ],
+    "github": "https://github.com/simonhansedasi/drawing",
+    "branch": "function_listener",
+    "readme": "# drawing\n\nGenerative art experiments \u2014 tie-dye patterns, trigonometric drawings, and interactive canvas sketching.\n\n## What it does\n\nA collection of visual experiments using matplotlib and numpy. Includes parametric trig art, procedural tie-dye color fields, and an event-driven listener for interactive drawing input.\n\n## Tech\n\nPython \u2014 `matplotlib`, `numpy`, Jupyter notebooks\n\n## Run\n\nOpen any notebook in Jupyter:\n\n```bash\njupyter notebook TieDyes.ipynb\njupyter notebook trig_art.ipynb\n```\n\nOr run the interactive listener:\n\n```bash\npython listener.py\n```\n",
+    "tree": {
+      "dirs": {
+        "function_art": {
+          "dirs": {},
+          "files": [
+            "char_gen_simulation_calls.json",
+            "gov_inertia_run_simulation_calls.json"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "TieDyes.ipynb",
+        "Untitled.ipynb",
+        "Untitled1.ipynb",
+        "Untitled2.ipynb",
+        "listener.py",
+        "trig_art.ipynb"
+      ]
+    }
+  },
+  "pyopoly": {
+    "name": "pyopoly",
+    "description": "Terminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.",
+    "tech": [
+      "Python"
+    ],
+    "github": "https://github.com/simonhansedasi/pyopoly",
+    "branch": "main",
+    "readme": "# pyopoly\n\n### A game for slumlords.\n\nTerminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.\n\n## What it does\n\nImplements Monopoly in Python with human vs. AI players. Features property ownership, building houses/hotels, custom card decks (Chance/Community Chest), jail mechanics, and a color-coded terminal UI.\n\n- **CPU AI** \u2014 automated buy, build, mortgage, and trade decisions\n- **Trading** \u2014 humans can propose trades with any player; CPUs proactively seek trades to complete monopolies (CPU-to-CPU and CPU-to-human)\n- **Auctions** \u2014 properties declined by the landing player go to open auction\n- **Jail** \u2014 pay bail, roll for doubles, or burn a Get Out of Jail Free card\n- **Mortgaging** \u2014 mortgage/unmortgage properties from the in-turn menu\n\n## Tech\n\nPython \u2014 stdlib only (`random`, `time`, ANSI color codes)\n\n## Run\n\n```bash\npython pyopoly.py\n```\n",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "gamefile.py",
+        "pyopoly.py"
       ]
     }
   }

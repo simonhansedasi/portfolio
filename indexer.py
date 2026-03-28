@@ -20,6 +20,28 @@ SKIP_EXTENSIONS = {
 
 SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io'}
 
+# Recruiter-facing order: published research → production systems → domain tools → fun projects
+REPO_ORDER = [
+    'GrapeExpectations',
+    'glacier_prethicktor',
+    'dada_science',
+    'sf_majick',
+    'gov_inertia',
+    'rejection_matrix',
+    'OmaElu',
+    'commuting',
+    'game_ranking',
+    'crm',
+    'alphabet_soup',
+    'wiki-index',
+    'timer',
+    'blackjack',
+    'char_gen',
+    'trivia',
+    'drawing',
+    'pyopoly',
+]
+
 MAX_DEPTH = 3
 
 
@@ -147,7 +169,10 @@ def scan_tree(path, depth=0):
 def main():
     projects = {}
 
-    for entry in sorted(os.listdir(root)):
+    all_entries = set(os.listdir(root))
+    ordered = [e for e in REPO_ORDER if e in all_entries]
+    ordered += sorted(e for e in all_entries if e not in REPO_ORDER)
+    for entry in ordered:
         if entry in SKIP_REPOS or entry.startswith('.'):
             continue
         full_path = os.path.join(root, entry)
