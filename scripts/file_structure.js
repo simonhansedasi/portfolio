@@ -1,7 +1,7 @@
 const fileStructure = {
   "GrapeExpectations": {
     "name": "GrapeExpectations",
-    "description": "Precision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and map microclimate frost risk at meter resolution. Includes a stacked ensemble ML model (R\u00b2 = 0.967) and a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.",
+    "description": "Precision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and microclimate frost risk at meter resolution. Stacked ensemble achieving R\u00b2 = 0.967. Includes a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.",
     "tech": [
       "Python",
       "scikit-learn",
@@ -18,7 +18,7 @@ const fileStructure = {
     ],
     "github": "https://github.com/simonhansedasi/GrapeExpectations",
     "branch": "main",
-    "readme": "# GrapeExpectations\n\nPrecision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and map microclimate frost risk at meter resolution. Includes a stacked ensemble ML model (R\u00b2 = 0.967) and a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.\n\n## What it does\n\nThe pipeline ingests five geospatial data sources, engineers a 100+ feature matrix across 3,598 hexagonal plot cells, and trains multi-output ensemble models to predict 8-week NDVI trajectories from environmental conditions alone.\n\n### Data pipeline (6-stage)\n\n| Stage | Notebook | What it does |\n|---|---|---|\n| 00 | `subsample_polygons` | Subdivide vineyard blocks into 3,598 hexagonal cells (~1,000 m\u00b2 each) for spatial variance |\n| 01 | `clip_dem` | Clip USGS 1m DEM to vineyard extent; reproject to UTM |\n| 02 | `breakdown_dem` | Zonal statistics per cell: elevation, slope, aspect (cos/sin), profile/plan curvature, local relief |\n| 03 | `get_temp_data` | Extract 9-year daily PRISM climate grid (tmin/tmax, precip, VPD, GDD) |\n| 04 | `ndvi_smol` | Sentinel-2 composites via Google Earth Engine; compute NDVI, EVI, NDWI, SAVI, RENDVI, MCARI2; smooth and interpolate |\n| 05 | `soil` | Clip USGS gSSURGO soil database to vineyard; extract sand/silt/clay %, AWC, CEC7, organic matter, pH, EC |\n| 06 | `assemble_data` | Join all layers into 100+ feature matrix; 3,598 samples \u00d7 9 years = 32,382 rows |\n\n### Machine learning (4 pipelines)\n\n**Stacked Ensemble** (`ML/forest_ensemble.ipynb`) \u2014 Multi-output regression predicting NDVI for weeks 36\u201343 simultaneously.\n- Base learners: Random Forest, Extra Trees, Gradient Boosting, XGBoost, KNN (distance-weighted)\n- Meta-learner: ElasticNetCV (\u03b1 and L1 ratio tuned via 5-fold CV)\n- Performance: **R\u00b2 = 0.967**, RMSE = 0.00033 on tune set\n\n**Spatial Clustering** (`ML/clustering.ipynb`) \u2014 Identifies 3 distinct management zones using gradient boosting leaf embeddings + PCA + k-means. Clusters reveal which soil and topographic variables drive canopy variability across the vineyard.\n\n**Time-Series Regression** (`ML/time_series.ipynb`) \u2014 Per-plot OLS on NDVI trajectory for anomaly detection and yield trend monitoring.\n\n**Frost Risk Map** (`assess_frost_risk.ipynb`) \u2014 Composite microclimate score (slope drainage \u00d7 elevation deviation \u00d7 NDVI vigor \u00d7 plot area) mapped to a raster overlay for targeted frost protection decisions.\n\n### DTS research proposal\n\n`docs/GrapeExpectations.tex` is a research proposal for deploying Distributed Temperature Sensing (DTS) fiber-optic cables across vineyard rows \u2014 1m spatial resolution, sub-minute temporal resolution, continuous canopy temperature monitoring at field scale. Pilot planned in collaboration with Washington State University.\n\n## Data sources\n\n| Source | Layer | Resolution | Coverage |\n|---|---|---|---|\n| USGS National Map | DEM | 1 m | ~5 km\u00b2 |\n| ESA Sentinel-2 (Earth Engine) | NDVI + 5 indices | 10 m | 9 years, 2016\u20132025 |\n| PRISM Oregon State | Daily weather | 4 km grid | 9 years, 2016\u20132025 |\n| USGS gSSURGO | Soil properties | Map unit | Regional |\n| Google Earth | Vineyard boundaries | Vector (KML) | Regression Ridge block |\n\n## Tech\n\nPython, scikit-learn, XGBoost, Google Earth Engine, rasterstats, rasterio, geopandas, GDAL, pandas, NumPy, matplotlib, Jupyter\n\n## Status\n\nActive research. Stacked ensemble and frost risk pipeline complete. DTS fiber-optic deployment proposal under review for funding. Pilot in planning with Washington State University.\n",
+    "readme": "# GrapeExpectations\n\nPrecision viticulture research pipeline \u2014 fuses 9 years of satellite imagery, topographic data, and soil maps to model vineyard canopy health and microclimate frost risk at meter resolution. Stacked ensemble achieving R\u00b2 = 0.967. Includes a research proposal for Distributed Temperature Sensing (DTS) fiber-optic deployment across vineyard rows.\n\n---\n\n## Data pipeline\n\nSix-stage pipeline assembling a 100+ feature matrix across 3,598 hexagonal plot cells (32,382 training rows over 9 years).\n\n### [00 \u2014 Subsample polygons](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/00_subsample_polygons.ipynb)\n\nSubdivide vineyard blocks into hexagonal cells (~1,000 m\u00b2 each) for equal-area spatial sampling and maximum feature variance.\n\n### [01 \u2014 Clip DEM](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/01_clip_dem.ipynb)\n\nClip USGS 1m DEM to vineyard extent; reproject to UTM.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/dem_clip.png\" alt=\"DEM clipped to vineyard extent\" width=\"600\"/>\n</p>\n\n### [02 \u2014 Breakdown DEM](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/02_breakdown_dem.ipynb)\n\nZonal statistics per cell: elevation, slope, aspect (cos/sin encoded), profile/plan curvature, local relief.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/dem_w_slope.png\" alt=\"DEM with slope overlay\" width=\"600\"/>\n</p>\n\n### [03 \u2014 Temperature data](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/03_get_temp_data.ipynb)\n\nExtract 9-year daily PRISM climate grid: tmin/tmax, precipitation, VPD, GDD.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/temp_timeseries.png\" alt=\"Temperature time series\" width=\"600\"/>\n</p>\n\n### [04 \u2014 Vegetation indices](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/04-2_ndvi_smol.ipynb)\n\nSentinel-2 composites via Google Earth Engine: NDVI, EVI, NDWI, SAVI, RENDVI, MCARI2. Smoothed and interpolated per cell across 9 seasons.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/health.png\" alt=\"Vegetation index time series\" width=\"600\"/>\n</p>\n\n### [05 \u2014 Soil](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/05_soil.ipynb)\n\nClip USGS gSSURGO soil database to vineyard; extract sand/silt/clay %, AWC, CEC7, organic matter, pH, EC.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/soil.png\" alt=\"Soil map\" width=\"600\"/>\n</p>\n\n### [06 \u2014 Assemble data](https://github.com/simonhansedasi/GrapeExpectations/blob/main/RegressionRidge/data_wrangling/06_assemble_data.ipynb)\n\nJoin all layers into a 100+ feature matrix: 3,598 cells \u00d7 9 years = 32,382 rows.\n\n---\n\n## Machine learning\n\n### Stacked ensemble \u2014 NDVI prediction\n\nMulti-output regression predicting NDVI for weeks 36\u201343 simultaneously.\n- Base learners: Random Forest, Extra Trees, Gradient Boosting, XGBoost, KNN\n- Meta-learner: ElasticNetCV (\u03b1 and L1 ratio tuned via 5-fold CV)\n- **R\u00b2 = 0.967**, RMSE = 0.00033 on tune set\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/weekly_preds.png\" alt=\"Weekly NDVI predictions vs. observed\" width=\"600\"/>\n</p>\n\nResiduals remain tight for near-term weeks and widen with prediction horizon \u2014 time-series modeling is the natural next step.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/weekly_preds_resid.png\" alt=\"Prediction residuals\" width=\"600\"/>\n</p>\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/weekly_pct_preds_resid.png\" alt=\"Percent prediction residuals\" width=\"600\"/>\n</p>\n\n### Spatial clustering \u2014 management zones\n\nGradient boosting leaf embeddings \u2192 PCA \u2192 k-means identifies 3 distinct management zones from soil and topographic features.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/cluster_pca.png\" alt=\"PCA cluster plot\" width=\"600\"/>\n</p>\n\nZones mapped back to the vineyard DEM reveal spatially coherent blocks aligned with topographic gradients.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/dem_w_cluster.png\" alt=\"Clusters overlaid on DEM\" width=\"600\"/>\n</p>\n\nRadar chart shows which soil and topographic features drive each zone.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/radar_cluster.png\" alt=\"Cluster feature weights\" width=\"600\"/>\n</p>\n\n### Time-series regression\n\nPer-plot OLS on NDVI trajectory for anomaly detection and yield trend monitoring across seasons.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/ts_lr.png\" alt=\"Time series linear regression\" width=\"600\"/>\n</p>\n\n### Frost risk map\n\nComposite microclimate score (slope drainage \u00d7 elevation deviation \u00d7 NDVI vigor \u00d7 plot area) rasterized to a spatial overlay for targeted frost protection decisions.\n\n<p align=\"center\">\n  <img src=\"RegressionRidge/img/frost_risk.png\" alt=\"Frost risk raster\" width=\"600\"/>\n</p>\n\n---\n\n## DTS research proposal\n\n`docs/GrapeExpectations.tex` proposes deploying Distributed Temperature Sensing (DTS) fiber-optic cables across vineyard rows \u2014 1m spatial resolution, sub-minute temporal resolution, continuous canopy temperature monitoring at field scale. Pilot planned with Washington State University. Funding decision pending ~April 2026.\n\n---\n\n## Data sources\n\n| Source | Layer | Resolution | Coverage |\n|---|---|---|---|\n| USGS National Map | DEM | 1 m | ~5 km\u00b2 |\n| ESA Sentinel-2 (Earth Engine) | NDVI + 5 indices | 10 m | 9 years, 2016\u20132025 |\n| PRISM Oregon State | Daily weather | 4 km grid | 9 years, 2016\u20132025 |\n| USGS gSSURGO | Soil properties | Map unit | Regional |\n| Google Earth | Vineyard boundaries | Vector (KML) | Regression Ridge block |\n\n## Tech\n\nPython, scikit-learn, XGBoost, Google Earth Engine, rasterstats, rasterio, geopandas, GDAL, pandas, NumPy, matplotlib, Jupyter\n\n## Status\n\nActive research. Stacked ensemble and frost risk pipeline complete. DTS fiber-optic deployment proposal under review for funding with Washington State University.\n",
     "tree": {
       "dirs": {
         "RegressionRidge": {
@@ -133,6 +133,97 @@ const fileStructure = {
         "Untitled.ipynb",
         "data_wrangling_env",
         "ml_env_setup"
+      ]
+    }
+  },
+  "OmaElu": {
+    "name": "OmaElu",
+    "description": "Life organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.",
+    "tech": [
+      "Flask",
+      "SQLite",
+      "Python",
+      "Click",
+      "Rich",
+      "questionary",
+      "Google Calendar API",
+      "Raspberry Pi",
+      "Tailscale",
+      "systemd",
+      "ntfy (push notifications)",
+      "cron"
+    ],
+    "github": "https://github.com/simonhansedasi/OmaElu",
+    "branch": "main",
+    "readme": "# OmaElu\n\nLife organization tools \u2014 the personal infrastructure branch of Edasi Motlev. Two integrated systems: a CLI weekly planner that syncs with Google Calendar, and a mobile-first personal health tracker running on a Raspberry Pi.\n\n---\n\n## Sub-projects\n\n### `scheduling/` \u2014 Weekly Planner CLI\nInteractive CLI for planning the week ahead. Pulls Google Calendar events, adds activities with time/location/tags/notes, pushes back to Calendar. Designed around a toddler nap window and weekly themed days.\n\n**Run:**\n```bash\npython plan.py show week\npython plan.py add\npython plan.py push\n```\n\n### `personal_tracker/` \u2014 Personal Health Tracker\nMobile-first Flask app running on a Raspberry Pi (port 5001). Logs wake/sleep, mood, energy, food, exercise, substances, hydration, and naps. Accessible via Tailscale from anywhere.\n\n**Access:**\n- Home: `http://192.168.88.9:5001`\n- Away: `http://100.93.132.118:5001`\n\n---\n\n## Tech\n\nFlask, SQLite, Python, Click, Rich, questionary, Google Calendar API, Raspberry Pi, Tailscale, systemd, ntfy (push notifications), cron\n\n---\n\n## Infrastructure\n\nBoth tools are deployed on a Raspberry Pi (HST timezone) via rsync + systemd services. Push notifications via [ntfy.sh](https://ntfy.sh) \u2014 topic `remember_dummy` for personal reminders.\n",
+    "tree": {
+      "dirs": {
+        "personal_tracker": {
+          "dirs": {
+            "static": {
+              "dirs": {},
+              "files": [
+                "style.css"
+              ]
+            },
+            "templates": {
+              "dirs": {},
+              "files": [
+                "base.html",
+                "edit.html",
+                "exercise.html",
+                "food.html",
+                "index.html",
+                "substance.html",
+                "today.html"
+              ]
+            }
+          },
+          "files": [
+            "INSTRUCTIONS.md",
+            "README.md",
+            "analysis.py",
+            "app.py",
+            "remind_personal.py",
+            "schema.sql",
+            "simon_analysis.ipynb"
+          ]
+        },
+        "scheduling": {
+          "dirs": {
+            "archive": {
+              "dirs": {},
+              "files": [
+                "waikoloa.json"
+              ]
+            },
+            "credentials": {
+              "dirs": {},
+              "files": [
+                "client_secret.json",
+                "token.json"
+              ]
+            },
+            "weeks": {
+              "dirs": {},
+              "files": [
+                "2026-W13.json",
+                "2026-W14.json"
+              ]
+            }
+          },
+          "files": [
+            "CONTEXT.md",
+            "README.md",
+            "config.json",
+            "gcal.py",
+            "plan.py",
+            "requirements.txt"
+          ]
+        }
+      },
+      "files": [
+        "README.md"
       ]
     }
   },
@@ -374,35 +465,6 @@ const fileStructure = {
             "sno_isle_catalog.csv"
           ]
         },
-        "personal_tracker": {
-          "dirs": {
-            "static": {
-              "dirs": {},
-              "files": [
-                "style.css"
-              ]
-            },
-            "templates": {
-              "dirs": {},
-              "files": [
-                "base.html",
-                "edit.html",
-                "exercise.html",
-                "food.html",
-                "index.html",
-                "today.html"
-              ]
-            }
-          },
-          "files": [
-            "INSTRUCTIONS.md",
-            "README.md",
-            "analysis.py",
-            "app.py",
-            "schema.sql",
-            "simon_analysis.ipynb"
-          ]
-        },
         "tracker": {
           "dirs": {
             "static": {
@@ -417,6 +479,7 @@ const fileStructure = {
                 "activity.html",
                 "base.html",
                 "edit.html",
+                "edit_daily.html",
                 "food.html",
                 "index.html",
                 "meltdown.html",
@@ -431,6 +494,7 @@ const fileStructure = {
             "analysis.py",
             "app.py",
             "dada_analysis.ipynb",
+            "remind_dada.py",
             "schema.sql"
           ]
         }
@@ -616,7 +680,7 @@ const fileStructure = {
     "tech": [],
     "github": "https://github.com/simonhansedasi/rejection_matrix",
     "branch": "main",
-    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"Acme Corp\" \"Data Analyst\" --source LinkedIn --location Remote\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS]\n```\n\nEvery update is written to the audit log with a timestamp. If `--status` is provided, the application status is updated and the old/new values are recorded.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary is shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
+    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n| `--variant` | no | Resume variant used (e.g. `geo`, `research`, `simulation`) |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"PNNL\" \"Research Scientist\" --source LinkedIn --location Remote --variant research\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS] [--variant VARIANT]\n```\n\nEvery update is written to the audit log with a timestamp. `--status` changes the application status; `--variant` updates which resume was used. Both are recorded with old/new values.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n\n# Update the resume variant (e.g. if you forgot to set it on add)\npython3 src/rm.py update 5 \"switched to geo resume\" --variant geo\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary and resume variant are shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
     "tree": {
       "dirs": {
         "data": {
@@ -636,47 +700,8 @@ const fileStructure = {
       },
       "files": [
         "CONTEXT.md",
-        "README.md"
-      ]
-    }
-  },
-  "scheduling": {
-    "name": "scheduling",
-    "description": "CLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.",
-    "tech": [
-      "Python",
-      "Google Calendar API",
-      "OAuth2",
-      "Rich",
-      "questionary",
-      "JSON"
-    ],
-    "github": "https://github.com/simonhansedasi/scheduling",
-    "branch": "main",
-    "readme": "# scheduling\n\nCLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.\n\n## What it does\n\nInteractive terminal planner for building and managing a weekly schedule. Activities are stored in per-week JSON files (append-only archive). A nap window is injected at display time from config \u2014 not stored in data files \u2014 so changing it is a one-line edit with instant global effect.\n\nGoogle Calendar integration supports push (plan \u2192 GCal, idempotent re-push), pull (GCal events written into the week JSON as `gcal_source` activities, never pushed back), and multi-account pull with timezone normalisation. Pulled events display in magenta with a \ud83d\udccd location link.\n\nActivities support an optional location field that renders as a clickable Google Maps hyperlink in the terminal and is included in the GCal event's native location field on push.\n\n## Tech\n\nPython, Google Calendar API, OAuth2, Rich, questionary, JSON\n\n## Commands\n\n```\nplan show week [YYYY-WXX]   Week view (defaults to current)\nplan show next / prev        Navigate weeks\nplan show today              Day view\nplan show YYYY-MM-DD         Specific day\nplan add                     Interactive activity creation (title, time, notes, location, tags)\nplan edit                    Interactive edit / delete (incl. nap override)\nplan nap                     Update global nap window\nplan check                   Outstanding \u26a0\ufe0f items across all weeks\nplan auth                    Google OAuth setup\nplan whoami                  Show authenticated Google account\nplan calendars               List all calendars visible to that account\nplan push [YYYY-WXX|next|prev]   Push week to Google Calendar\nplan pull [YYYY-WXX|next|prev]   Pull GCal events into week JSON and show\n```\n\n## Setup\n\n```bash\npip install -r requirements.txt\n```\n\nPlace `client_secret.json` in `credentials/`, then:\n\n```bash\npython plan.py auth\n```\n\n## Architecture\n\n```\nplan.py          CLI entry point + all commands\ngcal.py          Google Calendar integration (auth, push, pull)\nconfig.json      Global config: nap times, weekly themes, GCal settings\nweeks/           Append-only archive of week files (YYYY-WXX.json)\narchive/         Historical data\ncredentials/     OAuth token + client secret (gitignored)\n```\n",
-    "tree": {
-      "dirs": {
-        "archive": {
-          "dirs": {},
-          "files": [
-            "waikoloa.json"
-          ]
-        },
-        "weeks": {
-          "dirs": {},
-          "files": [
-            "2026-W13.json",
-            "2026-W14.json"
-          ]
-        }
-      },
-      "files": [
-        "CONTEXT.md",
         "README.md",
-        "config.json",
-        "gcal.py",
-        "plan.py",
-        "requirements.txt"
+        "WORKFLOW.md"
       ]
     }
   },
