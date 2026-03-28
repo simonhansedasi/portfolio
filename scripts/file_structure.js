@@ -116,6 +116,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "GrapeExpectations.py",
         "README.md",
         "Untitled.ipynb",
@@ -136,6 +137,7 @@ const fileStructure = {
     "tree": {
       "dirs": {},
       "files": [
+        "CONTEXT.md",
         "README.md",
         "Untitled.ipynb",
         "untitled.py"
@@ -154,6 +156,7 @@ const fileStructure = {
     "tree": {
       "dirs": {},
       "files": [
+        "CONTEXT.md",
         "README.md",
         "blackjack.py",
         "simulation.ipynb"
@@ -188,6 +191,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "README.md",
         "analysis.ipynb",
         "app.py",
@@ -232,6 +236,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "Gemfile",
         "Gemfile.lock",
         "README.md",
@@ -305,6 +310,7 @@ const fileStructure = {
       },
       "files": [
         "CLAUDE.md",
+        "CONTEXT.md",
         "README.md",
         "app.py",
         "config.yaml",
@@ -419,6 +425,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "Poisson_eggs.py",
         "README.md",
         "missed_nap_lag.py",
@@ -449,6 +456,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "README.md",
         "TieDyes.ipynb",
         "Untitled.ipynb",
@@ -486,6 +494,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "Gemfile",
         "README.md",
         "Untitled.ipynb",
@@ -529,6 +538,7 @@ const fileStructure = {
         "4-LOO.ipynb",
         "5-vol_confidence_interval.ipynb",
         "6-LOO_analysis.ipynb",
+        "CONTEXT.md",
         "P1-coregistration_plot.ipynb",
         "P2-residuals.ipynb",
         "P3-scatter_plot.ipynb",
@@ -559,6 +569,7 @@ const fileStructure = {
     "tree": {
       "dirs": {},
       "files": [
+        "CONTEXT.md",
         "README.md",
         "calls.json",
         "failure_condition.ipynb",
@@ -577,10 +588,11 @@ const fileStructure = {
     ],
     "github": "https://github.com/simonhansedasi/pyopoly",
     "branch": "main",
-    "readme": "# pyopoly\n\n### A game for slumlords.\n\nTerminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.\n\n## What it does\n\nImplements Monopoly in Python with human vs. AI players. Features property ownership, building houses/hotels, custom card decks (Chance/Community Chest), jail mechanics, and a color-coded terminal UI. CPU players make automated buy/build decisions.\n\n## Tech\n\nPython \u2014 stdlib only (`random`, `time`, ANSI color codes)\n\n## Run\n\n```bash\npython pyopoly.py\n```\n",
+    "readme": "# pyopoly\n\n### A game for slumlords.\n\nTerminal-based Monopoly clone with CPU opponents, colorized output, and the full mechanics: properties, rent, auctions, jail, and card decks.\n\n## What it does\n\nImplements Monopoly in Python with human vs. AI players. Features property ownership, building houses/hotels, custom card decks (Chance/Community Chest), jail mechanics, and a color-coded terminal UI.\n\n- **CPU AI** \u2014 automated buy, build, mortgage, and trade decisions\n- **Trading** \u2014 humans can propose trades with any player; CPUs proactively seek trades to complete monopolies (CPU-to-CPU and CPU-to-human)\n- **Auctions** \u2014 properties declined by the landing player go to open auction\n- **Jail** \u2014 pay bail, roll for doubles, or burn a Get Out of Jail Free card\n- **Mortgaging** \u2014 mortgage/unmortgage properties from the in-turn menu\n\n## Tech\n\nPython \u2014 stdlib only (`random`, `time`, ANSI color codes)\n\n## Run\n\n```bash\npython pyopoly.py\n```\n",
     "tree": {
       "dirs": {},
       "files": [
+        "CONTEXT.md",
         "README.md",
         "gamefile.py",
         "pyopoly.py"
@@ -589,22 +601,71 @@ const fileStructure = {
   },
   "rejection_matrix": {
     "name": "rejection_matrix",
-    "description": "CLI tool for tracking job applications. Log when you apply, update status as things progress (or die), and cross-reference time spent job searching from the personal tracker.",
+    "description": "Two CLI tools:",
     "tech": [],
     "github": "https://github.com/simonhansedasi/rejection_matrix",
     "branch": "main",
-    "readme": "# rejection_matrix\n\nCLI tool for tracking job applications. Log when you apply, update status as things progress (or die), and cross-reference time spent job searching from the personal tracker.\n\n## Setup\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db` and is already initialised.\n\nRun from the repo root:\n\n```bash\npython3 src/rm.py <command>\n```\n\n## Commands\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"Acme Corp\" \"Data Analyst\" --source LinkedIn --location Remote\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS]\n```\n\nEvery update is written to the audit log with a timestamp. If `--status` is provided, the application status is updated and the old/new values are recorded.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary is shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
+    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"Acme Corp\" \"Data Analyst\" --source LinkedIn --location Remote\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS]\n```\n\nEvery update is written to the audit log with a timestamp. If `--status` is provided, the application status is updated and the old/new values are recorded.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary is shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
     "tree": {
       "dirs": {
+        "data": {
+          "dirs": {},
+          "files": [
+            "resume_ds_analyst.tex",
+            "resume_remote_sensing_ds.tex"
+          ]
+        },
         "src": {
           "dirs": {},
           "files": [
-            "rm.py"
+            "rm.py",
+            "search.py"
           ]
         }
       },
       "files": [
+        "CONTEXT.md",
         "README.md"
+      ]
+    }
+  },
+  "scheduling": {
+    "name": "scheduling",
+    "description": "CLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.",
+    "tech": [
+      "Python",
+      "Google Calendar API",
+      "OAuth2",
+      "Rich",
+      "questionary",
+      "JSON"
+    ],
+    "github": "https://github.com/simonhansedasi/scheduling",
+    "branch": "main",
+    "readme": "# scheduling\n\nCLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.\n\n## What it does\n\nInteractive terminal planner for building and managing a weekly schedule. Activities are stored in per-week JSON files (append-only archive). A nap window is injected at display time from config \u2014 not stored in data files \u2014 so changing it is a one-line edit with instant global effect.\n\nGoogle Calendar integration supports push (plan \u2192 GCal, idempotent re-push), pull (GCal events written into the week JSON as `gcal_source` activities, never pushed back), and multi-account pull with timezone normalisation. Pulled events display in magenta with a \ud83d\udccd location link.\n\nActivities support an optional location field that renders as a clickable Google Maps hyperlink in the terminal and is included in the GCal event's native location field on push.\n\n## Tech\n\nPython, Google Calendar API, OAuth2, Rich, questionary, JSON\n\n## Commands\n\n```\nplan show week [YYYY-WXX]   Week view (defaults to current)\nplan show next / prev        Navigate weeks\nplan show today              Day view\nplan show YYYY-MM-DD         Specific day\nplan add                     Interactive activity creation (title, time, notes, location, tags)\nplan edit                    Interactive edit / delete (incl. nap override)\nplan nap                     Update global nap window\nplan check                   Outstanding \u26a0\ufe0f items across all weeks\nplan auth                    Google OAuth setup\nplan whoami                  Show authenticated Google account\nplan calendars               List all calendars visible to that account\nplan push [YYYY-WXX|next|prev]   Push week to Google Calendar\nplan pull [YYYY-WXX|next|prev]   Pull GCal events into week JSON and show\n```\n\n## Setup\n\n```bash\npip install -r requirements.txt\n```\n\nPlace `client_secret.json` in `credentials/`, then:\n\n```bash\npython plan.py auth\n```\n\n## Architecture\n\n```\nplan.py          CLI entry point + all commands\ngcal.py          Google Calendar integration (auth, push, pull)\nconfig.json      Global config: nap times, weekly themes, GCal settings\nweeks/           Append-only archive of week files (YYYY-WXX.json)\narchive/         Historical data\ncredentials/     OAuth token + client secret (gitignored)\n```\n",
+    "tree": {
+      "dirs": {
+        "archive": {
+          "dirs": {},
+          "files": [
+            "waikoloa.json"
+          ]
+        },
+        "weeks": {
+          "dirs": {},
+          "files": [
+            "2026-W13.json",
+            "2026-W14.json"
+          ]
+        }
+      },
+      "files": [
+        "CONTEXT.md",
+        "README.md",
+        "config.json",
+        "gcal.py",
+        "plan.py",
+        "requirements.txt"
       ]
     }
   },
@@ -699,6 +760,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "README.md",
         "setup.py"
       ]
@@ -718,6 +780,7 @@ const fileStructure = {
     "tree": {
       "dirs": {},
       "files": [
+        "CONTEXT.md",
         "README.md",
         "index.html"
       ]
@@ -744,6 +807,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "Gemfile",
         "Gemfile.lock",
         "README.md",
@@ -802,6 +866,7 @@ const fileStructure = {
         }
       },
       "files": [
+        "CONTEXT.md",
         "Gemfile",
         "Gemfile.lock",
         "README.md",

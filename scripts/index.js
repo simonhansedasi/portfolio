@@ -2,6 +2,7 @@ const ORDER = [
   'dada_science',
   'glacier_prethicktor',
   'sf_majick',
+  'scheduling',
   'gov_inertia',
   'encounterMCMC',
   'game_ranking',
