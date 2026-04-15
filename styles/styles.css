@@ -86,6 +86,60 @@ header h1 {
   color: #a5d6ff;
 }
 
+/* ── Inline README images ── */
+.readme-figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.readme-inline-img {
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+  display: block;
+  margin: 0 auto;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+
+.readme-figure a:hover .readme-inline-img {
+  border-color: #555;
+  opacity: 0.9;
+}
+
+.readme-figure figcaption {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.35rem;
+  font-style: italic;
+}
+
+/* ── Curated gallery (bottom of readme, for repos without inline images) ── */
+.readme-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #2a2a2a;
+}
+
+.readme-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #333;
+  display: block;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+
+.readme-gallery a:hover .readme-img {
+  border-color: #666;
+  opacity: 0.9;
+}
+
 .card-desc {
   font-size: 0.88rem;
   color: #b0b0b0;
@@ -226,12 +280,10 @@ header h1 {
   list-style: none;
   margin: 0;
   padding: 0 0 0 1.2em;
-  border-left: 1px solid #333;
 }
 
 .tree > ul {
   padding-left: 0;
-  border-left: none;
 }
 
 .tree li {

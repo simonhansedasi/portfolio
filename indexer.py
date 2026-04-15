@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 import os
 import json
+import re
+import shutil
 import subprocess
 
 root = os.path.expanduser('~/coding')
 output = 'scripts/file_structure.js'
+IMAGES_OUTPUT_DIR = 'images'   # portfolio/images/ — committed to repo for GitHub Pages
 
 SKIP_DIRS = {
     '.git', '__pycache__', 'node_modules', '.venv', 'venv', 'env',
     'dist', 'build', '.mypy_cache', '.pytest_cache', '.tox',
+    '_site', '.ipynb_checkpoints', 'Miniforge3-Linux-x86_64.sh',
 }
 
 SKIP_EXTENSIONS = {
@@ -16,34 +20,100 @@ SKIP_EXTENSIONS = {
     '.png', '.jpg', '.jpeg', '.gif', '.pdf', '.ico',
     '.zip', '.tar', '.gz', '.bz2', '.xz',
     '.parquet', '.feather', '.npy', '.npz', '.arrow',
+    '.md', '.ipynb', '.json', '.lock', '.txt',
 }
+
+IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
 
 SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io'}
 
-# Recruiter-facing order: flagship research → published research → production systems → domain tools → fun projects
+# Ordered by scientific/technical excitement.
 REPO_ORDER = [
-    'GrapeExpectations',
-    'glacier_prethicktor',
-    'dada_science',
+    'GeoGastronomy',
     'sf_majick',
-    'gov_inertia',
-    'rejection_matrix',
-    'OmaElu',
-    'commuting',
-    'game_ranking',
-    'crm',
-    'alphabet_soup',
-    'wiki-index',
-    'timer',
-    'blackjack',
+    'glacier_prethicktor',
+    'glacier_prethicktor_2',
+    'dada_science',
     'char_gen',
-    'trivia',
-    'drawing',
+    'gov_inertia',
+    'commuting',
+    'blackjack',
+    'game_ranking',
     'pyopoly',
+    'alphabet_soup',
+    'OmaElu',
+    'crm',
+    'rejection_matrix',
+    'wiki-index',
+    'drawing',
+    'trivia',
+    'timer',
 ]
 
 MAX_DEPTH = 3
+MAX_IMAGES = 4
 
+SUBPROJECTS = {}
+
+# Images that live outside the repo tree (e.g. in a sibling repo).
+# src: absolute local path to the image file
+# rel: filename/subpath to use inside portfolio/images/{repo}/
+# remote: GitHub raw URL fallback
+CURATED_IMAGES = {
+    'GeoGastronomy': [
+        {
+            'src': os.path.expanduser('~/coding/GeoGastronomy/JavaScript/Fig1.png'),
+            'rel': 'JavaScript/Fig1.png',
+            'remote': 'https://raw.githubusercontent.com/simonhansedasi/GeoGastronomy/main/JavaScript/Fig1.png',
+        },
+        {
+            'src': os.path.expanduser('~/coding/GeoGastronomy/JavaScript/Fig4.png'),
+            'rel': 'JavaScript/Fig4.png',
+            'remote': 'https://raw.githubusercontent.com/simonhansedasi/GeoGastronomy/main/JavaScript/Fig4.png',
+        },
+    ],
+    'glacier_prethicktor': [
+        {
+            'src': os.path.expanduser(
+                '~/coding/simonhansedasi.github.io/images/discrepancy_boxplot.png'
+            ),
+            'rel': 'discrepancy_boxplot.png',
+            'remote': 'https://raw.githubusercontent.com/simonhansedasi/'
+                      'simonhansedasi.github.io/main/images/discrepancy_boxplot.png',
+        }
+    ],
+}
+
+
+# ── Image copying ─────────────────────────────────────────────────────────────
+
+def copy_to_portfolio(src_abs, repo_name, rel_in_repo):
+    """Copy image file into portfolio/images/{repo_name}/{rel_in_repo}.
+    Returns the portfolio-relative path (e.g. images/sf_majick/figures/fig1.png),
+    or None if the source file does not exist.
+    """
+    if not os.path.isfile(src_abs):
+        return None
+    dest_rel = os.path.join(IMAGES_OUTPUT_DIR, repo_name, rel_in_repo)
+    dest_dir = os.path.dirname(dest_rel)
+    if dest_dir:
+        os.makedirs(dest_dir, exist_ok=True)
+    shutil.copy2(src_abs, dest_rel)
+    return dest_rel.replace(os.sep, '/')
+
+
+def copy_readme_images(readme_text, repo_path, repo_name):
+    """Find all ![](relative/path) refs in readme and copy those files into
+    portfolio/images/{repo_name}/ so local_base resolution works offline."""
+    for m in re.finditer(r'!\[[^\]]*\]\(([^)]+)\)', readme_text):
+        href = m.group(1)
+        if href.startswith('http'):
+            continue
+        src_abs = os.path.join(repo_path, href)
+        copy_to_portfolio(src_abs, repo_name, href)
+
+
+# ── Git helpers ───────────────────────────────────────────────────────────────
 
 def get_git_info(repo_path):
     try:
@@ -70,6 +140,8 @@ def get_git_info(repo_path):
     return remote, branch
 
 
+# ── README parsing ────────────────────────────────────────────────────────────
+
 def parse_readme(repo_path):
     """Return (description, tech_tags, full_text) from README.md, or defaults."""
     for name in ('README.md', 'readme.md', 'README.txt'):
@@ -92,36 +164,31 @@ def extract_description(text):
         line = line.strip()
         if not line or line.startswith('#'):
             continue
-        if line.startswith('[!['):  # skip badge lines
+        if line.startswith('[!['):
             continue
-        # Strip leading markdown markers and inline bold/italic syntax
-        import re
-        line = re.sub(r'\*\*(.+?)\*\*', r'\1', line)  # **bold**
-        line = re.sub(r'\*(.+?)\*', r'\1', line)       # *italic*
-        line = re.sub(r'`(.+?)`', r'\1', line)          # `code`
+        line = re.sub(r'\*\*(.+?)\*\*', r'\1', line)
+        line = re.sub(r'\*(.+?)\*', r'\1', line)
+        line = re.sub(r'`(.+?)`', r'\1', line)
         line = line.lstrip('*_>')
         return line.strip()
     return ''
 
 
 def extract_tech(text):
-    """Parse the ## Tech section into a list of tag strings."""
+    """Parse ## Tech or ## Stack section into a list of tag strings."""
     in_tech = False
     for line in text.splitlines():
         stripped = line.strip()
-        if stripped.lower().startswith('## tech'):
+        if stripped.lower().startswith(('## tech', '## stack')):
             in_tech = True
             continue
         if in_tech:
             if not stripped:
                 continue
             if stripped.startswith('#'):
-                break  # hit the next section
-            # Take everything before a code block or bullet marker
+                break
             stripped = stripped.lstrip('-* ')
-            # Split on comma, then take only the part before ' — ' or ' - '
-            # Strip the whole line at the em-dash level first, then split on comma
-            for sep in [' — ', ' — ', ' – ']:
+            for sep in [' \u2014 ', ' \u2013 ', ' \u2013 ']:
                 stripped = stripped.split(sep)[0]
             raw_tags = [t.strip() for t in stripped.split(',')]
             tags = []
@@ -133,45 +200,202 @@ def extract_tech(text):
     return []
 
 
+# ── Image collection ──────────────────────────────────────────────────────────
+
+def collect_images(repo_path, github, branch):
+    """Find up to MAX_IMAGES images, copy them into portfolio/images/{repo}/,
+    and return a list of {local, remote} dicts.
+
+    local  — portfolio-relative path (images/reponame/...)
+    remote — GitHub raw URL fallback
+
+    Priority:
+      1. Fig\\d named files anywhere in the repo (paper figures), sorted numerically
+      2. figures/ directory files
+      3. img/ dirs up to depth 2 — prefer higher-numbered (later analysis stage) files
+      4. Root-level images (fallback)
+    """
+    if not github:
+        return []
+
+    repo_name = os.path.basename(repo_path.rstrip('/'))
+    raw_base = github.replace('github.com', 'raw.githubusercontent.com') + '/' + branch
+
+    def to_entry(rel_path):
+        fwd = rel_path.replace(os.sep, '/')
+        src_abs = os.path.join(repo_path, rel_path)
+        local = copy_to_portfolio(src_abs, repo_name, fwd)
+        remote = raw_base + '/' + fwd
+        return {'local': local or remote, 'remote': remote}
+
+    def is_image(name):
+        return os.path.splitext(name)[1].lower() in IMAGE_EXTENSIONS
+
+    def skip_file(name, dirpath=''):
+        return (
+            'frame' in name.lower()
+            or 'checkpoint' in name.lower()
+            or '.ipynb_checkpoints' in dirpath
+            or '_site' in dirpath.split(os.sep)
+        )
+
+    SKIP_IMG_DIRS = SKIP_DIRS | {'_site', '.ipynb_checkpoints'}
+
+    def walk_capped(base, max_depth=3):
+        for dirpath, dirnames, filenames in os.walk(base):
+            rel = os.path.relpath(dirpath, base)
+            depth = 0 if rel == '.' else len(rel.split(os.sep))
+            if depth >= max_depth:
+                dirnames.clear()
+                continue
+            dirnames[:] = [d for d in sorted(dirnames)
+                           if d not in SKIP_IMG_DIRS and 'frame' not in d.lower()]
+            yield dirpath, rel, filenames
+
+    # 1. Fig\d files anywhere
+    fig_files = []
+    seen_basenames = set()
+    for dirpath, rel, filenames in walk_capped(repo_path):
+        for name in filenames:
+            if (is_image(name) and re.match(r'(?i)fig\d', name)
+                    and not skip_file(name, dirpath)
+                    and name not in seen_basenames):
+                rel_path = name if rel == '.' else os.path.join(rel, name)
+                fig_files.append(rel_path)
+                seen_basenames.add(name)
+
+    def fig_sort_key(p):
+        m = re.search(r'(?i)fig(\d+)', p)
+        return (int(m.group(1)) if m else 99, p)
+    fig_files.sort(key=fig_sort_key)
+
+    # 2. figures/ dir
+    fig_dir_files = []
+    figures_dir = os.path.join(repo_path, 'figures')
+    if os.path.isdir(figures_dir):
+        for name in sorted(os.listdir(figures_dir)):
+            full = os.path.join(figures_dir, name)
+            if os.path.isfile(full) and is_image(name) and not skip_file(name, figures_dir):
+                fig_dir_files.append(os.path.join('figures', name))
+
+    # 3. img/ dirs — higher-numbered files first
+    img_files = []
+    seen_img_basenames = set()
+    for dirpath, rel, filenames in walk_capped(repo_path):
+        if os.path.basename(dirpath) == 'img' and dirpath != repo_path:
+            for name in sorted(filenames, reverse=True):
+                if (is_image(name) and not skip_file(name, dirpath)
+                        and name not in seen_img_basenames):
+                    rel_path = name if rel == '.' else os.path.join(rel, name)
+                    img_files.append(rel_path)
+                    seen_img_basenames.add(name)
+
+    # 4. Root-level images
+    root_files = []
+    try:
+        for name in sorted(os.listdir(repo_path)):
+            full = os.path.join(repo_path, name)
+            if os.path.isfile(full) and is_image(name) and not skip_file(name):
+                root_files.append(name)
+    except OSError:
+        pass
+
+    seen = set()
+    unique = []
+    for rel_path in fig_files + fig_dir_files + img_files + root_files:
+        key = rel_path.replace(os.sep, '/')
+        if key not in seen:
+            seen.add(key)
+            entry = to_entry(rel_path)
+            if entry:
+                unique.append(entry)
+        if len(unique) >= MAX_IMAGES:
+            break
+    return unique
+
+
+# ── File tree ─────────────────────────────────────────────────────────────────
+
 def scan_tree(path, depth=0):
-    """Recursively build a compact file tree (names only, no URLs)."""
     if depth >= MAX_DEPTH:
         return None
-
     result = {'dirs': {}, 'files': []}
     try:
         entries = sorted(os.listdir(path))
     except OSError:
         return result
-
     for entry in entries:
         if entry.startswith('.'):
             continue
         if entry in SKIP_DIRS or entry.endswith('.egg-info'):
             continue
-
         full = os.path.join(path, entry)
-
         if os.path.isdir(full):
             subtree = scan_tree(full, depth + 1)
             if subtree and (subtree['dirs'] or subtree['files']):
                 result['dirs'][entry] = subtree
-
         else:
             ext = os.path.splitext(entry)[1].lower()
             if ext in SKIP_EXTENSIONS:
                 continue
             result['files'].append(entry)
-
     return result
 
+
+# ── Project assembly ──────────────────────────────────────────────────────────
+
+def add_project(projects, key, name, full_path, github, branch, github_subpath=None):
+    description, tech, readme_text = parse_readme(full_path)
+    tree = scan_tree(full_path)
+
+    repo_name = os.path.basename(full_path.rstrip('/'))
+
+    # Gallery images
+    if key in CURATED_IMAGES:
+        images = []
+        for item in CURATED_IMAGES[key]:
+            local = copy_to_portfolio(item['src'], key, item['rel'])
+            images.append({'local': local or item['remote'], 'remote': item['remote']})
+    else:
+        images = collect_images(full_path, github, branch)
+
+    # Copy images referenced inline in the README
+    copy_readme_images(readme_text, full_path, repo_name)
+
+    gh_link = '{}/tree/{}/{}'.format(github, branch, github_subpath) if github_subpath else github
+
+    # local_base: portfolio-relative prefix for resolving README image paths.
+    # e.g. "images/GeoGastronomy/" so that "GrapeExpectations/img/foo.png"
+    # becomes "images/GeoGastronomy/GrapeExpectations/img/foo.png"
+    local_base = 'images/{}/'.format(repo_name)
+
+    projects[key] = {
+        'name': name,
+        'description': description,
+        'tech': tech,
+        'github': gh_link,
+        'branch': branch,
+        'readme': readme_text,
+        'tree': tree,
+        'images': images,
+        'local_base': local_base,
+    }
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
     projects = {}
 
+    # Clear stale images from previous runs
+    if os.path.isdir(IMAGES_OUTPUT_DIR):
+        shutil.rmtree(IMAGES_OUTPUT_DIR)
+    os.makedirs(IMAGES_OUTPUT_DIR)
+
     all_entries = set(os.listdir(root))
     ordered = [e for e in REPO_ORDER if e in all_entries]
     ordered += sorted(e for e in all_entries if e not in REPO_ORDER)
+
     for entry in ordered:
         if entry in SKIP_REPOS or entry.startswith('.'):
             continue
@@ -183,26 +407,29 @@ def main():
         if not github:
             continue
 
-        description, tech, readme_text = parse_readme(full_path)
-        tree = scan_tree(full_path)
-
-        projects[entry] = {
-            'name': entry,
-            'description': description,
-            'tech': tech,
-            'github': github,
-            'branch': branch,
-            'readme': readme_text,
-            'tree': tree,
-        }
+        if entry in SUBPROJECTS:
+            for subname in SUBPROJECTS[entry]:
+                subpath = os.path.join(full_path, subname)
+                if os.path.isdir(subpath):
+                    add_project(projects, subname, subname, subpath,
+                                github, branch, github_subpath=subname)
+        else:
+            add_project(projects, entry, entry, full_path, github, branch)
 
     os.makedirs(os.path.dirname(output), exist_ok=True)
     with open(output, 'w') as f:
-        f.write(f'const fileStructure = {json.dumps(projects, indent=2)};\n')
+        f.write('const fileStructure = {};\n'.format(json.dumps(projects, indent=2)))
 
     total = len(projects)
     size_kb = os.path.getsize(output) // 1024
-    print(f'Generated {output}: {total} projects, {size_kb} KB')
+
+    # Count copied images
+    img_count = sum(
+        len(files)
+        for _, _, files in os.walk(IMAGES_OUTPUT_DIR)
+    )
+    print('Generated {}: {} projects, {} KB, {} images copied'.format(
+        output, total, size_kb, img_count))
 
 
 if __name__ == '__main__':

@@ -1,22 +1,23 @@
 const ORDER = [
-  'GrapeExpectations',
-  'glacier_prethicktor',
-  'dada_science',
+  'GeoGastronomy',
   'sf_majick',
-  'gov_inertia',
-  'rejection_matrix',
-  'OmaElu',
-  'commuting',
-  'game_ranking',
-  'crm',
-  'alphabet_soup',
-  'wiki-index',
-  'timer',
-  'blackjack',
+  'glacier_prethicktor',
+  'glacier_prethicktor_2',
+  'dada_science',
   'char_gen',
-  'trivia',
-  'drawing',
+  'gov_inertia',
+  'commuting',
+  'blackjack',
+  'game_ranking',
   'pyopoly',
+  'alphabet_soup',
+  'OmaElu',
+  'crm',
+  'rejection_matrix',
+  'wiki-index',
+  'drawing',
+  'trivia',
+  'timer',
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -98,34 +99,91 @@ function buildCard(proj) {
   const body = document.createElement('div');
   body.className = 'card-body';
 
-  // README
-  if (proj.readme) {
+  // README + inline images
+  if (proj.readme || (proj.images && proj.images.length > 0)) {
     const readmeSection = document.createElement('div');
     readmeSection.className = 'readme-section';
-    try {
-      readmeSection.innerHTML = marked.parse(proj.readme);
-    } catch (e) {
-      readmeSection.textContent = proj.readme;
+
+    if (proj.readme) {
+      try {
+        // Custom renderer: rewrite relative img paths to local_base + path,
+        // with GitHub raw URL as onerror fallback.
+        const rawBase = proj.github
+          ? proj.github
+              .replace('github.com', 'raw.githubusercontent.com')
+              .replace(/\/tree\/[^/]+.*$/, '') + '/' + proj.branch + '/'
+          : null;
+
+        const renderer = new marked.Renderer();
+        renderer.image = function(href, title, text) {
+          const isRelative = !/^https?:\/\//.test(href);
+          const localSrc = isRelative && proj.local_base
+            ? proj.local_base + href
+            : href;
+          const remoteSrc = isRelative && rawBase ? rawBase + href : href;
+          const onerr = `if(this.src!=='${remoteSrc}'){this.src='${remoteSrc}'}else{this.parentElement.style.display='none'}`;
+          const titleAttr = title ? ` title="${title}"` : '';
+          return `<figure class="readme-figure"><a href="${remoteSrc}" target="_blank" rel="noopener">`
+            + `<img src="${localSrc}" alt="${text || ''}"${titleAttr} class="readme-inline-img" loading="lazy" onerror="${onerr}">`
+            + `</a>${text ? `<figcaption>${text}</figcaption>` : ''}</figure>`;
+        };
+
+        readmeSection.innerHTML = marked.parse(proj.readme, { renderer });
+      } catch (e) {
+        readmeSection.textContent = proj.readme;
+      }
     }
+
+    if (proj.images && proj.images.length > 0) {
+      const gallery = document.createElement('div');
+      gallery.className = 'readme-gallery';
+      proj.images.forEach(entry => {
+        const local = entry.local || entry;
+        const remote = entry.remote || entry;
+        const a = document.createElement('a');
+        a.href = remote;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        const img = document.createElement('img');
+        img.className = 'readme-img';
+        img.src = local;
+        img.loading = 'lazy';
+        img.alt = '';
+        img.onerror = function () {
+          if (this.src !== remote) {
+            this.src = remote;
+          } else {
+            this.parentElement.style.display = 'none';
+          }
+        };
+        a.appendChild(img);
+        gallery.appendChild(a);
+      });
+      readmeSection.appendChild(gallery);
+    }
+
     body.appendChild(readmeSection);
   }
 
   // File tree
   if (proj.tree) {
-    const treeSection = document.createElement('div');
-    treeSection.className = 'tree-section';
+    const rootUl = buildTree(proj.tree, proj.github, proj.branch, '');
+    if (rootUl) {
+      const treeSection = document.createElement('div');
+      treeSection.className = 'tree-section';
 
-    const label = document.createElement('div');
-    label.className = 'tree-section-label';
-    label.textContent = 'Files';
-    treeSection.appendChild(label);
+      const label = document.createElement('div');
+      label.className = 'tree-section-label';
+      label.textContent = 'Files';
+      treeSection.appendChild(label);
 
-    const treeEl = document.createElement('div');
-    treeEl.className = 'tree';
-    treeEl.appendChild(buildTree(proj.tree, proj.github, proj.branch, ''));
-    treeSection.appendChild(treeEl);
+      const treeEl = document.createElement('div');
+      treeEl.className = 'tree';
+      treeEl.appendChild(rootUl);
+      treeSection.appendChild(treeEl);
 
-    body.appendChild(treeSection);
+      body.appendChild(treeSection);
+    }
   }
 
   card.appendChild(body);
@@ -138,8 +196,11 @@ function buildTree(node, github, branch, pathPrefix) {
   // Directories first
   const dirs = node.dirs || {};
   for (const dirName of Object.keys(dirs).sort()) {
+    const subtree = buildTree(dirs[dirName], github, branch,
+      pathPrefix ? `${pathPrefix}/${dirName}` : dirName);
+    if (!subtree) continue; // skip empty dirs
+
     const li = document.createElement('li');
-    const childPath = pathPrefix ? `${pathPrefix}/${dirName}` : dirName;
 
     const label = document.createElement('span');
     label.className = 'dir-label';
@@ -147,7 +208,7 @@ function buildTree(node, github, branch, pathPrefix) {
 
     const children = document.createElement('div');
     children.className = 'dir-children';
-    children.appendChild(buildTree(dirs[dirName], github, branch, childPath));
+    children.appendChild(subtree);
 
     label.addEventListener('click', () => {
       label.classList.toggle('open');
@@ -175,5 +236,5 @@ function buildTree(node, github, branch, pathPrefix) {
     ul.appendChild(li);
   }
 
-  return ul;
+  return ul.hasChildNodes() ? ul : null;
 }
