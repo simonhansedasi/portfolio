@@ -5,9 +5,10 @@ import re
 import shutil
 import subprocess
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 root = os.path.expanduser('~/coding')
-output = 'scripts/file_structure.js'
-IMAGES_OUTPUT_DIR = 'images'   # portfolio/images/ — committed to repo for GitHub Pages
+output = os.path.join(SCRIPT_DIR, 'scripts', 'file_structure.js')
+IMAGES_OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'images')
 
 SKIP_DIRS = {
     '.git', '__pycache__', 'node_modules', '.venv', 'venv', 'env',
@@ -25,28 +26,28 @@ SKIP_EXTENSIONS = {
 
 IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
 
-SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io'}
+SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io', 'OmaElu'}
 
 # Ordered by scientific/technical excitement.
 REPO_ORDER = [
     'GeoGastronomy',
-    'sf_majick',
     'glacier_prethicktor',
     'glacier_prethicktor_2',
-    'dada_science',
+    'sf_majick',
     'char_gen',
-    'gov_inertia',
-    'commuting',
-    'blackjack',
+    'dada_science',
+    'questbook',
     'game_ranking',
-    'pyopoly',
-    'alphabet_soup',
-    'OmaElu',
-    'crm',
+    'gov_inertia',
     'rejection_matrix',
-    'wiki-index',
+    'alphabet_soup',
+    'pyopoly',
+    'blackjack',
+    'commuting',
+    'crm',
     'drawing',
     'trivia',
+    'wiki-index',
     'timer',
 ]
 
