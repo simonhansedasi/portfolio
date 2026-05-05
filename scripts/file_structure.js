@@ -134,6 +134,122 @@ const fileStructure = {
     ],
     "local_base": "images/GeoGastronomy/"
   },
+  "rippleforge": {
+    "name": "rippleforge",
+    "description": "A causality engine for narrative. Characters, factions, and events form a relationship graph \u2014 log one event, and every connected entity feels it automatically. Cause propagates. Consequence compounds. The world keeps moving.",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/rippleforge",
+    "branch": "master",
+    "readme": "# RippleForge\n\nA causality engine for narrative. Characters, factions, and events form a relationship graph \u2014 log one event, and every connected entity feels it automatically. Cause propagates. Consequence compounds. The world keeps moving.\n\nUse it for tabletop campaigns, novels, historical timelines, alternate histories, or any story where what happens to one character ripples through everyone else.\n\n## Live\n\n`https://rippleforge.gg`\n\nTry it: `https://rippleforge.gg/demo/`\n\n---\n\n## What it does\n\nRippleForge is not a note-taking tool or character sheet replacement. It models **cause and effect** across a narrative world.\n\n### As a worldbuilding tool\n\n- **Ripple system** \u2014 log one event against any entity, and every connected character and faction updates automatically based on their relationship (allies share the impact, rivals feel the opposite)\n- **AI event parsing** \u2014 paste raw session notes, chapter summaries, or historical records; get structured log entries matched to known entities with polarity and intensity assigned\n- **Projected consequences** \u2014 AI reads every active tension in the world and forecasts what happens next; Narrator reviews, selects, commits\n- **World diff** \u2014 every commit shows a before/after snapshot: score changes, relationship label shifts, entries added\n- **Intelligence layer** \u2014 algorithmic ranked lists of active pressure, consequence risk, stale threads, and narrative gaps; no manual curation\n- **Branching timelines** \u2014 fork from any point and write alternate histories inside the same world; switch between timelines to compare how the graph diverges\n\n### As a writing assistant\n\n- **Dual-axis relationships** \u2014 formal and personal relationship axes that can conflict; rendered as separate arcs in the world graph\n- **Per-player fog of war** \u2014 each character knows only what they've witnessed; author can preview the world through any character's eyes\n- **Ripple chain view** \u2014 visual cause\u2192effect chains showing every downstream consequence of any source event\n- **Session brief** \u2014 algorithmic pre-session intel: pending futures, active tensions, stale threads, narrative gaps\n\n### As a party game\n\n- **Pass-the-phone collaborative storytelling** \u2014 30-minute session, 2\u20136 players, no prep\n- **Secret objectives** \u2014 each player gets a private mission that may conflict with the group's arc; relationship biases (trusts/suspects) add tension\n- **AI arc generation** \u2014 give the group a genre, place, and faction; the AI writes an arc with three open-ended leads (not linear steps)\n- **AI epilogue** \u2014 at the end, reveals everyone's secret missions and generates a prose epilogue\n- **World persists** \u2014 after the game, the campaign lives on as a full RippleForge world\n\nRippleForge does not invent narrative. AI proposes; Narrator approves; the world updates.\n\n---\n\n## Concept: AI as referee\n\nThe AI role is constraint enforcement, not storytelling:\n\n- **Summarization** \u2014 compresses session notes into a chronicle\n- **Event parsing** \u2014 extracts discrete world events from freeform notes or text\n- **Consequence projection** \u2014 given current world state, predicts what logically follows\n- **Arc generation** \u2014 builds story arcs with open-ended leads for groups to pursue\n- **Narrator always approves** \u2014 nothing is written without explicit commit\n\n---\n\n## Starter Worlds\n\nSix cloneable demo campaigns show the system across domains:\n\n| World | Domain | Sessions |\n|-------|--------|---------|\n| The Iliad | Epic fiction | 8 books |\n| The Book of Genesis | Biblical fiction | 15 |\n| World War II | Historical (1933\u20131945) | 12 |\n| Wars of the Roses | Historical | 9 periods |\n| The Ashcroft Vein | Original TTRPG fiction | 5 |\n| Paladin's Grace | Original TTRPG fiction | 4 |\n\nThe Ashcroft Vein doubles as the demo source (`DEMO_SOURCE=ashford`).\n\n**Note on share links:** Each starter world has a read-only `/share/<token>` URL. The token is stored in `campaign.json` and regenerates every time the seed script runs. After any re-seed, retrieve the new token from `campaigns/<slug>/campaign.json` on the Pi and update any hardcoded links in `templates/landing.html`.\n\n---\n\n## Pricing\n\n| Tier | Price | Worlds |\n|------|-------|--------|\n| Free | \u2014 | 1 world |\n| Pro Monthly | $8/mo | 5 worlds + AI features |\n| Pro Annual | $76/yr (save $20) | 5 worlds + AI features |\n| World add-on | $1 one-time | +1 world (stacks) |\n| Party game | 1 free, then $2/game | Non-Pro users |\n\nPlayers (read-only share link) are always free. Only Narrator accounts pay.\n\n14-day free trial on Pro Monthly.\n\n---\n\n## User Accounts\n\nGoogle OAuth at `/auth/google` \u2014 no password required. Username derived from email prefix on first sign-in.\n\nUsername/password login still works for legacy accounts (`users.json`, werkzeug pbkdf2).\n\n```json\n{\n  \"users\": {\n    \"username\": {\n      \"password_hash\": \"<hash>\",\n      \"display_name\": \"Display Name\",\n      \"ai_enabled\": true,\n      \"world_limit\": 5,\n      \"party_plays\": 0\n    }\n  }\n}\n```\n\n**AI gate:** AI features require `ai_enabled: true`. New signups default to `false`. Admin generates KS codes at `/admin/ks-codes`. Users redeem at `/redeem`.\n\n---\n\n## Worlds (Campaigns)\n\nEach world is a folder under `campaigns/<slug>/`. Three access modes:\n\n| Mode | Flag in campaign.json | Who can write |\n|------|----------------------|---------------|\n| Normal | `\"owner\": \"username\"` | Owner + Narrator PIN |\n| Public (read-only) | `\"public\": true` | Nobody (Narrator login still works) |\n| Demo | `\"demo_mode\": true` | Everyone |\n\nThree world modes: `ttrpg` | `fiction` | `historical`. Mode drives all UI labels and nav structure. Party games use `fiction` mode.\n\n---\n\n## Demo\n\n`/demo/` is a live writable copy of The Ashcroft Vein (original fiction, no third-party IP). Resets every 30 minutes.\n\nThe demo includes a 4-step guided tour and an AI tools page at `/demo/ai`.\n\n**Parse limit:** Visitors get 3 free live parses. Tracked via `demo_id` cookie (30-day).\n\n---\n\n## Narrator Mode\n\nLog in via the **Narrator** link in the nav. Each world has a Narrator PIN in `campaign.json`.\n\n---\n\n## AI Features\n\nRequires `ANTHROPIC_API_KEY` in `.env` at repo root. Uses `claude-haiku-4-5-20251001`.\n\n| Feature | Route | Description |\n|---------|-------|-------------|\n| Generate Recap | `POST /<slug>/dm/session/recap` | Chronicle from session notes |\n| Parse into Events | `POST /<slug>/dm/session/propose` | Notes \u2192 structured log entries for review |\n| Commit parsed | `POST /<slug>/dm/session/commit_proposals` | Write approved entries + trigger ripples |\n| What happens next | `POST /<slug>/dm/world/futures` | Consequence projections from world state |\n| Commit futures | `POST /<slug>/dm/world/commit_futures` | Write as PROJECTED entries, returns world diff |\n| Party arc | `POST /<slug>/play/generate-arc` | Generate story arc + 3 open-ended leads |\n| Party secrets | `POST /<slug>/play/generate-secrets` | Generate per-character secret objectives |\n| Party summary | `POST /<slug>/play/generate-summary` | Generate prose epilogue for done screen |\n\nAll narrative AI routes require Narrator auth **and** `ai_enabled: true` (or `admin: true`). Party AI routes are unauthed (rate-limited).\n\n---\n\n## URL Structure\n\n```\n/                            Login page / My worlds (authenticated)\n/demo/                       Live writable demo\n/demo/ai                     AI tools demo page\n/share/<token>               Read-only via share link\n/welcome                     Party mode entry point (POST choice=party)\n/billing                     Subscription management\n/billing/checkout/pro        Stripe checkout \u2014 monthly Pro\n/billing/checkout/pro-annual Stripe checkout \u2014 annual Pro\n/billing/party/success       Post-payment redirect for $2 party game\n\n/<slug>/                     World home\n/<slug>/party                Cast roster\n/<slug>/assets               Currency, items, ships, stronghold\n/<slug>/world                Entity and faction overview\n/<slug>/world/ripples        Ripple chain visualization\n/<slug>/world/npc/<id>       Character detail + interaction log\n/<slug>/world/faction/<id>   Faction detail\n/<slug>/story                Quest / arc log\n/<slug>/journal              Session journal\n/<slug>/brief                Narrator briefing (full intelligence report)\n/<slug>/play                 Party game screen (setup/arc/secrets/play/done)\n\n/<slug>/dm                   Narrator dashboard\n/<slug>/dm/login             Narrator PIN entry\n/<slug>/branch/create        Create alternate timeline branch (POST)\n/<slug>/branch/switch        Switch active branch (POST)\n/<slug>/branch/delete        Delete branch + purge entries (POST)\n```\n\n---\n\n## Data Model\n\n```\ncampaigns/<slug>/\n  campaign.json        name, system, slug, owner, dm_pin, share_token, mode, terminology, observer_name, branches[]\n  party.json           characters: [{name, assigned_user, known_events, ...}]\n  assets.json          currency, items, ships[{name, type, log[]}], stronghold\n  world/\n    npcs.json          npcs: [{id, name, role, relationship, log, hidden, factions, relations}]\n    factions.json      factions: [{id, name, relationship, log, hidden, relations}]\n    locations.json     locations: [{id, name, role, description, log, hidden, dm_notes}]\n  story/\n    quests.json\n  dm/\n    session.json       plan (markdown), notes\n    party_game.json    phase, genre, characters, place, faction, arc, history, secret_objectives\n  journal.json         {entries: [{session, date, recap}]}\n  references.json\n```\n\n### Log entry schema\n\n```json\n{\n  \"id\": \"evt_abc123\",\n  \"session\": 4,\n  \"note\": \"Allied with the resistance against the occupation.\",\n  \"visibility\": \"public\",\n  \"polarity\": \"positive\",\n  \"intensity\": 2,\n  \"event_type\": \"politics\",\n  \"axis\": \"formal\",\n  \"actor_id\": \"iarno_albrek\",\n  \"actor_type\": \"npc\",\n  \"ripple_source\": { \"entity_id\": \"iarno_albrek\", \"entity_type\": \"npc\", \"event_id\": \"evt_111\" },\n  \"branch\": \"br_ef30f2\",\n  \"deleted\": true\n}\n```\n\n`event_type` is freeform. Reserved: `projected` (AI-committed consequence projection).\n`axis` = `\"formal\"` | `\"personal\"` | absent. Only tagged entries feed the dual-axis conflict display.\n`deleted: true` = soft-deleted. Never shown or counted in scores. Filter in every code path that reads logs.\n`actor_id` / `actor_type` \u2014 display context for inter-entity events. Not a scoring exclusion.\n`branch` is only present on entries belonging to an alternate timeline branch.\n\n### Relationship computation\n\n`compute_npc_relationship(npc)` \u2014 decay-weighted score from all polarity events (0.85^age per session). Score thresholds: `allied` (\u22656), `friendly` (\u22653), `neutral` (\u2265\u22123), `hostile` (<\u22123). Stored `relationship` field acts as score floor.\n\n---\n\n## Setup\n\n```bash\ncd rippleforge\npython3 -m venv venv\nvenv/bin/pip install flask markdown werkzeug anthropic python-dotenv flask-limiter\nvenv/bin/python app.py\n```\n\nRuns at `http://localhost:5052`.\n\n---\n\n## Deploy\n\n**Live site is on DigitalOcean (68.183.130.60). Edits happen on sbook. Two-step deploy:**\n\n**Step 1 \u2014 push sbook \u2192 Pi:**\n```bash\nrsync -av --exclude='venv/' --exclude='campaigns/' --exclude='.env' \\\n  /home/simonhans/coding/rippleforge/ simonhans@raspberrypi:/mnt/serverdrive/coding/rippleforge/\n```\n\n**Step 2 \u2014 Pi \u2192 DO:**\n```bash\nssh simonhans@raspberrypi \"cd /mnt/serverdrive/coding/rippleforge && ./deploy_do.sh\"\n```\n\nSkipping step 1 means `deploy_do.sh` pushes the Pi's stale copy \u2014 nothing new arrives on the live site.\n\nSystemd service: `/etc/systemd/system/rippleforge.service`. nginx routes `rippleforge.gg` \u2192 `127.0.0.1:5052`.\n",
+    "tree": {
+      "dirs": {
+        "seeds": {
+          "dirs": {},
+          "files": [
+            "seed_ashford.py",
+            "seed_genesis.py",
+            "seed_iliad.py",
+            "seed_paladins_grace.py",
+            "seed_roses.py",
+            "seed_ww2.py"
+          ]
+        },
+        "src": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "ai.py",
+            "app.py",
+            "data.py",
+            "email.py",
+            "importer.py",
+            "npc.html"
+          ]
+        },
+        "static": {
+          "dirs": {},
+          "files": [
+            "style.css",
+            "sw.js",
+            "tour.js"
+          ]
+        },
+        "templates": {
+          "dirs": {
+            "account": {
+              "dirs": {},
+              "files": [
+                "password.html"
+              ]
+            },
+            "admin": {
+              "dirs": {},
+              "files": [
+                "index.html",
+                "invites.html",
+                "ks_codes.html",
+                "login.html"
+              ]
+            },
+            "dm": {
+              "dirs": {},
+              "files": [
+                "add_character.html",
+                "add_faction.html",
+                "add_npc.html",
+                "add_quest.html",
+                "brief.html",
+                "import.html",
+                "index.html",
+                "log.html",
+                "login.html",
+                "npc.html"
+              ]
+            }
+          },
+          "files": [
+            "add_npc.html",
+            "app.py",
+            "assets.html",
+            "base.html",
+            "billing.html",
+            "brief.html",
+            "campaign.html",
+            "demo_ai.html",
+            "demo_splash.html",
+            "faction.html",
+            "graph.html",
+            "guide.html",
+            "index.html",
+            "journal.html",
+            "landing.html",
+            "location.html",
+            "login.html",
+            "npc.html",
+            "party.html",
+            "party_play.html",
+            "redeem.html",
+            "references.html",
+            "ripples.html",
+            "setup_wizard.html",
+            "signup.html",
+            "story.html",
+            "welcome.html",
+            "wiki.html",
+            "world.html"
+          ]
+        }
+      },
+      "files": [
+        "app.py",
+        "backup.sh",
+        "deploy.sh",
+        "make_icons.py"
+      ]
+    },
+    "images": [],
+    "local_base": "images/rippleforge/"
+  },
   "glacier_prethicktor": {
     "name": "glacier_prethicktor",
     "description": "Published: Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" Journal of Glaciology 72, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123",
@@ -488,67 +604,6 @@ const fileStructure = {
       }
     ],
     "local_base": "images/dada_science/"
-  },
-  "questbook": {
-    "name": "questbook",
-    "description": "A campaign-agnostic CRM (Campaign Relationship Manager) for tabletop RPGs. Track your party, assets, world relationships, and story across any system.",
-    "tech": [],
-    "github": "https://github.com/simonhansedasi/questlog",
-    "branch": "master",
-    "readme": "# QuestLog\n\nA campaign-agnostic CRM (Campaign Relationship Manager) for tabletop RPGs. Track your party, assets, world relationships, and story across any system.\n\n## Live\n\n`https://questlog.duckdns.org`\n\nAlso accessible at `https://game-ranking.duckdns.org/questbook/` (legacy path).\n\n## Concept\n\nQuestLog is not a character sheet replacement. It does not track spell slots, inventory weight, ability scores, or combat mechanics \u2014 those live in your VTT or character sheet.\n\nWhat it tracks:\n\n- **Party** \u2014 who is in the party, their status, and brief notes\n- **Assets** \u2014 shared resources: currency, items, ships (weapon loadouts + HP tracking), stronghold, property\n- **World** \u2014 NPCs and factions, each with a relationship status and running interaction log\n- **Story** \u2014 quest log with objectives, status tracking, and session history\n- **References** \u2014 rulebook tables and notes, editable per campaign\n\nThe interaction log is the core feature: every meaningful encounter with an NPC or faction gets a one-line entry tied to a session number, building a full relationship history over time.\n\n---\n\n## User Accounts\n\nQuestLog uses username/password login. Users only see campaigns they own.\n\nAccounts are stored in `users.json` at the repo root with werkzeug pbkdf2-hashed passwords.\n\nTo add a user, generate a hash and edit `users.json`:\n\n```bash\npython3 -c \"from werkzeug.security import generate_password_hash; print(generate_password_hash('yourpassword'))\"\n```\n\n```json\n{\n  \"users\": {\n    \"username\": {\n      \"password_hash\": \"<hash>\",\n      \"display_name\": \"Display Name\"\n    }\n  }\n}\n```\n\n---\n\n## Campaigns\n\n### Ownership\n\nEach `campaign.json` has an `\"owner\"` field (username). Non-demo campaigns are only accessible to their owner. Demo campaigns (marked `\"demo\": true`) are accessible to all users as templates.\n\n### Starting a Campaign\n\nFrom the index page:\n- **Start from Scratch** \u2014 clone the Blank Campaign template\n- **Starter Campaigns** \u2014 clone a pre-populated system-specific demo (D&D 5e, PF2e, Blades in the Dark)\n\nCloning copies the full campaign folder, assigns ownership to the current user, and generates a unique slug (`pabtso-a3f2b1`). The DM is auto-logged-in and redirected to the DM dashboard.\n\n### Player Share Link\n\nFrom the DM dashboard \u2192 **Player Share Link**: generate a token URL (`/share/<token>`). Players visit the link, get a read-only session, and can browse the campaign without creating an account. Regenerating the link invalidates the old one.\n\n---\n\n## DM Mode\n\nEach campaign has a DM PIN set in `campaign.json`. Log in via the **DM** link in the nav.\n\nWhen authenticated as DM:\n\n- **Reveal/hide** entities from players (NPCs, factions, quests, party members)\n- **Add/edit/delete** NPCs, factions, quests, party members, assets, ships, weapons\n- **Edit objectives** \u2014 toggle done, edit text, delete individual objectives\n- **Edit quest description** inline from the story page\n- **Edit ship details** \u2014 name, type, HP, notes, crew, cargo (add/remove)\n- **Edit stronghold** \u2014 name, type, location, condition, notes, features, upgrades; delete stronghold\n- **Delete ship** \u2014 remove a ship entirely from DM Controls\n- **Session Plan** \u2014 write in markdown, rendered on the DM dashboard\n- **Session Notes** \u2014 freeform textarea; use Export .md to save as next session plan\n- **\u2726 Generate Recap** \u2014 AI-generated player-facing session recap from notes (Claude Haiku)\n- **Campaign Settings** \u2014 rename campaign, update system and description\n- **Delete Campaign** \u2014 permanent, requires typing campaign name to confirm (owner only)\n\nTo exit DM mode: **Exit DM** in the nav or the logout button on the dashboard.\n\n---\n\n## Hidden Entities\n\nAll entities support `\"hidden\": true`. Hidden entities are visible only to the DM \u2014 players see nothing until revealed.\n\nDemo campaign entities all start hidden. The DM reveals them as the story unfolds using the **Reveal to Players** button on each entity's detail page (NPCs, factions) or in the quest's DM Controls (story page). Hidden entities appear dimmed on the World page with a \"Hidden\" badge.\n\n---\n\n## Assets\n\n### Ships\n\nShips track name, type, HP, crew, cargo, notes, and weapons. Weapon HP is trackable by players without DM login.\n\nDM controls on the Assets page allow editing all ship fields, adding/removing crew and cargo members, and adding weapons after creation.\n\n### Stronghold\n\nA single stronghold per campaign. Fields: name, type, location, condition, notes, features (list), upgrades (list). DM can add/remove individual features and upgrades.\n\n---\n\n## URL Structure\n\n```\n/login                       Login page\n/                            My Campaigns + Start a Campaign (login required)\n/share/<token>               Player read-only access via share link\n/demo/<slug>/clone           Clone a demo campaign (POST)\n\n/<slug>/                     Campaign home\n/<slug>/party                Full party roster\n/<slug>/assets               Currency, items, ships, stronghold\n/<slug>/world                NPC and faction overview\n/<slug>/world/npc/<id>       NPC detail + interaction log\n/<slug>/world/faction/<id>   Faction detail + interaction log\n/<slug>/story                Quest log grouped by status\n/<slug>/references           Rulebook reference tables\n\n/<slug>/dm                   DM dashboard (PIN required)\n/<slug>/dm/log               Post-session logging tool\n/<slug>/dm/login             DM PIN entry\n/<slug>/dm/logout            Exit DM mode\n```\n\n---\n\n## Data Model\n\nEach campaign is a folder under `campaigns/<slug>/`:\n\n```\ncampaigns/\n  my-campaign/\n    campaign.json        name, system, slug, description, owner, dm_pin, share_token\n    party.json           characters array\n    assets.json          currency, items, ships, stronghold, property\n    world/\n      npcs.json          npcs array\n      factions.json      factions array\n    story/\n      quests.json        quests array\n    references.json      optional lookup tables\n    dm/\n      session.json       session plan (markdown) + notes\n```\n\n### campaign.json\n\n```json\n{\n  \"name\": \"My Campaign\",\n  \"system\": \"D&D 5e\",\n  \"slug\": \"my-campaign\",\n  \"description\": \"Optional one-liner.\",\n  \"created\": \"2026-04-19\",\n  \"owner\": \"username\",\n  \"dm_pin\": \"1234\",\n  \"share_token\": \"abc123...\"\n}\n```\n\nAdd `\"demo\": true` instead of `\"owner\"` for template campaigns.\n\n### assets.json\n\n```json\n{\n  \"currency\": { \"gold\": 0 },\n  \"items\": [{ \"name\": \"Rope (50 ft)\", \"notes\": \"\" }],\n  \"ships\": [\n    {\n      \"name\": \"The Osprey\",\n      \"type\": \"Sloop\",\n      \"hp\": \"80/80\",\n      \"crew\": [\"Captain Vex\"],\n      \"weapons\": [{ \"name\": \"Ballista #1\", \"hp\": 50, \"max_hp\": 50 }],\n      \"cargo\": [\"50 barrels of ale\"],\n      \"notes\": \"\"\n    }\n  ],\n  \"stronghold\": {\n    \"name\": \"The Old Keep\",\n    \"type\": \"Fortress\",\n    \"location\": \"Phandalin\",\n    \"condition\": \"Ruined\",\n    \"notes\": \"\",\n    \"features\": [\"Great hall\", \"Dungeon\"],\n    \"upgrades\": [\"Reinforced gate\"]\n  },\n  \"property\": []\n}\n```\n\n### story/quests.json\n\n```json\n{\n  \"quests\": [\n    {\n      \"id\": \"missing_merchant\",\n      \"title\": \"The Missing Merchant\",\n      \"status\": \"active\",\n      \"description\": \"Torvald vanished on the road to Millhaven.\",\n      \"hidden\": false,\n      \"objectives\": [\n        { \"text\": \"Find out what happened\", \"done\": false }\n      ],\n      \"log\": [\n        { \"session\": 1, \"note\": \"Quest picked up from Mara.\" }\n      ]\n    }\n  ]\n}\n```\n\nStatus options: `active`, `complete`, `failed`\n\n### dm/session.json\n\n```json\n{\n  \"plan\": \"# Session Plan\\n\\n## Beat 1...\",\n  \"notes\": \"\"\n}\n```\n\nNotes export as `.md` for direct use as next session's plan.\n\n---\n\n## AI Session Recap\n\nThe DM dashboard includes a **\u2726 Generate Recap** button. After writing session notes, click it to generate a player-facing chronicle-style recap using Claude Haiku (Anthropic API).\n\nRequires `ANTHROPIC_API_KEY` in a `.env` file at the repo root:\n\n```\nANTHROPIC_API_KEY=sk-ant-...\n```\n\nThe `.env` is gitignored. If the key is missing the button will return a 500 error.\n\n---\n\n## Setup\n\n```bash\ncd questbook\npython3 -m venv venv\nvenv/bin/pip install flask markdown werkzeug anthropic python-dotenv\nvenv/bin/python app.py\n```\n\nRuns at `http://localhost:5052`.\n\n---\n\n## Deploying to Raspberry Pi\n\nDeploy individual changed files:\n\n```bash\nrsync -av /path/to/file simonhans@raspberrypi:/home/simonhans/coding/questbook/path/to/file\nssh simonhans@raspberrypi \"sudo systemctl restart questbook\"\n```\n\nOr sync everything:\n\n```bash\nrsync -av --exclude='venv' --exclude='__pycache__' --exclude='*.pyc' \\\n  ~/coding/questbook/ simonhans@raspberrypi:~/coding/questbook/\nssh simonhans@raspberrypi \"sudo systemctl restart questbook\"\n```\n\n### Systemd service\n\n`/etc/systemd/system/questbook.service`:\n\n```ini\n[Service]\nUser=simonhans\nWorkingDirectory=/home/simonhans/coding/questbook\nExecStart=/home/simonhans/coding/questbook/venv/bin/python app.py\nEnvironment=FLASK_ENV=production\nEnvironment=QUESTBOOK_PREFIX=\nEnvironment=QUESTBOOK_SECRET=<hex secret>\n```\n\nGenerate a secret: `python3 -c \"import secrets; print(secrets.token_hex(32))\"`\n\n### nginx\n\nConfigured in `/etc/nginx/sites-enabled/default` (certbot-managed). Routes `questlog.duckdns.org` \u2192 `127.0.0.1:5052`. Do not expose port 5052 directly.\n",
-    "tree": {
-      "dirs": {
-        "src": {
-          "dirs": {},
-          "files": [
-            "__init__.py",
-            "ai.py",
-            "data.py"
-          ]
-        },
-        "static": {
-          "dirs": {},
-          "files": [
-            "style.css"
-          ]
-        },
-        "templates": {
-          "dirs": {
-            "dm": {
-              "dirs": {},
-              "files": [
-                "add_character.html",
-                "add_faction.html",
-                "add_npc.html",
-                "add_quest.html",
-                "index.html",
-                "log.html",
-                "login.html"
-              ]
-            }
-          },
-          "files": [
-            "assets.html",
-            "base.html",
-            "campaign.html",
-            "faction.html",
-            "index.html",
-            "journal.html",
-            "login.html",
-            "npc.html",
-            "party.html",
-            "references.html",
-            "story.html",
-            "world.html"
-          ]
-        }
-      },
-      "files": [
-        "app.py"
-      ]
-    },
-    "images": [],
-    "local_base": "images/questbook/"
   },
   "game_ranking": {
     "name": "game_ranking",
@@ -947,5 +1002,22 @@ const fileStructure = {
     },
     "images": [],
     "local_base": "images/timer/"
+  },
+  "edasi_motlev": {
+    "name": "edasi_motlev",
+    "description": "",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/edasi_motlev",
+    "branch": "master",
+    "readme": "",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "index.html",
+        "style.css"
+      ]
+    },
+    "images": [],
+    "local_base": "images/edasi_motlev/"
   }
 };

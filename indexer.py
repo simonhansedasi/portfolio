@@ -31,12 +31,12 @@ SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io', 'OmaElu'}
 # Ordered by scientific/technical excitement.
 REPO_ORDER = [
     'GeoGastronomy',
+    'rippleforge',
     'glacier_prethicktor',
     'glacier_prethicktor_2',
     'sf_majick',
     'char_gen',
     'dada_science',
-    'questbook',
     'game_ranking',
     'gov_inertia',
     'rejection_matrix',
