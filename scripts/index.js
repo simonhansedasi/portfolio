@@ -1,5 +1,6 @@
 const ORDER = [
   'GeoGastronomy',
+  'rippleforge',
   'sf_majick',
   'glacier_prethicktor',
   'glacier_prethicktor_2',
