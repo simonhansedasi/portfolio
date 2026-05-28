@@ -1,40 +1,183 @@
 /* ── Reset & base ── */
 *, *::before, *::after { box-sizing: border-box; }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  margin: 0;
-  padding: 2rem;
-  background: #1a1a1a;
+  background: #0a0a14;
   color: #d0d0d0;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Header ── */
 header {
-  max-width: 900px;
-  margin: 0 auto 2rem;
+  padding: 1rem 2rem 0.75rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid #1e1e2e;
 }
 
 header h1 {
-  margin: 0 0 0.25rem;
-  font-size: 2rem;
+  margin: 0 0 0.15rem;
+  font-size: 1.6rem;
   color: #ffffff;
 }
 
 .subtitle {
   margin: 0;
-  color: #888;
-  font-size: 1rem;
+  color: #666;
+  font-size: 0.88rem;
 }
 
-/* ── Card grid ── */
-#cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 1.25rem;
-  max-width: 1200px;
-  margin: 0 auto;
+/* ── Main layout ── */
+#main-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#graph-canvas {
+  width: 100%;
+  height: 100%;
+  background: #0a0a14;
+}
+
+/* ── Color legend (fixed overlay, bottom-left) ── */
+#legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 18px;
+  background: rgba(8, 8, 18, 0.82);
+  border: 1px solid #2a2a40;
+  border-radius: 7px;
+  padding: 10px 14px;
+  pointer-events: none;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+}
+
+.legend-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-heading {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+}
+
+.swatch.circle {
+  border-radius: 50%;
+}
+
+.swatch.diamond {
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+/* ── Detail panel (overlay from right) ── */
+#detail-panel {
+  position: absolute;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  height: 100%;
+  overflow: hidden;
+  transition: right 0.28s ease;
+  background: #141428;
+  border-left: 2px solid #2a2a50;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+#detail-panel.open {
+  right: 0;
+}
+
+#panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #2a2a50;
+  flex-shrink: 0;
+}
+
+#panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#panel-close {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+#panel-close:hover { color: #ccc; }
+
+#panel-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.panel-detail { }
+
+.panel-detail .github-link {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.private-note {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.75rem 0 0;
+  font-style: italic;
+}
+
+.domain-tag {
+  margin-bottom: 0.75rem;
 }
 
 /* ── Card ── */

@@ -134,134 +134,6 @@ const fileStructure = {
     ],
     "local_base": "images/GeoGastronomy/"
   },
-  "rippleforge": {
-    "name": "rippleforge",
-    "description": "A causality engine for narrative. Characters, factions, and events form a relationship graph \u2014 log one event, and every connected entity feels it automatically. Cause propagates. Consequence compounds. The world keeps moving.",
-    "tech": [
-      "Python",
-      "Flask",
-      "Jinja2",
-      "JavaScript",
-      "Cytoscape.js",
-      "Anthropic API",
-      "Stripe",
-      "SQLite",
-      "Gunicorn",
-      "nginx",
-      "DigitalOcean"
-    ],
-    "github": "https://github.com/simonhansedasi/rippleforge",
-    "branch": "master",
-    "readme": "# RippleForge\n\nA causality engine for narrative. Characters, factions, and events form a relationship graph \u2014 log one event, and every connected entity feels it automatically. Cause propagates. Consequence compounds. The world keeps moving.\n\nUse it for tabletop campaigns, novels, historical timelines, alternate histories, or any story where what happens to one character ripples through everyone else.\n\n## Live\n\n`https://rippleforge.gg`\n\nTry it: `https://rippleforge.gg/demo/`\n\n---\n\n## What it does\n\nRippleForge is not a note-taking tool or character sheet replacement. It models **cause and effect** across a narrative world.\n\n### As a worldbuilding tool\n\n- **Ripple system** \u2014 log one event against any entity, and every connected character and faction updates automatically based on their relationship (allies share the impact, rivals feel the opposite)\n- **AI event parsing** \u2014 paste raw session notes, chapter summaries, or historical records; get structured log entries matched to known entities with polarity and intensity assigned\n- **Projected consequences** \u2014 AI reads every active tension in the world and forecasts what happens next; Narrator reviews, selects, commits\n- **World diff** \u2014 every commit shows a before/after snapshot: score changes, relationship label shifts, entries added\n- **Intelligence layer** \u2014 algorithmic ranked lists of active pressure, consequence risk, stale threads, and narrative gaps; no manual curation\n- **Branching timelines** \u2014 fork from any point and write alternate histories inside the same world; switch between timelines to compare how the graph diverges\n\n### As a writing assistant\n\n- **Dual-axis relationships** \u2014 formal and personal relationship axes that can conflict; rendered as separate arcs in the world graph\n- **Per-player fog of war** \u2014 each character knows only what they've witnessed; author can preview the world through any character's eyes\n- **Ripple chain view** \u2014 visual cause\u2192effect chains showing every downstream consequence of any source event\n- **Session brief** \u2014 algorithmic pre-session intel: pending futures, active tensions, stale threads, narrative gaps\n\n### As a party game\n\n- **Pass-the-phone collaborative storytelling** \u2014 30-minute session, 2\u20136 players, no prep\n- **Secret objectives** \u2014 each player gets a private mission that may conflict with the group's arc; relationship biases (trusts/suspects) add tension\n- **AI arc generation** \u2014 give the group a genre, place, and faction; the AI writes an arc with three open-ended leads (not linear steps)\n- **AI epilogue** \u2014 at the end, reveals everyone's secret missions and generates a prose epilogue\n- **World persists** \u2014 after the game, the campaign lives on as a full RippleForge world\n\nRippleForge does not invent narrative. AI proposes; Narrator approves; the world updates.\n\n---\n\n## Concept: AI as referee\n\nThe AI role is constraint enforcement, not storytelling:\n\n- **Summarization** \u2014 compresses session notes into a chronicle\n- **Event parsing** \u2014 extracts discrete world events from freeform notes or text\n- **Consequence projection** \u2014 given current world state, predicts what logically follows\n- **Arc generation** \u2014 builds story arcs with open-ended leads for groups to pursue\n- **Narrator always approves** \u2014 nothing is written without explicit commit\n\n---\n\n## Starter Worlds\n\nSix cloneable demo campaigns show the system across domains:\n\n| World | Domain | Sessions |\n|-------|--------|---------|\n| The Iliad | Epic fiction | 8 books |\n| The Book of Genesis | Biblical fiction | 15 |\n| World War II | Historical (1933\u20131945) | 12 |\n| Wars of the Roses | Historical | 9 periods |\n| The Ashcroft Vein | Original TTRPG fiction | 5 |\n| Paladin's Grace | Original TTRPG fiction | 4 |\n\nThe Ashcroft Vein doubles as the demo source (`DEMO_SOURCE=ashford`).\n\n**Note on share links:** Each starter world has a read-only `/share/<token>` URL. The token is stored in `campaign.json` and regenerates every time the seed script runs. After any re-seed, retrieve the new token from `campaigns/<slug>/campaign.json` on the Pi and update any hardcoded links in `templates/landing.html`.\n\n---\n\n## Pricing\n\n| Tier | Price | Worlds |\n|------|-------|--------|\n| Free | \u2014 | 1 world |\n| Pro Monthly | $8/mo | 5 worlds + AI features |\n| Pro Annual | $76/yr (save $20) | 5 worlds + AI features |\n| World add-on | $1 one-time | +1 world (stacks) |\n| Party game | 1 free, then $2/game | Non-Pro users |\n\nPlayers (read-only share link) are always free. Only Narrator accounts pay.\n\n14-day free trial on Pro Monthly.\n\n---\n\n## User Accounts\n\nGoogle OAuth at `/auth/google` \u2014 no password required. Username derived from email prefix on first sign-in.\n\nUsername/password login still works for legacy accounts (`users.json`, werkzeug pbkdf2).\n\n```json\n{\n  \"users\": {\n    \"username\": {\n      \"password_hash\": \"<hash>\",\n      \"display_name\": \"Display Name\",\n      \"ai_enabled\": true,\n      \"world_limit\": 5,\n      \"party_plays\": 0\n    }\n  }\n}\n```\n\n**AI gate:** AI features require `ai_enabled: true`. New signups default to `false`. Admin generates KS codes at `/admin/ks-codes`. Users redeem at `/redeem`.\n\n---\n\n## Worlds (Campaigns)\n\nEach world is a folder under `campaigns/<slug>/`. Three access modes:\n\n| Mode | Flag in campaign.json | Who can write |\n|------|----------------------|---------------|\n| Normal | `\"owner\": \"username\"` | Owner + Narrator PIN |\n| Public (read-only) | `\"public\": true` | Nobody (Narrator login still works) |\n| Demo | `\"demo_mode\": true` | Everyone |\n\nThree world modes: `ttrpg` | `fiction` | `historical`. Mode drives all UI labels and nav structure. Party games use `fiction` mode.\n\n---\n\n## Demo\n\n`/demo/` is a live writable copy of The Ashcroft Vein (original fiction, no third-party IP). Resets every 30 minutes.\n\nThe demo includes a 4-step guided tour and an AI tools page at `/demo/ai`.\n\n**Parse limit:** Visitors get 3 free live parses. Tracked via `demo_id` cookie (30-day).\n\n---\n\n## Narrator Mode\n\nLog in via the **Narrator** link in the nav. Each world has a Narrator PIN in `campaign.json`.\n\n---\n\n## AI Features\n\nRequires `ANTHROPIC_API_KEY` in `.env` at repo root. Uses `claude-haiku-4-5-20251001`.\n\n| Feature | Route | Description |\n|---------|-------|-------------|\n| Generate Recap | `POST /<slug>/dm/session/recap` | Chronicle from session notes |\n| Parse into Events | `POST /<slug>/dm/session/propose` | Notes \u2192 structured log entries for review |\n| Commit parsed | `POST /<slug>/dm/session/commit_proposals` | Write approved entries + trigger ripples |\n| What happens next | `POST /<slug>/dm/world/futures` | Consequence projections from world state |\n| Commit futures | `POST /<slug>/dm/world/commit_futures` | Write as PROJECTED entries, returns world diff |\n| Party arc | `POST /<slug>/play/generate-arc` | Generate story arc + 3 open-ended leads |\n| Party secrets | `POST /<slug>/play/generate-secrets` | Generate per-character secret objectives |\n| Party summary | `POST /<slug>/play/generate-summary` | Generate prose epilogue for done screen |\n\nAll narrative AI routes require Narrator auth **and** `ai_enabled: true` (or `admin: true`). Party AI routes are unauthed (rate-limited).\n\n---\n\n## URL Structure\n\n```\n/                            Login page / My worlds (authenticated)\n/demo/                       Live writable demo\n/demo/ai                     AI tools demo page\n/share/<token>               Read-only via share link\n/welcome                     Party mode entry point (POST choice=party)\n/billing                     Subscription management\n/billing/checkout/pro        Stripe checkout \u2014 monthly Pro\n/billing/checkout/pro-annual Stripe checkout \u2014 annual Pro\n/billing/party/success       Post-payment redirect for $2 party game\n\n/<slug>/                     World home\n/<slug>/party                Cast roster\n/<slug>/assets               Currency, items, ships, stronghold\n/<slug>/world                Entity and faction overview\n/<slug>/world/ripples        Ripple chain visualization\n/<slug>/world/npc/<id>       Character detail + interaction log\n/<slug>/world/faction/<id>   Faction detail\n/<slug>/story                Quest / arc log\n/<slug>/journal              Session journal\n/<slug>/brief                Narrator briefing (full intelligence report)\n/<slug>/play                 Party game screen (setup/arc/secrets/play/done)\n\n/<slug>/dm                   Narrator dashboard\n/<slug>/dm/login             Narrator PIN entry\n/<slug>/branch/create        Create alternate timeline branch (POST)\n/<slug>/branch/switch        Switch active branch (POST)\n/<slug>/branch/delete        Delete branch + purge entries (POST)\n```\n\n---\n\n## Data Model\n\n```\ncampaigns/<slug>/\n  campaign.json        name, system, slug, owner, dm_pin, share_token, mode, terminology, observer_name, branches[]\n  party.json           characters: [{name, assigned_user, known_events, ...}]\n  assets.json          currency, items, ships[{name, type, log[]}], stronghold\n  world/\n    npcs.json          npcs: [{id, name, role, relationship, log, hidden, factions, relations}]\n    factions.json      factions: [{id, name, relationship, log, hidden, relations}]\n    locations.json     locations: [{id, name, role, description, log, hidden, dm_notes}]\n  story/\n    quests.json\n  dm/\n    session.json       plan (markdown), notes\n    party_game.json    phase, genre, characters, place, faction, arc, history, secret_objectives\n  journal.json         {entries: [{session, date, recap}]}\n  references.json\n```\n\n### Log entry schema\n\n```json\n{\n  \"id\": \"evt_abc123\",\n  \"session\": 4,\n  \"note\": \"Allied with the resistance against the occupation.\",\n  \"visibility\": \"public\",\n  \"polarity\": \"positive\",\n  \"intensity\": 2,\n  \"event_type\": \"politics\",\n  \"axis\": \"formal\",\n  \"actor_id\": \"iarno_albrek\",\n  \"actor_type\": \"npc\",\n  \"ripple_source\": { \"entity_id\": \"iarno_albrek\", \"entity_type\": \"npc\", \"event_id\": \"evt_111\" },\n  \"branch\": \"br_ef30f2\",\n  \"deleted\": true\n}\n```\n\n`event_type` is freeform. Reserved: `projected` (AI-committed consequence projection).\n`axis` = `\"formal\"` | `\"personal\"` | absent. Only tagged entries feed the dual-axis conflict display.\n`deleted: true` = soft-deleted. Never shown or counted in scores. Filter in every code path that reads logs.\n`actor_id` / `actor_type` \u2014 display context for inter-entity events. Not a scoring exclusion.\n`branch` is only present on entries belonging to an alternate timeline branch.\n\n### Relationship computation\n\n`compute_npc_relationship(npc)` \u2014 decay-weighted score from all polarity events (0.85^age per session). Score thresholds: `allied` (\u22656), `friendly` (\u22653), `neutral` (\u2265\u22123), `hostile` (<\u22123). Stored `relationship` field acts as score floor.\n\n---\n\n## Setup\n\n```bash\ncd rippleforge\npython3 -m venv venv\nvenv/bin/pip install flask markdown werkzeug anthropic python-dotenv flask-limiter\nvenv/bin/python app.py\n```\n\nRuns at `http://localhost:5052`.\n\n---\n\n## Deploy\n\n**Live site is on DigitalOcean (68.183.130.60). Edits happen on sbook. Two-step deploy:**\n\n**Step 1 \u2014 push sbook \u2192 Pi:**\n```bash\nrsync -av --exclude='venv/' --exclude='campaigns/' --exclude='.env' \\\n  /home/simonhans/coding/rippleforge/ simonhans@raspberrypi:/mnt/serverdrive/coding/rippleforge/\n```\n\n**Step 2 \u2014 Pi \u2192 DO:**\n```bash\nssh simonhans@raspberrypi \"cd /mnt/serverdrive/coding/rippleforge && ./deploy_do.sh\"\n```\n\nSkipping step 1 means `deploy_do.sh` pushes the Pi's stale copy \u2014 nothing new arrives on the live site.\n\nSystemd service: `/etc/systemd/system/rippleforge.service`. nginx routes `rippleforge.gg` \u2192 `127.0.0.1:5052`.\n\n\n## Stack\n\nPython, Flask, Jinja2, JavaScript, Cytoscape.js, Anthropic API, Stripe, SQLite, Gunicorn, nginx, DigitalOcean\n",
-    "tree": {
-      "dirs": {
-        "seeds": {
-          "dirs": {},
-          "files": [
-            "seed_ashford.py",
-            "seed_genesis.py",
-            "seed_iliad.py",
-            "seed_paladins_grace.py",
-            "seed_roses.py",
-            "seed_ww2.py"
-          ]
-        },
-        "src": {
-          "dirs": {},
-          "files": [
-            "__init__.py",
-            "ai.py",
-            "app.py",
-            "data.py",
-            "email.py",
-            "importer.py",
-            "npc.html"
-          ]
-        },
-        "static": {
-          "dirs": {},
-          "files": [
-            "style.css",
-            "sw.js",
-            "tour.js"
-          ]
-        },
-        "templates": {
-          "dirs": {
-            "account": {
-              "dirs": {},
-              "files": [
-                "password.html"
-              ]
-            },
-            "admin": {
-              "dirs": {},
-              "files": [
-                "index.html",
-                "invites.html",
-                "ks_codes.html",
-                "login.html"
-              ]
-            },
-            "dm": {
-              "dirs": {},
-              "files": [
-                "add_character.html",
-                "add_faction.html",
-                "add_npc.html",
-                "add_quest.html",
-                "brief.html",
-                "import.html",
-                "index.html",
-                "log.html",
-                "login.html",
-                "npc.html"
-              ]
-            }
-          },
-          "files": [
-            "add_npc.html",
-            "app.py",
-            "assets.html",
-            "base.html",
-            "billing.html",
-            "brief.html",
-            "campaign.html",
-            "demo_ai.html",
-            "demo_splash.html",
-            "faction.html",
-            "graph.html",
-            "guide.html",
-            "index.html",
-            "journal.html",
-            "landing.html",
-            "location.html",
-            "login.html",
-            "npc.html",
-            "party.html",
-            "party_play.html",
-            "redeem.html",
-            "references.html",
-            "ripples.html",
-            "setup_wizard.html",
-            "signup.html",
-            "story.html",
-            "welcome.html",
-            "wiki.html",
-            "world.html"
-          ]
-        }
-      },
-      "files": [
-        "app.py",
-        "backup.sh",
-        "deploy.sh",
-        "make_icons.py"
-      ]
-    },
-    "images": [],
-    "local_base": "images/rippleforge/"
-  },
   "glacier_prethicktor": {
     "name": "glacier_prethicktor",
     "description": "Published: Edasi SH and Lipovsky BP (2026) \"Tidewater and lake-terminating glaciers are systematically thicker.\" Journal of Glaciology 72, e28, 1\u20138. https://doi.org/10.1017/jog.2026.10123",
@@ -312,11 +184,19 @@ const fileStructure = {
   },
   "glacier_prethicktor_2": {
     "name": "glacier_prethicktor_2",
-    "description": "",
-    "tech": [],
+    "description": "Global consensus ice-thickness estimates fail to encode a first-order flotation constraint for water-terminating glaciers \u2014 proven at power >0.99.",
+    "tech": [
+      "Python",
+      "pandas",
+      "NumPy",
+      "SciPy",
+      "scikit-learn",
+      "matplotlib",
+      "LaTeX"
+    ],
     "github": "https://github.com/simonhansedasi/glacier_prethicktor_2",
     "branch": "main",
-    "readme": "",
+    "readme": "# GlacierPrethicktor 2\n\nGlobal consensus ice-thickness estimates fail to encode a first-order flotation constraint for water-terminating glaciers \u2014 proven at power >0.99.\n\nBuilds on [Edasi & Lipovsky (2026)](https://github.com/simonhansedasi/glacier_prethicktor), which established that tidewater and lake-terminating glaciers are systematically thicker. This paper tests whether that depth-dependent signal is recoverable from the Farinotti et al. (2019) global consensus product. It is not \u2014 and the failure is not a power problem.\n\n## Findings\n\nThree interlocking arguments establish non-emergence of flotation physics from morphometric predictors:\n\n**Statistical** \u2014 HAB regression on 3,433 water-terminating glaciers in the Farinotti consensus yields slope = \u22120.027, p = 0.197, at power >0.99. Implicit encoding is ruled out.\n\n**Observational** \u2014 The same 9 BedMachine v6 glaciers show slope = 0.724, R\u00b2 = 0.66, p = 0.008. The signal exists in measured ice thickness; it is absent specifically from the consensus model.\n\n**Physical** \u2014 A correction experiment recovers the expected signal. In the plasticity-controlled regime (A < B, 52% of glaciers), applying a flotation correction shifts slope from \u22120.087 to +0.451, R\u00b2 = 0.63; 100% of 10,000 permutations are positive.\n\n## Status\n\nManuscript complete. Pending submission to Nature Geoscience.\n\n![BedMachine vs Farinotti](figures/bedmachine_vs_farinotti.png)\n\n## Stack\n\nPython, pandas, NumPy, SciPy, scikit-learn, matplotlib, LaTeX\n",
     "tree": {
       "dirs": {
         "data_wrangling": {
@@ -367,7 +247,7 @@ const fileStructure = {
     ],
     "github": "https://github.com/simonhansedasi/sf_majick",
     "branch": "main",
-    "readme": "# sf_majick\n\nA Salesforce sales org simulator \u2014 imports real CRM data, calibrates a behavioral model to match observed outcomes, and runs agent-based simulations to predict and experiment on org performance.\n\n![AND vs OR gate logic and resulting funnel shapes](figures/fig0_gate_mechanism.png)\n\n## What it does\n\nThe goal is to \"clone\" a Salesforce org: given a SOQL export of real opportunities, accounts, leads, and users, back-fit a parameterized simulation whose conversion rates, cycle times, and deal difficulty distribution match the real org. Then run what-if experiments \u2014 different rep archetypes, coaching interventions, pipeline hygiene changes \u2014 and measure the impact.\n\n### Simulation layer\n\nEach simulated day, rep agents work through their pipeline using a 3-step lookahead decision engine. They pick micro-actions (emails, calls, meetings, proposals, internal prep) based on their personality archetype, the entity's sentiment state, and expected future value. Macro events (stage advancement, lead conversion, close/lost) fire stochastically, with probabilities modulated by sentiment, momentum, friction, deal difficulty, and rep behavior.\n\n**Rep archetypes:** Closer, Nurturer, Grinder, Scattered \u2014 each with distinct personality traits (aggression, empathy, discipline) that drive action affinity, distraction rates, and burnout thresholds. Reps can be scheduled to join mid-simulation via `RepSlot.start_day`.\n\n**Micro-actions (9):** `send_email`, `make_call`, `hold_meeting`, `follow_up`, `research_account`, `internal_prep`, `solution_design`, `stakeholder_alignment`, `send_proposal` \u2014 each with attention cost, gating requirements, and sentiment effect.\n\n**Macro transitions (5):** Lead advancement, lead conversion \u2192 Account + Opportunity, stage advancement (Prospecting \u2192 Qualification \u2192 Proposal \u2192 Negotiation), opportunity close (Won/Lost), passive decay/death.\n\n**Sentiment engine:** Every touch updates entity sentiment; neglected entities decay passively. Sentiment history feeds momentum and friction signals that modulate macro probabilities and rep decision-making.\n\n**Burnout dynamics:** Reps accumulate workload stress each day via `end_of_day()` (actions taken, deals worked). Stress above the archetype's burnout threshold craters available attention and increments `days_burned_out`.\n\n**Human biases modeled:** Recency bias, sunk-cost bias, distraction (discipline-dependent), burnout, and learned timing weights (per-rep EMA of observed sentiment deltas per action/stage pair).\n\n### Calibration\n\n`OrgCalibrator` takes a Salesforce SOQL export and derives simulation parameters by back-fitting observed metrics:\n\n- Win rate, lost rate, cycle time \u2192 `base_prob_close`, `base_prob_lost`, stagnation/inactivity alphas\n- Stage distribution \u2192 per-stage advancement probabilities\n- Account and revenue distributions \u2192 seed state for the simulation\n\nThe result is an `OrgConfig` \u2014 probability fields overlay the `theta` dict \u2014 whose simulated org behaviorally matches the real one. Experiments run against this baseline.\n\n`OrgConfig` also accepts deal-size parameters (`lead_revenue_base`, `lead_revenue_sigma`, `account_revenue_mean_log`, `account_revenue_sigma_log`) to control revenue distributions directly from config rather than relying on entity defaults.\n\n### Experiments\n\n`ExperimentRunner` runs N iterations of a baseline and alternative scenarios and compares:\n- Won rate, revenue per run, avg rep earnings\n- Stage distribution and deal stall analysis\n- Rep stress / burnout distribution\n- Sentiment trajectory and action effect sizes\n\n**Statistical analysis:** `pipeline.py` computes terminal-state feature dataframes and `build_sentiment_effects()` runs raw mean sentiment delta per action (with CIs) and OLS-adjusted coefficients controlling for stage, rep, and outcome \u2014 identifying which actions actually move deals vs. which just correlate with deals that were going to move anyway.\n\n## Tests\n\n```bash\npytest tests/test_sim.py -v\n```\n\nCovers: requirement-tree consume logic (AND/OR correctness), commission single-credit, burnout accumulation, deferred rep `start_day`, full smoke runs, and double-commission regression.\n\n## Tech\n\nPython \u2014 `requests` (Salesforce OAuth/SOQL), `dataclasses`, `numpy`, `pandas`, `statsmodels` (OLS), `scipy`, `setuptools`\n\n## Setup\n\n```bash\npip install -e .\n```\n\nRequires a `.env` with Salesforce credentials:\n```\nSF_CLIENT_ID=...\nSF_CLIENT_SECRET=...\nSF_REFRESH_TOKEN=...\nSF_INSTANCE_URL=https://yourorg.salesforce.com\n```\n\n## Run\n\n```python\nfrom sf_majick.sim.org_calibrator import OrgCalibrator, ExperimentRunner, build_state_from_config\nfrom sf_majick.sim.org_config import OrgConfig, RepSlot\nfrom sf_majick.functions import SalesforceAuth\n\nsf = SalesforceAuth()\ncalibrator = OrgCalibrator(sf)\nconfig = calibrator.calibrate()\n\nrunner = ExperimentRunner(config)\nresults = runner.compare([\n    config,                             # baseline\n    config_with_more_closers,           # scenario A\n    config_with_coaching_intervention,  # scenario B\n])\n```\n\nHire reps mid-simulation:\n```python\nfrom sf_majick.sim.org_config import OrgConfig, RepSlot\n\ncfg = OrgConfig(\n    rep_slots=[\n        RepSlot(\"Closer\", count=3, start_day=0),\n        RepSlot(\"Grinder\", count=2, start_day=30),   # joins on day 30\n    ],\n    days=90,\n)\n```\n\nOr run the simulation directly with a hand-built config:\n```python\nfrom sf_majick.sim.run_simulation import run_experiment\nresults = run_experiment(n_runs=100, days=90)\n```\n",
+    "readme": "# sf_majick\n\nA Salesforce sales org simulator \u2014 imports real CRM data, calibrates a behavioral model to match observed outcomes, and runs agent-based simulations to predict and experiment on org performance.\n\n![AND vs OR gate logic and resulting funnel shapes](figures/fig0_gate_mechanism.png)\n\n## What it does\n\nThe goal is to \"clone\" a Salesforce org: given a SOQL export of real opportunities, accounts, leads, and users, back-fit a parameterized simulation whose conversion rates, cycle times, and deal difficulty distribution match the real org. Then run what-if experiments \u2014 different rep archetypes, coaching interventions, pipeline hygiene changes \u2014 and measure the impact.\n\n### Simulation layer\n\nEach simulated day, rep agents work through their pipeline using a 3-step lookahead decision engine. They pick micro-actions (emails, calls, meetings, proposals, internal prep) based on their personality archetype, the entity's sentiment state, and expected future value. Macro events (stage advancement, lead conversion, close/lost) fire stochastically, with probabilities modulated by sentiment, momentum, friction, deal difficulty, and rep behavior.\n\n**Rep archetypes:** Closer, Nurturer, Grinder, Scattered \u2014 each with distinct personality traits (aggression, empathy, discipline) that drive action affinity, distraction rates, and burnout thresholds. Reps can be scheduled to join mid-simulation via `RepSlot.start_day`.\n\n**Micro-actions (9):** `send_email`, `make_call`, `hold_meeting`, `follow_up`, `research_account`, `internal_prep`, `solution_design`, `stakeholder_alignment`, `send_proposal` \u2014 each with attention cost, gating requirements, and sentiment effect.\n\n**Macro transitions (5):** Lead advancement, lead conversion \u2192 Account + Opportunity, stage advancement (Prospecting \u2192 Qualification \u2192 Proposal \u2192 Negotiation), opportunity close (Won/Lost), passive decay/death.\n\n**Sentiment engine:** Every touch updates entity sentiment; neglected entities decay passively. Sentiment history feeds momentum and friction signals that modulate macro probabilities and rep decision-making.\n\n**Burnout dynamics:** Reps accumulate workload stress each day via `end_of_day()` (actions taken, deals worked). Stress above the archetype's burnout threshold craters available attention and increments `days_burned_out`.\n\n**Human biases modeled:** Recency bias, sunk-cost bias, distraction (discipline-dependent), burnout, and learned timing weights (per-rep EMA of observed sentiment deltas per action/stage pair).\n\n### Calibration\n\n`OrgCalibrator` takes a Salesforce SOQL export and derives simulation parameters by back-fitting observed metrics:\n\n- Win rate, lost rate, cycle time \u2192 `base_prob_close`, `base_prob_lost`, stagnation/inactivity alphas\n- Stage distribution \u2192 per-stage advancement probabilities\n- Account and revenue distributions \u2192 seed state for the simulation\n\nThe result is an `OrgConfig` \u2014 probability fields overlay the `theta` dict \u2014 whose simulated org behaviorally matches the real one. Experiments run against this baseline.\n\n`OrgConfig` also accepts deal-size parameters (`lead_revenue_base`, `lead_revenue_sigma`, `account_revenue_mean_log`, `account_revenue_sigma_log`) to control revenue distributions directly from config rather than relying on entity defaults.\n\n### Experiments\n\n`ExperimentRunner` runs N iterations of a baseline and alternative scenarios and compares:\n- Won rate, revenue per run, avg rep earnings\n- Stage distribution and deal stall analysis\n- Rep stress / burnout distribution\n- Sentiment trajectory and action effect sizes\n\n**Statistical analysis:** `pipeline.py` computes terminal-state feature dataframes and `build_sentiment_effects()` runs raw mean sentiment delta per action (with CIs) and OLS-adjusted coefficients controlling for stage, rep, and outcome \u2014 identifying which actions actually move deals vs. which just correlate with deals that were going to move anyway.\n\n## Web GUI (Raspberry Pi)\n\nThe GUI runs on a local Pi at `http://raspberrypi:5008`. It has five tabs:\n\n- **Setup** \u2014 manual org config sliders for quick exploration\n- **Sim** \u2014 run the in-browser sim against the current config\n- **Fitter** \u2014 visual calibration diagnostics\n- **CSV** \u2014 drop a Salesforce SOQL export, auto-fit an `OrgConfig`, save the calibration to the Pi\n- **Experiments** \u2014 scenario builder (reads from local Setup config; on Pi this is display-only)\n\nDeploy/restart:\n```bash\nbash push_pi.sh\n```\n\n## Workflow: real SF org \u2192 experiment results\n\n1. Open `http://raspberrypi:5008` \u2192 CSV tab \u2192 drop a Salesforce opportunity export\n2. Review the fitted parameters, give it a name, click **Save to Pi**\n3. Locally: pull the calibration file:\n   ```bash\n   bash pull_calibration.sh\n   ```\n4. Edit `SCENARIOS` in `run_experiment.py` if needed, then run locally:\n   ```bash\n   python3 run_experiment.py data/fitted_configs/<name>.json\n   ```\n   This runs 100 Monte Carlo iterations per scenario using the full Python engine, prints a summary table, and writes a CSV next to the config.\n\nExperiments run locally because the Pi's ARM CPU is too slow for the Python simulation engine (~6.6s/run locally; 10\u201330\u00d7 slower on Pi). Fitting is client-side JS in the browser \u2014 no Pi CPU involved.\n\n## Tests\n\n```bash\npytest tests/test_sim.py -v\n```\n\nCovers: requirement-tree consume logic (AND/OR correctness), commission single-credit, burnout accumulation, deferred rep `start_day`, full smoke runs, and double-commission regression.\n\n## Tech\n\nPython \u2014 `dataclasses`, `numpy`, `pandas`, `statsmodels` (OLS), `scipy`, `setuptools`; Flask (GUI backend); vanilla JS + Canvas (browser fitter + experiment UI)\n\n## Setup\n\n```bash\npip install -e .\n```\n\n## Programmatic use\n\n```python\nfrom sf_majick.sim.org_config import OrgConfig\nfrom sf_majick.sim.org_calibrator import ExperimentRunner, build_state_from_config\nfrom sf_majick.sim.simulate import run_simulation\nfrom sf_majick.sim.micro_policy import simulate_rep_thinking\n\ncfg = OrgConfig.load(\"data/fitted_configs/acme_q3.json\")\n\nrunner = ExperimentRunner(\n    base_config   = cfg.with_changes(n_runs=100),\n    state_factory = build_state_from_config,\n    sim_fn        = run_simulation,\n    micro_policy  = simulate_rep_thinking,\n    n_iterations  = 100,\n)\n\nresults = runner.compare({\n    \"baseline\":    {},\n    \"hire_2_reps\": {\"n_reps\": cfg.n_reps + 2},\n})\n```\n\nHire reps mid-simulation:\n```python\ncfg = OrgConfig(\n    rep_slots=[\n        RepSlot(\"Closer\", count=3, start_day=0),\n        RepSlot(\"Grinder\", count=2, start_day=30),\n    ],\n    days=90,\n)\n```\n",
     "tree": {
       "dirs": {
         "data": {
@@ -381,6 +261,20 @@ const fileStructure = {
         },
         "sf_majick": {
           "dirs": {
+            "cheatsheets": {
+              "dirs": {},
+              "files": [
+                "Field_name_cheatsheet_generator"
+              ]
+            },
+            "scripts": {
+              "dirs": {},
+              "files": [
+                "build_opp_df.py",
+                "deal_landscape.py",
+                "pipeline_metrics.py"
+              ]
+            },
             "sim": {
               "dirs": {},
               "files": [
@@ -425,10 +319,15 @@ const fileStructure = {
         }
       },
       "files": [
+        "app.py",
         "make_figures.py",
         "make_gate_figure.py",
+        "pull_calibration.sh",
+        "push_pi.sh",
+        "run_experiment.py",
         "run_whitepaper.py",
-        "setup.py"
+        "setup.py",
+        "sf_majick_gui.service"
       ]
     },
     "images": [
@@ -518,104 +417,212 @@ const fileStructure = {
     ],
     "local_base": "images/char_gen/"
   },
-  "dada_science": {
-    "name": "dada_science",
-    "description": "Rigorous statistical analysis of toddler behavior \u2014 plus a real-time data logging app on Raspberry Pi and a library book recommender.",
+  "strat_hacking": {
+    "name": "strat_hacking",
+    "description": "Multi-game strategy simulation lab. Each game is a self-contained Python module. Simulate thousands of games and compare strategy win rates head-to-head.",
+    "tech": [
+      "Python",
+      "NumPy",
+      "matplotlib",
+      "pandas"
+    ],
+    "github": "https://github.com/simonhansedasi/strat_hacking",
+    "branch": "master",
+    "readme": "# StratHacking\n\nMulti-game strategy simulation lab. Each game is a self-contained Python module. Simulate thousands of games and compare strategy win rates head-to-head.\n\n## Games\n\n### Spots\n\nDice-placement dog game. First to score 6 dogs wins. Bust risk (yard sum > 7) is the central tension.\n\n6 strategies from random baseline to exact bust-probability math. Key finding: `BustAwareStrategy` uses per-decision expected-value calculations; `FastAndLooseStrategy` accepts busts as the price of speed.\n\n### Monopoly\n\nNo trading, no auctions. Pure individual strategy: buy/build/jail/mortgage decisions. 5-player games have ~60% timeout rate \u2014 monopolies are hard to form without trading.\n\n5 strategies from always-buy to railroad-focused cash hoarder.\n\n### Yahtzee\n\nSingle-player scoring. Strategies compared by average total score across N independent games.\n\n| Strategy        | Avg   | Std  | Bonus% | Ytz/g |\n|-----------------|-------|------|--------|-------|\n| Random          | 45.7  | 18.1 |   0.0% |  0.00 |\n| Greedy          | 210.8 | 50.8 |   8.6% |  0.36 |\n| UpperBonusHunter| 160.2 | 40.6 |   4.4% |  0.18 |\n| YahtzeeHunter   | 155.2 | 66.1 |   2.4% |  0.58 |\n| Balanced        | 201.0 | 46.6 |  36.3% |  0.18 |\n\nGreedy wins on average. Balanced hits the upper bonus 4x more often. YahtzeeHunter has the highest variance.\n\n### Qwixx\n\nMultiplayer dice game (5-player head-to-head). Scoring is triangular: n crosses = n*(n+1)/2 points.\n\n| Strategy     | Avg  | Std  | Win%  | Pen/g |\n|--------------|------|------|-------|-------|\n| Random       |  7.0 |  9.5 |  7.2% |  2.31 |\n| Aggressive   |  9.0 | 10.4 |  6.7% |  2.53 |\n| Conservative |  6.0 |  8.9 |  3.4% |  2.55 |\n| LockHunter   |  3.4 | 13.3 |  7.1% |  3.01 |\n| Balanced     | 27.2 | 14.7 | 72.4% |  1.81 |\n\nBalanced dominates with 72.4% win rate. Key insight: consecutive crosses (gap=0) over jumping to higher positions. Triangular scoring means more total crosses beats any individual high-position cross.\n\n## Running simulations\n\n```python\nfrom qwixx.sim import simulate\nfrom qwixx.strategies import BalancedStrategy, AggressiveStrategy\n\nstats = simulate(\n    [lambda rng: BalancedStrategy(rng), lambda rng: AggressiveStrategy(rng)],\n    ['Balanced', 'Aggressive'],\n    n_games=20_000,\n)\nprint(stats)\n```\n\nOr run any game directly: `python -m yahtzee.sim`, `python -m qwixx.sim`, etc.\n\n## Stack\n\nPython, NumPy, matplotlib, pandas\n",
+    "tree": {
+      "dirs": {
+        "monopoly": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "board.py",
+            "cards.py",
+            "game.py",
+            "sim.py",
+            "strategies.py"
+          ]
+        },
+        "qwixx": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "analysis.py",
+            "game.py",
+            "sim.py",
+            "strategies.py"
+          ]
+        },
+        "spots": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "analysis.py",
+            "game.py",
+            "prob.py",
+            "sim.py",
+            "strategies.py",
+            "tricks.py"
+          ]
+        },
+        "yahtzee": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "analysis.py",
+            "game.py",
+            "sim.py",
+            "strategies.py"
+          ]
+        }
+      },
+      "files": []
+    },
+    "images": [],
+    "local_base": "images/strat_hacking/"
+  },
+  "statistical_uniqueness": {
+    "name": "statistical_uniqueness",
+    "description": "How statistically rare are you? Fetches US Census data, computes per-attribute probabilities across your demographic profile, and reports your joint rarity as a 1-in-N.",
     "tech": [
       "Python",
       "Flask",
-      "SQLite",
-      "pandas",
       "NumPy",
-      "matplotlib",
-      "seaborn",
-      "statsmodels (ANOVA/STL/ARIMAX)",
-      "scikit-learn (TF-IDF)",
-      "Click",
-      "Rich",
-      "Requests",
-      "Raspberry Pi",
-      "Tailscale"
+      "pandas",
+      "PyYAML",
+      "US Census API (ACS PUMS)"
     ],
-    "github": "https://github.com/simonhansedasi/dada_science",
-    "branch": "main",
-    "readme": "# Dada Science\n\nRigorous statistical analysis of toddler behavior \u2014 plus a real-time data logging app on Raspberry Pi and a library book recommender.\n\n> *noun* **dada scientist** /\u02c8d\u0251\u02d0d\u0251\u02d0 \u02c8sa\u026a\u0259nt\u026ast/ \u2014 a data scientist hired, ostensibly against their better judgement, to raise a toddler. Applies rigorous statistical methods to questions that would embarrass a peer reviewer but are of urgent operational importance at 6:45 AM.\n\nA collection of analytical studies on toddler behavior \u2014 sleep, snacks, potty training, Easter eggs \u2014 conducted with the same seriousness one would bring to modeling commodity futures. The repo also includes a real-time data logging app (Dada Tracker) running on a Raspberry Pi and a library book recommendation engine. All study data is **simulated/synthetic**. No actual toddlers were mined for data without consent, or denied their Cocopuff incentive in the name of science.\n\n---\n\n## Studies\n\n| Script | Description | Method |\n|--------|-------------|--------|\n| `potty_training.py` | Time Until Potty (TuP) by location, book reading, and incentive type | Simulated week of events; scatter + boxplot visualizations |\n| `snack_sugar_content.py` | Tantrum duration drivers across 1,000 synthetic snack records | Two-way ANOVA + Tukey HSD; time-of-day explains 76.9% of variance |\n| `nap_timeseries.py` | 141-day Jul\u2013Nov time series: daylight + DST end drive nap collapse | STL decomposition (trend, seasonal, residual) |\n| `missed_nap_lag.py` | 130-day lagged analysis of missed naps vs. overnight sleep quality | ARIMAX with \"berry season\" as natural experiment |\n| `Poisson_eggs.py` | Easter egg selectivity vs. random baseline | Poisson fits, KL divergence, sparsity metrics |\n| `winter_spring_transition.py` | Jan\u2013Mar parenting shift (TV \u2192 books) + DST spring-forward effect | Behavioral transition tracking, nap latency analysis |\n\nRun any study directly: `python potty_training.py` \u2014 each outputs PNG visualizations.\n\n---\n\n## Dada Tracker\n\nA mobile-first Flask app running on a Raspberry Pi that logs toddler events in real time.\n\n**Tracks**: sleep/naps, food & drink, activities, meltdowns (severity + trigger), potty, mood.\n\n**Stack**: Flask, SQLite (7-table schema), Jinja2 templates, systemd on Pi, Tailscale VPN for remote access.\n\n```bash\ncd tracker\npython app.py   # http://192.168.88.9:5000 (local) or Tailscale IP\n```\n\nPull data to a laptop for notebook analysis:\n\n```python\nfrom tracker.analysis import TrackerDB\ndb = TrackerDB()\ndb.sync()                          # scp from Pi\nsleep_df    = db.sleep()\nmeltdown_df = db.meltdowns()\ndb.daily_summary('2025-03-25')\n```\n\nSee `tracker/README.md` for full schema and systemd management.\n\n---\n\n## Library Recommender\n\nA CLI tool that scrapes the Sno-Isle library catalog into SQLite, learns taste from user ratings (1\u20135), and recommends books via TF-IDF + cosine similarity.\n\n**Stack**: Python, Click, Rich, scikit-learn, Requests, SQLite, BiblioCommons API.\n\n```bash\ncd library_recommender\npython catalog_scraper.py          # Scrape catalog (~165k books, ~45 min)\n./library recommend                # 5 best matches + 2 experimental + 3 hidden gems\n./library rate                     # Rate returned books\n./library hold 42 --branch 18      # Place a hold via BiblioCommons\n./library export-ratings           # Sync ratings to JSON for cross-machine use\n```\n\nMulti-user capable \u2014 separate rating histories per parent. See `library_recommender/README.md`.\n\n---\n\n## Tech\n\nPython, Flask, SQLite, pandas, NumPy, matplotlib, seaborn, statsmodels (ANOVA/STL/ARIMAX), scikit-learn (TF-IDF), Click, Rich, Requests, Raspberry Pi, Tailscale\n\n---\n\n## Data\n\nAll study datasets are fully synthetic, generated with seeded NumPy for reproducibility. Tracker data lives on the Pi in a `.gitignored` database \u2014 no real data is committed to this repo.\n",
+    "github": "https://github.com/simonhansedasi/statistical_uniqueness",
+    "branch": "master",
+    "readme": "# StatisticalUniqueness\n\nHow statistically rare are you? Fetches US Census data, computes per-attribute probabilities across your demographic profile, and reports your joint rarity as a 1-in-N.\n\nLive at [uniquefier.us](https://uniquefier.us)\n\n## How it works\n\nFill out `profile.yaml` with your demographics, life path, and family details. The tool fetches matching Census microdata (ACS PUMS), computes the frequency of each attribute in your age/sex cohort, then multiplies them to a joint probability.\n\n```bash\npython main.py --profile profile.yaml\npython main.py --profile profile.yaml --verbose   # show data sources\n```\n\nThe web app at `uniquefier.us` wraps the same engine in a form-based UI.\n\n## Profile structure\n\n```yaml\nmeta:\n  name: \"Simon\"\n  age: 33\n  sex: \"male\"\n\ndemographics:\n  race_ethnicity: \"white_non_hispanic\"\n  education_level: \"masters\"\n  occupation_group: \"life_physical_social_science\"\n  household_income: 75000\n  state: \"WA\"\n  languages: [\"estonian\"]\n\nfamily:\n  marital_status: \"married\"\n  num_children: 1\n  housing_tenure: \"rent\"\n\nlife_path:\n  age_at_first_marriage: 29\n  age_at_first_child: 31\n  founded_business: true\n  moved_states: true\n  lived_abroad: true\n  foreign_born: false\n  attended_grad_school: true\n```\n\n## Stack\n\nPython, Flask, NumPy, pandas, PyYAML, US Census API (ACS PUMS)\n",
     "tree": {
       "dirs": {
-        "library_recommender": {
-          "dirs": {},
-          "files": [
-            "catalog_scraper.py",
-            "cli.py",
-            "db.py",
-            "explore_catalog.py",
-            "failed_pages.csv",
-            "hold.py",
-            "importer.py",
-            "library",
-            "recommender.py",
-            "sno_isle_catalog.csv"
-          ]
-        },
-        "tracker": {
+        "data": {
           "dirs": {
-            "static": {
+            "pums": {
               "dirs": {},
               "files": [
-                "style.css"
+                "__init__.py",
+                "build_tables.py"
               ]
             },
-            "templates": {
+            "reference": {
               "dirs": {},
               "files": [
-                "activity.html",
-                "base.html",
-                "edit.html",
-                "edit_daily.html",
-                "food.html",
-                "index.html",
-                "meltdown.html",
-                "potty.html",
-                "today.html"
+                "acs_marital_status.csv",
+                "bls_selfemployment.csv",
+                "language_rates.csv",
+                "mobility.csv",
+                "nsfg_first_birth_age.csv",
+                "nsfg_marriage_age.csv",
+                "veteran_rates.csv"
               ]
             }
           },
           "files": [
-            "analysis.py",
-            "app.py",
-            "remind_dada.py",
-            "schema.sql"
+            "__init__.py",
+            "bls.py",
+            "census.py",
+            "nsfg.py",
+            "pums_lookup.py"
+          ]
+        },
+        "engine": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "probability.py"
+          ]
+        },
+        "static": {
+          "dirs": {},
+          "files": [
+            "style.css"
+          ]
+        },
+        "templates": {
+          "dirs": {},
+          "files": [
+            "index.html"
           ]
         }
       },
       "files": [
-        "Poisson_eggs.py",
-        "missed_nap_lag.py",
-        "nap_timeseries.py",
-        "potty_training.py",
-        "snack_sugar_content.py",
-        "winter_spring_transition.py"
+        "app.py",
+        "deploy_do.sh",
+        "main.py",
+        "profile.yaml",
+        "push_pi.sh",
+        "report.py"
+      ]
+    },
+    "images": [],
+    "local_base": "images/statistical_uniqueness/"
+  },
+  "library_recommender": {
+    "name": "library_recommender",
+    "description": "A family book discovery tool for Sno-Isle Library. Scrapes the full catalog into a local database, learns each user's taste from engagement signals, and places holds directly from the interface. The primary interface is a local web UI served from the Raspberry Pi; a CLI is also available for scripting and bulk operations.",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/dada_science/tree/main/library_recommender",
+    "branch": "main",
+    "readme": "# Library Recommender\n\nA family book discovery tool for Sno-Isle Library. Scrapes the full catalog into a local database, learns each user's taste from engagement signals, and places holds directly from the interface. The primary interface is a local web UI served from the Raspberry Pi; a CLI is also available for scripting and bulk operations.\n\nThree users: **heiki** (toddler \u2014 juvenile books), **simon**, and **madeleine** (adults \u2014 full catalog). Each user has an independent taste profile against the same shared catalog.\n\n---\n\n## Plain Language Summary\n\nThe catalog is scraped nightly into `library.db` on the Pi. Open the web UI on any device on the home network, pick your user from the dropdown, and tap Refresh to see what you currently have checked out. Log engagement \u2014 a slider for the rating, +/\u2212 buttons for reads, rereads, and false starts. In the Recommend tab, set an audience and genre filter if you want (e.g. Adult + Mystery Fiction), then tap Get Recommendations for 10 suggestions with live shelf availability at your home branch. Tap a title to expand the description and subject keywords. Place holds directly from that screen.\n\nAll four engagement signals combine into a preference score that drives recommendations. Re-read demands carry the most weight.\n\n---\n\n## Project Structure\n\n```\nlibrary_recommender/\n\u251c\u2500\u2500 app.py                  Flask web UI \u2014 served on Pi at port 5003\n\u251c\u2500\u2500 templates/index.html    Single-page HTML \u2014 Checked Out, Recommend, Holds tabs\n\u251c\u2500\u2500 cli.py                  CLI entry point \u2014 all commands live here\n\u251c\u2500\u2500 db.py                   Database layer \u2014 reads and writes to library.db\n\u251c\u2500\u2500 recommender.py          Recommendation engine \u2014 scoring and ranking logic\n\u251c\u2500\u2500 catalog_scraper.py      Scraper \u2014 pulls full Sno-Isle catalog into library.db (runs nightly via cron)\n\u251c\u2500\u2500 hold.py                 Hold placement \u2014 login, account resolution, hold submission\n\u251c\u2500\u2500 explore_catalog.py      Catalog explorer \u2014 shows available filter fields and counts\n\u251c\u2500\u2500 restart.sh              Local script \u2014 rsyncs code and restarts service on Pi\n\u251c\u2500\u2500 start_service.sh        Pi-side script \u2014 kills and restarts app.py (called by restart.sh)\n\u251c\u2500\u2500 library                 Shell wrapper so you can run ./library <command>\n\u251c\u2500\u2500 library.db              SQLite database \u2014 source of truth lives on Pi (not committed)\n\u251c\u2500\u2500 venv/                   Python venv on Pi (not committed, not rsynced)\n\u251c\u2500\u2500 logs/scraper.log        Nightly scraper output (on Pi only)\n\u251c\u2500\u2500 ratings_heiki.json      Heiki's exported ratings \u2014 commit to git\n\u251c\u2500\u2500 ratings_simon.json      Simon's exported ratings \u2014 commit to git\n\u251c\u2500\u2500 ratings_madeleine.json  Madeleine's exported ratings \u2014 commit to git\n\u251c\u2500\u2500 requirements.txt        Python dependencies\n\u251c\u2500\u2500 INSTRUCTIONS.md         Quick reference for daily use\n\u2514\u2500\u2500 README.md               This file\n```\n\n---\n\n## Deploy Model\n\nCode is written locally and rsynced to the Pi. The Pi runs everything \u2014 web UI, scraper, CLI. Git is managed from the local machine.\n\n**`library.db` on the Pi is the source of truth.** Do not overwrite it from a local copy.\n\n### Sync to Pi\n\n```bash\nrsync -av --exclude='venv' --exclude='library.db' --exclude='.env' \\\n          --exclude='__pycache__' --exclude='logs' \\\n  ~/coding/dada_science/library_recommender/ \\\n  simonhans@raspberrypi:~/coding/dada_science/library_recommender/\n```\n\n### Start / restart the web UI\n\nFrom your local machine (rsyncs code + restarts):\n```bash\n~/coding/dada_science/library_recommender/restart.sh\n```\n\nOr from the Pi directly:\n```bash\nbash ~/coding/dada_science/library_recommender/start_service.sh\n```\n\nAccess at `http://raspberrypi:5003` (or the Pi's LAN IP, e.g. `http://192.168.88.12:5003`).\n\n### Nightly catalog update\n\nA cron job runs the scraper every night at midnight:\n\n```\n0 0 * * * cd ~/coding/dada_science/library_recommender && venv/bin/python catalog_scraper.py >> logs/scraper.log 2>&1\n```\n\nCheck the last run: `tail ~/coding/dada_science/library_recommender/logs/scraper.log`\n\n---\n\n## Multi-User Setup\n\nEach user gets an independent rating profile. The catalog is shared; only ratings and checkouts are per-user.\n\nThree active users: **heiki**, **simon**, **madeleine**. The web UI shows a user dropdown populated automatically from `.env`.\n\n### Credentials in `.env`\n\n```\n# Default user when no selection is made\nLIBRARY_USER=heiki\n\n# Per-user library cards (any SNOISLE_CARD_<NAME> with a non-empty value appears in the web dropdown)\nSNOISLE_CARD_HEIKI=...\nSNOISLE_PIN_HEIKI=...\n\nSNOISLE_CARD_SIMON=...\nSNOISLE_PIN_SIMON=...\n\nSNOISLE_CARD_MADELEINE=...     # alphanumeric Libby cards work fine (e.g. PACREG937335)\nSNOISLE_PIN_MADELEINE=...\n\n# Default pickup branch (Lynnwood = 18)\nSNOISLE_BRANCH=18\n```\n\n`.env` is in `.gitignore` and is never committed. After editing `.env` on the Pi, run `start_service.sh` to restart.\n\n### Selecting a user\n\n**Web UI:** Use the dropdown in the header \u2014 switches instantly with a page reload.\n\n**CLI:**\n```bash\n./library --user simon recommend\n./library --user madeleine recommend\n```\n\n---\n\n## Getting a Catalog\n\nThe recommender needs books in the database before it can recommend anything.\n\n### 1. Explore what's available (optional)\n\n```bash\npython explore_catalog.py                                   # full overview of all filter fields\npython explore_catalog.py --audience JUVENILE --format BK  # scope to children's physical books\n```\n\n### 2. Scrape into the database\n\n```bash\npython catalog_scraper.py                  # full run \u2014 38 subject queries, all ages\npython catalog_scraper.py --max-pages 2    # quick test\n```\n\nCovers: juvenile (12 subjects), young adult (2), adult fiction (12), adult nonfiction (12). No audience filter \u2014 all ages in one pass. Re-run anytime to refresh checkout counts and pick up new titles. Ratings and personal checkout history are never overwritten. Any pages that fail are written to `failed_pages.csv`.\n\nThe scraper skips books that haven't changed (matched by `metadata_id`, compared against description, isbn, genre, subject, age_range, and checkout count). Timeouts are retried up to 5 times with exponential backoff.\n\n| Flag | Default | Description |\n|------|---------|-------------|\n| `--max-pages N` | all | Stop after N pages per query prefix |\n\n---\n\n## CLI Commands\n\n### `./library [--user NAME] <command>`\n\nAll commands accept `--user` as a global flag before the command name. Defaults to `LIBRARY_USER` in `.env`.\n\n---\n\n### `./library recommend [--age AUDIENCE] [--hold-all]`\n\nDisplays 10 book recommendations in three categories, scoped to the active user's ratings.\n\n```bash\n./library recommend\n./library --user heiki recommend --age juvenile\n./library --user simon recommend --age adult\n./library --user heiki recommend --age juvenile --hold-all\n```\n\n`--age` is a case-insensitive substring match against the BiblioCommons audience field (maps to `audience=` in the recommender). The web UI exposes this as an audience dropdown with values drawn live from the catalog.\n\n`--hold-all` places holds on all 10 recommendations immediately after displaying them. Logs in once and places all holds in sequence. Uses `SNOISLE_BRANCH` from `.env` for pickup branch (or prompts if not set). Two categories of books are skipped with a warning:\n- Books with no `metadata_id` \u2014 re-run the scraper to fix\n- Books whose `metadata_id` doesn't start with `S121` \u2014 these are shared catalog records from partner libraries; Sno-Isle's hold API only accepts its own records. Place these holds on the website instead.\n\n```bash\n# Additional --hold-all options (all fall back to .env)\n./library --user heiki recommend --hold-all --branch 18\n./library --user heiki recommend --hold-all --card 12345 --pin 9999\n```\n\n**The three categories:**\n\n| Category | Count | How it's chosen |\n|----------|-------|-----------------|\n| Top matches | 5 | Highest combined score: content similarity to your liked books (60%) + library popularity (40%) |\n| Experimental | 2 | High content similarity to liked books but low library checkout count |\n| Hidden gems | 3 | Lowest library checkout counts in the entire catalog |\n\n**How the content score works:**\n\nThe engine converts each book's title, author, description, subject, genre, and age range into a numerical fingerprint using TF-IDF. It then finds the \"average fingerprint\" of books rated 4 or 5 stars by the active user, **weighted by rating** (a 5-star book pulls the profile harder than a 4-star one), and measures how similar each unread book is to that profile.\n\nIf there are no ratings yet, it falls back to the mean vector of all checked-out books. If there are no checkouts either, it falls back to popularity-only scoring.\n\n---\n\n### `./library search`\n\nSearches the catalog by title, author, description, or subject. Filters are ANDed together.\n\n```bash\n./library search \"caterpillar\"                      # all fields\n./library search --author \"Eric Carle\"              # author only\n./library search --title \"hungry\" --author \"carle\"  # both\n./library search \"bedtime\" --author \"sendak\"        # general + author filter\n```\n\n---\n\n### `./library hold <id>`\n\nPlaces a hold on a book at Sno-Isle for library pickup using the active user's card.\n\n```bash\n./library hold 42                          # uses SNOISLE_BRANCH from .env, or prompts\n./library hold 42 --branch 18             # Lynnwood Library directly\n./library --user madeleine hold 42        # places hold on Madeleine's card\n```\n\n**What it does:**\n1. Fetches live copy availability (unauthenticated) \u2014 shows which branches have the book and whether each copy is on the shelf or checked out\n2. Logs into `sno-isle.bibliocommons.com` using the active user's card and PIN from `.env`\n3. Resolves the `accountId` from the BiblioCommons API\n4. POSTs a hold to `gateway.bibliocommons.com/v2/libraries/sno-isle/holds`\n\n**Note:** Only books with a `metadata_id` starting with `S121` can be held via the API \u2014 these are records owned by Sno-Isle. Books with other prefixes (e.g. `S980`) are shared records from partner libraries; the CLI will refuse them with a clear message. Place those holds on the website instead.\n\n**Branch IDs** (common Sno-Isle locations):\n\n| ID | Branch | ID | Branch |\n|----|--------|----|--------|\n| 7  | Arlington | 18 | Lynnwood |\n| 9  | Camano Island | 19 | Marysville |\n| 13 | Edmonds | 20 | Mill Creek |\n| 15 | Granite Falls | 21 | Monroe |\n| 16 | Lake Stevens | 22 | Mountlake Terrace |\n| 30 | Lakewood Smokey Point | 23 | Mukilteo |\n| 17 | Langley | 25 | Snohomish |\n\nRun `./library hold <id>` without `--branch` for the full interactive list.\n\n---\n\n### `./library availability <id>`\n\nShows live copy availability for a book \u2014 no login required.\n\n```bash\n./library availability 42\n```\n\nLists every copy in the Sno-Isle system with branch name, collection, call number, and shelf status.\n\n---\n\n### `./library sync-checkouts`\n\nPulls your currently checked-out books from Sno-Isle and marks them in the local database. Run this before `recommend` to ensure the recommender excludes books already sitting on your shelf.\n\n```bash\n./library sync-checkouts\n./library --user madeleine sync-checkouts\n```\n\nUses credentials from `.env`. Books are matched to the local catalog by `metadata_id`; any not found are reported but do not cause an error. The `currently_checked_out` flag is reset on every sync, so running it again after returning books will un-flag them.\n\n**Typical pre-trip workflow:**\n```bash\n./library sync-checkouts     # mark what we already have\n./library recommend          # get fresh picks\n./library hold <id>          # place holds\n```\n\n---\n\n### `./library my-account`\n\nLogs into Sno-Isle and shows current holds and checked-out books for the active user.\n\n```bash\n./library my-account\n./library --user madeleine my-account\n```\n\nShows:\n- **Holds** \u2014 title, status, queue position, pickup branch, pickup-by / expiry dates\n- **Checkouts** \u2014 local DB id, title, due date, overdue status, renewable flag, your rating\n\nThe local DB id is looked up first by matching the BiblioCommons `metadata_id`, then by title + author as a fallback (handles cases where the checkout API returns a different metadata_id format than the scraper stored). Books genuinely absent from the local catalog show `?` \u2014 re-run the scraper to pick them up.\n\n---\n\n### `./library export-account-csv` / `./library import-ratings-csv`\n\nThe primary workflow for rating an entire batch of checked-out books at once. Replaces typing `rate-book` one book at a time.\n\n```bash\n# 1. Export currently checked-out books to a CSV\n./library export-account-csv                       # writes currently_out_YYYY-MM-DD.csv\n./library export-account-csv myratings.csv         # custom path\n\n# 2. Open the CSV in any spreadsheet, fill in the columns you want, save\n#    Columns: metadata_id (key \u2014 don't edit), title, author, rating, times_read,\n#             reread_demands, false_starts\n\n# 3. Apply the filled-in data\n./library import-ratings-csv currently_out_2025-06-01.csv\n./library --user madeleine import-ratings-csv myratings.csv\n```\n\n**Export behavior:**\n- Fetches live checkouts from Sno-Isle (same credentials as `my-account`)\n- Any checked-out books not yet in the local catalog are auto-added before writing\n- Pre-fills existing ratings from the local DB \u2014 already-logged values appear in the CSV so you can review and edit them\n\n**Import behavior:**\n- Books matched by `metadata_id` first, then title + author as fallback\n- Only non-empty cells are written \u2014 blank cells preserve whatever was already stored\n- Values are SET, not incremented: `times_read=5` means \"5 total reads\", not \"add 5 more\"\n- Any row whose book can't be found in the local catalog is reported and skipped\n\n---\n\n### `./library checkout <id>`\n\nRecords a book as currently checked out in the local database for the active user.\n\n```bash\n./library checkout 42\n```\n\n**This does not contact the library.** It marks the book so it appears in `./library rate` when you return it. Use `hold` to interact with Sno-Isle.\n\n---\n\n### `./library rate`\n\nPrompts you to rate all checked-out unrated books for the active user.\n\n```bash\n./library rate\n./library --user madeleine rate\n```\n\n**Rating scale:**\n\n| Score | Meaning |\n|-------|---------|\n| 1 | No interest |\n| 2 | Tolerated |\n| 3 | Liked it |\n| 4 | Asked for it again |\n| 5 | Totally engaged |\n\nDecimal values are accepted (e.g., `3.5`). Press `s` to skip a book.\n\nThe star rating is one of four engagement signals. For richer data, also log `read`, `reread`, and `false-start` events as they happen during a session.\n\n---\n\n### `./library rate-book`\n\nRate a single book directly \u2014 no checkout flow needed. Useful for one-off corrections or seeding ratings on books you've already read. For rating a whole batch, use `export-account-csv` / `import-ratings-csv` instead.\n\n```bash\n./library rate-book              # interactive: search \u2192 pick \u2192 rate, repeat\n./library rate-book <id> <score> # one-liner\n```\n\n---\n\n### `./library read <id>`\n\nLogs a completed reading session for a book. Call it once each time a book gets read cover-to-cover \u2014 whether on that library trip or re-read from a previous one.\n\n```bash\n./library read 42\n./library --user heiki read 42\n```\n\n---\n\n### `./library reread <id>`\n\nLogs a re-read demand \u2014 Heiki asked for the book again before it was even put down. This is the strongest positive engagement signal in the recommender.\n\n```bash\n./library reread 42\n./library --user heiki reread 42\n```\n\n---\n\n### `./library false-start <id>`\n\nLogs a false start \u2014 the book was opened but not finished. A soft negative signal. More false starts against a book will gently push it down in future recommendations.\n\n```bash\n./library false-start 42\n./library --user heiki false-start 42\n```\n\n---\n\n### `./library export-ratings` / `./library import-ratings`\n\nExport and restore per-user ratings. Commit the exported files to git so ratings persist across machines.\n\n```bash\n# Export (run after each library trip, then commit)\n./library export-ratings                    # writes ratings_heiki.json\n./library --user madeleine export-ratings   # writes ratings_madeleine.json\n\n# Import (after cloning or pulling on a new machine)\n./library import-ratings                    # reads ratings_heiki.json\n./library --user madeleine import-ratings   # reads ratings_madeleine.json\n\n# Custom file path\n./library export-ratings mybackup.json\n./library import-ratings mybackup.json\n```\n\nBooks are matched by title + author, so import works correctly after a full re-scrape where numeric IDs differ. Books not found in the current catalog are reported as skipped \u2014 re-run the scraper and import again.\n\n**New machine workflow:**\n```bash\ngit clone <repo>\npip install -r requirements.txt\n# Edit .env with your credentials\npython catalog_scraper.py\n./library import-ratings\n./library --user madeleine import-ratings\n./library recommend\n```\n\n---\n\n### `./library list`\n\nLists all books in the database with personal fields scoped to the active user.\n\n```bash\n./library list\n./library list --limit 100\n./library list --rated        # only books you've rated\n```\n\n---\n\n## Module Reference\n\n### `catalog_scraper.py`\n\nQueries `gateway.bibliocommons.com/v2/libraries/sno-isle/bibs/search` page by page and upserts books directly into `library.db`. Uses `tqdm` for progress bars. Stores `metadata_id` (the BiblioCommons bib ID) on each book, which is required for hold placement.\n\n### `hold.py`\n\nHandles availability lookup, authentication, and hold submission against the BiblioCommons API. Functions: `get_availability()`, `login()`, `get_account_id()`, `get_branches()`, `place_hold()`, `hold_book()`, `get_holds()`, `get_checkouts()`.\n\n`get_availability(metadata_id)` is unauthenticated \u2014 it returns per-copy branch name, collection, call number, and shelf status. `get_holds()` and `get_checkouts()` return live account data using `_gateway_get()`, which retries across NERF load-balancer backends to handle session replication lag. All authenticated functions require credentials from `.env`.\n\n### `explore_catalog.py`\n\nQueries the BiblioCommons API and prints all available filter fields with counts. Use before scraping to understand what's available.\n\n### `cli.py`\n\nEntry point. Uses [Click](https://click.palletsprojects.com/) for commands and [Rich](https://rich.readthedocs.io/) for display. Calls into `db.py`, `hold.py`, and `recommender.py`. The `--user` global option is resolved here and passed to all database and recommender calls.\n\n### `db.py`\n\nAll database reads and writes. Uses Python's built-in `sqlite3`. No ORM. All personal-data functions accept a `user` parameter to scope ratings and checkouts.\n\n| Function | Description |\n|----------|-------------|\n| `init_db()` | Creates tables and runs migrations. Called on every CLI invocation. |\n| `upsert_book(data)` | Inserts or updates a book matched by title + author. |\n| `get_all_books(user)` | Returns every book with personal fields scoped to the user. |\n| `get_book(book_id, user)` | Returns a single book by ID with user-scoped personal fields. |\n| `get_checked_out_unrated(user)` | Returns books with open checkout records and no rating for this user. |\n| `add_checkout(book_id, user)` | Creates a checkout record for this user. |\n| `record_rating(checkout_id, rating)` | Saves a rating; user is inferred from the checkout record. |\n| `rate_book_direct(book_id, rating, user)` | Creates a completed checkout + rating in one step. |\n| `log_read(book_id, user)` | Increments `times_read` for a completed reading session. |\n| `log_reread_demand(book_id, user)` | Increments `reread_demands`. |\n| `log_false_start(book_id, user)` | Increments `false_starts`. |\n| `search_books(query, user, title, author)` | Search with optional field-specific filters. |\n| `get_book_ids_by_metadata(metadata_ids)` | Returns `{metadata_id: book_id}` for a list of BiblioCommons bib IDs. |\n| `get_book_ids_by_title_author(books)` | Fallback lookup returning `{(title, author): book_id}` for books not matched by metadata_id. |\n| `get_ratings_by_book_ids(book_ids, user)` | Returns `{book_id: {avg_rating, times_read, reread_demands, false_starts}}` for the given book ids and user. |\n| `sync_currently_checked_out(book_ids, user)` | Sets `currently_checked_out=1` for the given book ids, 0 for all others. Called by `sync-checkouts` CLI and by `api_account()` on Refresh. |\n| `get_catalog_meta()` | Returns `{audiences: [...], genres: [...]}` \u2014 distinct audience values and top 50 genre terms (title-cased, deduplicated) from the catalog. Used by `/api/catalog_meta`. |\n| `export_ratings(user)` | Returns all rating data for a user as a serialisable dict. |\n| `import_ratings(data, user)` | Restores ratings from an export, matching books by title + author. |\n| `upsert_ratings_partial(user, book_id, **fields)` | SET-semantics upsert; only updates columns explicitly passed. Used by `import-ratings-csv`. |\n\n**Database schema:**\n\n```sql\nbooks (\n    id                     INTEGER PRIMARY KEY,\n    title                  TEXT NOT NULL,\n    author                 TEXT,\n    description            TEXT,\n    isbn                   TEXT,\n    age_range              TEXT,\n    genre                  TEXT,\n    subject                TEXT,\n    metadata_id            TEXT,              -- BiblioCommons bib ID (for holds)\n    library_checkout_count INTEGER,           -- total copies held (popularity proxy)\n    last_library_checkout  TEXT,\n    date_added             TEXT,\n    UNIQUE(title, author)\n)\n\ncheckouts (\n    id             INTEGER PRIMARY KEY,\n    book_id        INTEGER,\n    user           TEXT,                      -- which user checked this out\n    checkout_date  TEXT,\n    return_date    TEXT,\n    rating         REAL,\n    notes          TEXT\n)\n\nuser_ratings (\n    user                    TEXT,             -- user profile name\n    book_id                 INTEGER,\n    avg_rating              REAL,             -- average star rating for this user\n    times_checked_out       INTEGER,          -- library checkouts by this user\n    times_read              INTEGER,          -- completed reading sessions\n    reread_demands          INTEGER,          -- \"again!\" requests\n    false_starts            INTEGER,          -- started but not finished\n    currently_checked_out   INTEGER,          -- 1 if on our shelf right now (set by sync-checkouts)\n    PRIMARY KEY (user, book_id)\n)\n```\n\n### `recommender.py`\n\nCore recommendation engine using TF-IDF and cosine similarity from scikit-learn.\n\n**Scoring:**\n1. TF-IDF matrix built from all books (unigrams + bigrams, 5,000 features max) \u2014 text includes title, author, description, subject, genre, and age_range\n2. Preference profile = engagement-weighted TF-IDF centroid of any book with a composite preference score > 0; falls back to mean of all checked-out books; falls back to zero vector (popularity-only) if no history\n3. Content score = cosine similarity to preference profile\n4. Popularity score = library checkout count normalized to 0\u20131\n5. Familiarity penalty = `times_checked_out` normalized 0\u20131\n6. Final score = `0.6 \u00d7 content + 0.4 \u00d7 popularity \u2212 0.25 \u00d7 familiarity`\n\nBooks with `currently_checked_out = 1` (set by `sync-checkouts`) are hard-excluded from candidates entirely. Books previously checked out but returned are penalized by up to \u22120.25 but remain eligible for recommendation.\n\n**Composite preference score** (used to identify and weight liked books):\n\n| Signal | Weight | Notes |\n|--------|--------|-------|\n| `avg_rating` (normalized 0\u20131) | +0.30 | Adult subjective quality |\n| `reread_demands` (normalized 0\u20131) | +0.40 | Strongest engagement signal |\n| `times_read` (normalized 0\u20131) | +0.20 | Completed sessions |\n| `false_starts` (normalized 0\u20131) | \u22120.10 | Soft negative \u2014 disengagement |\n\nEach signal is normalized independently to 0\u20131 before weighting, so a book with 5 re-read demands and no rating still seeds the profile.\n\nExperimental picks are selected by highest `content \u2212 popularity` gap (similar to liked books but rarely checked out). Hidden gems are the three lowest absolute checkout counts across the whole catalog.\n\n---\n\n## Dependencies\n\n| Package | Purpose |\n|---------|---------|\n| `click` | CLI framework |\n| `rich` | Terminal formatting |\n| `requests` | HTTP \u2014 scraper and hold placement |\n| `tqdm` | Progress bars in the scraper |\n| `scikit-learn` | TF-IDF and cosine similarity |\n| `numpy` | Matrix math |\n| `sqlite3` | Built-in \u2014 database storage |\n",
+    "tree": {
+      "dirs": {
+        "templates": {
+          "dirs": {},
+          "files": [
+            "index.html",
+            "stats.html"
+          ]
+        }
+      },
+      "files": [
+        "app.py",
+        "catalog_scraper.py",
+        "cli.py",
+        "currently_out_2026-05-12.csv",
+        "db.py",
+        "explore_catalog.py",
+        "failed_pages.csv",
+        "hold.py",
+        "importer.py",
+        "library",
+        "recommender.py",
+        "restart.sh",
+        "sno_isle_catalog.csv",
+        "start_service.sh"
       ]
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/dada_science/DST_spring.png",
-        "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/DST_spring.png"
-      },
-      {
-        "local": "/home/simonhans/coding/portfolio/images/dada_science/effect_chart.png",
-        "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/effect_chart.png"
-      },
-      {
-        "local": "/home/simonhans/coding/portfolio/images/dada_science/missed_nap_stl.png",
-        "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/missed_nap_stl.png"
-      },
-      {
-        "local": "/home/simonhans/coding/portfolio/images/dada_science/missed_naps.png",
-        "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/missed_naps.png"
+        "local": "/home/simonhans/coding/portfolio/images/library_recommender/screenshot.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/screenshot.png"
       }
     ],
-    "local_base": "images/dada_science/"
+    "local_base": "images/library_recommender/"
+  },
+  "scheduling": {
+    "name": "scheduling",
+    "description": "CLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.",
+    "tech": [
+      "Python",
+      "Google Calendar API",
+      "OAuth2",
+      "Rich",
+      "questionary",
+      "JSON"
+    ],
+    "github": "https://github.com/simonhansedasi/dada_science/tree/main/scheduling",
+    "branch": "main",
+    "readme": "# scheduling\n\nCLI weekly planner with Google Calendar sync \u2014 draft your week in the terminal, push to Google Calendar, and pull external events into the plan.\n\n## What it does\n\nInteractive terminal planner for building and managing a weekly schedule. Activities are stored in per-week JSON files (append-only archive). A nap window is injected at display time from config \u2014 not stored in data files \u2014 so changing it is a one-line edit with instant global effect.\n\nGoogle Calendar integration supports push (plan \u2192 GCal, idempotent re-push), pull (GCal events written into the week JSON as `gcal_source` activities, never pushed back), and multi-account pull with timezone normalisation. Pulled events display in magenta with a \ud83d\udccd location link.\n\nActivities support an optional location field that renders as a clickable Google Maps hyperlink in the terminal and is included in the GCal event's native location field on push.\n\n## Tech\n\nPython, Google Calendar API, OAuth2, Rich, questionary, JSON\n\n## Commands\n\n```\nplan show week [YYYY-WXX]   Week view (defaults to current)\nplan show next / prev        Navigate weeks\nplan show today              Day view\nplan show YYYY-MM-DD         Specific day\nplan add                     Interactive activity creation (title, time, notes, location, tags)\nplan edit                    Interactive edit / delete (incl. nap override)\nplan nap                     Update global nap window\nplan check                   Outstanding \u26a0\ufe0f items across all weeks\nplan auth                    Google OAuth setup\nplan whoami                  Show authenticated Google account\nplan calendars               List all calendars visible to that account\nplan push [YYYY-WXX|next|prev]   Push week to Google Calendar\nplan pull [YYYY-WXX|next|prev]   Pull GCal events into week JSON and show\n```\n\n## Setup\n\n```bash\npip install -r requirements.txt\n```\n\nPlace `client_secret.json` in `credentials/`, then:\n\n```bash\npython plan.py auth\n```\n\n## Architecture\n\n```\nplan.py          CLI entry point + all commands\ngcal.py          Google Calendar integration (auth, push, pull)\nconfig.json      Global config: nap times, weekly themes, GCal settings\nweeks/           Append-only archive of week files (YYYY-WXX.json)\narchive/         Historical data\ncredentials/     OAuth token + client secret (gitignored)\n```\n",
+    "tree": {
+      "dirs": {},
+      "files": [
+        "gcal.py",
+        "plan.py"
+      ]
+    },
+    "images": [],
+    "local_base": "images/scheduling/"
   },
   "game_ranking": {
     "name": "game_ranking",
@@ -709,25 +716,46 @@ const fileStructure = {
   },
   "rejection_matrix": {
     "name": "rejection_matrix",
-    "description": "Two CLI tools:",
+    "description": "Two CLI tools + a Flask web UI + a daily pipeline that surfaces new listings automatically.",
     "tech": [],
     "github": "https://github.com/simonhansedasi/rejection_matrix",
     "branch": "main",
-    "readme": "# rejection_matrix\n\nTwo CLI tools:\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n\nNo dependencies beyond Python 3.6+ stdlib. The SQLite database lives at `data/applications.db`.\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n| **USAJOBS** | Yes \u2014 free | US federal jobs: **NPS, USGS, NOAA, Forest Service**, and all other federal agencies; salary data; location + radius |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n#### Setting up USAJOBS (federal jobs)\n\nUSAJOBS is the official US federal job board. The API is free but requires registration.\n\n1. Register at **https://developer.usajobs.gov/APIRequest/Index** \u2014 fill in your name, email, and intended use\n2. You'll receive an API key by email\n3. Set both required env vars:\n\n```bash\nexport USAJOBS_API_KEY=your_key_here\nexport USAJOBS_EMAIL=your_email@example.com   # must match registration email\n# Add to ~/.bashrc or ~/.zshrc to persist\n```\n\nOnce both vars are set, USAJOBS runs automatically. Without them, it prints `SKIPPED`.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch,usajobs`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n\n# Federal jobs only (NPS, USGS, NOAA, etc.)\npython3 src/search.py \"park ranger\" --zip 98087 --sources usajobs\npython3 src/search.py \"geologist\" --zip 98087 --sources usajobs\npython3 src/search.py \"physical scientist\" --zip 98087 --sources usajobs --remote\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n| `--variant` | no | Resume variant used (e.g. `geo`, `research`, `simulation`) |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"PNNL\" \"Research Scientist\" --source LinkedIn --location Remote --variant research\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS] [--variant VARIANT]\n```\n\nEvery update is written to the audit log with a timestamp. `--status` changes the application status; `--variant` updates which resume was used. Both are recorded with old/new values.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n\n# Update the resume variant (e.g. if you forgot to set it on add)\npython3 src/rm.py update 5 \"switched to geo resume\" --variant geo\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary and resume variant are shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
+    "readme": "# rejection_matrix\n\nTwo CLI tools + a Flask web UI + a daily pipeline that surfaces new listings automatically.\n\n- **`src/search.py`** \u2014 search job boards for listings by title, salary, location, work type, industry, and company\n- **`src/rm.py`** \u2014 track applications you've submitted, log updates, and view status\n- **`src/app.py`** \u2014 web UI on port 5004; search page streams results live, applications page shows the full tracker, Uncovered tab shows pipeline-surfaced jobs\n- **`src/pipeline.py`** \u2014 daily cron script; searches broad keyword across sources, dedupes, title-filters, writes survivors to `weekly_search_results`, notifies via ntfy.sh\n\nThe CLI tools have no dependencies beyond Python 3.6+ stdlib. The web UI requires `flask`. The SQLite database lives at `data/applications.db`.\n\n## Working on the go\n\nTo work on job search at a library or coffee shop without the laptop lid suspending your session:\n\n```bash\n~/coding/incognito_mode.sh   # run once = lid-close does nothing; run again = back to normal\n```\n\nRequires `sudo`. Script lives outside this directory at `~/coding/incognito_mode.sh`.\n\n## Web UI\n\nRun locally:\n\n```bash\npython3 src/app.py\n# \u2192 http://localhost:5004\n```\n\nOn the Pi it runs as a systemd service (`rejection-matrix.service`). To redeploy:\n\n```bash\nrsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='venv' \\\n  /home/simonhans/coding/rejection_matrix/ simonhans@raspberrypi:~/coding/rejection_matrix/\nssh simonhans@raspberrypi \"sudo systemctl restart rejection-matrix\"\n```\n\n## CLI\n\nRun both from the repo root:\n\n```bash\npython3 src/search.py <keywords> [options]\npython3 src/rm.py <command> [options]\n```\n\n---\n\n## search.py \u2014 find jobs\n\n```\npython3 src/search.py <keywords...> [options]\n```\n\n### Job boards searched\n\n| Board | Requires key? | What it has |\n|---|---|---|\n| **Remotive** | No | Remote jobs; salary data on many listings; keyword + category filters |\n| **We Work Remotely** | No | Remote jobs; no salary; RSS feed |\n| **The Muse** | No | Remote, hybrid, and onsite; location filter; no salary |\n| **JSearch** | Yes \u2014 free | Aggregates **LinkedIn, Indeed, Glassdoor, ZipRecruiter**; salary data; location; remote filter |\n| **USAJOBS** | Yes \u2014 free | US federal jobs: **NPS, USGS, NOAA, Forest Service**, and all other federal agencies; salary data; location + radius |\n\nEvery result shows a **Source** column (which board \u2014 or for JSearch, which underlying site like LinkedIn or Indeed) and a **URL** column (direct link to the listing). That URL is where you apply. When you save a result to the tracker with `--save`, the board name is stored in the `source` field and the listing URL is stored in `notes`.\n\n#### Setting up JSearch (LinkedIn / Indeed / Glassdoor)\n\nJSearch is a RapidAPI service that scrapes the major boards so you don't have to.\n\n1. Sign up free at **rapidapi.com** \u2192 search for **JSearch** \u2192 subscribe to the free plan (200 req/month)\n2. Copy your RapidAPI key and set it in your environment:\n\n```bash\nexport JSEARCH_API_KEY=your_key_here\n# Add to ~/.bashrc or ~/.zshrc to persist it\n```\n\nOnce the env var is set, JSearch runs automatically alongside the other three sources. Without it, it prints `SKIPPED` and the other sources still run.\n\n#### Setting up USAJOBS (federal jobs)\n\nUSAJOBS is the official US federal job board. The API is free but requires registration.\n\n1. Register at **https://developer.usajobs.gov/APIRequest/Index** \u2014 fill in your name, email, and intended use\n2. You'll receive an API key by email\n3. Set both required env vars:\n\n```bash\nexport USAJOBS_API_KEY=your_key_here\nexport USAJOBS_EMAIL=your_email@example.com   # must match registration email\n# Add to ~/.bashrc or ~/.zshrc to persist\n```\n\nOnce both vars are set, USAJOBS runs automatically. Without them, it prints `SKIPPED`.\n\n### Options\n\n| Flag | Description |\n|---|---|\n| `keywords` | Job title keywords. Quote multi-word phrases: `\"data analyst\"` |\n| `--zip ZIP` | US zip code \u2014 resolves to city/state for location filtering |\n| `--radius MILES` | Search radius around zip, default 25 (applies to onsite/hybrid on The Muse) |\n| `--salary-min N` | Hide listings where the *known* max salary is below N |\n| `--salary-max N` | Hide listings where the *known* min salary is above N |\n| `--remote` | Show only remote listings |\n| `--hybrid` | Show only hybrid listings |\n| `--industry TEXT` | Category/industry passed to Remotive and The Muse APIs (e.g. `fintech`, `data`, `marketing`) |\n| `--company NAME` | Filter results to companies whose name contains this string |\n| `--sources LIST` | Comma-separated list of boards to search (default: `remotive,wwr,muse,jsearch,usajobs`) |\n| `--limit N` | Max results to fetch per source, default 25 |\n| `--save` | After displaying results, prompt for numbers to save to the tracker |\n\n> **Note on salary filtering:** Most listings don't include salary. The filter only excludes listings where salary is *known* to be outside your range \u2014 listings with no salary posted will still appear.\n\n### Examples\n\n```bash\n# Basic search\npython3 src/search.py \"data analyst\"\n\n# Remote only, with salary floor\npython3 src/search.py \"data analyst\" --remote --salary-min 90000\n\n# Local + remote, near a zip code\npython3 src/search.py \"software engineer\" --zip 98101 --salary-min 120000\n\n# Remote or hybrid, specific industry\npython3 src/search.py \"product manager\" --remote --hybrid --industry fintech\n\n# Search for roles at a specific company\npython3 src/search.py \"engineer\" --company Stripe --remote\n\n# Narrow to two sources, higher result cap\npython3 src/search.py \"data engineer\" --sources remotive,wwr --limit 50\n\n# Search and save picks to the tracker\npython3 src/search.py \"analyst\" --remote --salary-min 80000 --save\n\n# Federal jobs only (NPS, USGS, NOAA, etc.)\npython3 src/search.py \"park ranger\" --zip 98087 --sources usajobs\npython3 src/search.py \"geologist\" --zip 98087 --sources usajobs\npython3 src/search.py \"physical scientist\" --zip 98087 --sources usajobs --remote\n```\n\n### Saving to the tracker\n\nPass `--save` and after results are shown you'll be prompted:\n\n```\nEnter result numbers to save to tracker (e.g. 1,3,5), or press Enter to skip:\n  > 2,5\n  Saved #7: Senior Data Analyst @ Acme Corp\n  Saved #8: Data Analyst @ Some Co\n```\n\nSaved entries land in `data/applications.db` with status `applied`. The listing URL is in the `notes` field \u2014 retrieve it with:\n\n```bash\nsqlite3 data/applications.db \"SELECT notes FROM job_applications WHERE id = 7;\"\n```\n\n---\n\n## rm.py \u2014 track applications\n\n### `add` \u2014 log a new application\n\n```\npython3 src/rm.py add <company> <role> [options]\n```\n\n| Argument | Required | Description |\n|---|---|---|\n| `company` | yes | Company name |\n| `role` | yes | Job title |\n| `--date YYYY-MM-DD` | no | Date applied (defaults to today) |\n| `--source` | no | Where you found it (LinkedIn, referral, etc.) |\n| `--location` | no | Office location or \"Remote\" |\n| `--salary` | no | Salary offer (number) |\n| `--industry` | no | Company industry (e.g. Fintech, Healthcare) |\n| `--notes` | no | Any free-text notes |\n| `--variant` | no | Resume variant used (e.g. `geo`, `research`, `simulation`) |\n\nNew applications are always set to `applied` status.\n\n```bash\npython3 src/rm.py add \"PNNL\" \"Research Scientist\" --source LinkedIn --location Remote --variant research\npython3 src/rm.py add \"Boring Co\" \"Engineer\" --date 2026-03-20 --notes \"Applied via recruiter\"\n```\n\n---\n\n### `update` \u2014 log what happened\n\n```\npython3 src/rm.py update <id> <note> [--status STATUS] [--variant VARIANT]\n```\n\nEvery update is written to the audit log with a timestamp. `--status` changes the application status; `--variant` updates which resume was used. Both are recorded with old/new values.\n\n```bash\n# Log a note without changing status\npython3 src/rm.py update 3 \"Had a phone screen, seemed positive\"\n\n# Log a note and change status\npython3 src/rm.py update 3 \"Got the rejection email\" --status rejected\npython3 src/rm.py update 7 \"No reply in 3 weeks\" --status ghosted\npython3 src/rm.py update 12 \"Turned out to be a recruiter farm\" --status scam\n\n# Update the resume variant (e.g. if you forgot to set it on add)\npython3 src/rm.py update 5 \"switched to geo resume\" --variant geo\n```\n\n**Valid statuses:**\n\n| Status | Meaning |\n|---|---|\n| `applied` | Submitted, waiting |\n| `interviewing` | Active process |\n| `offer` | Offer received |\n| `rejected` | Formal rejection |\n| `ghosted` | No response |\n| `dead` | Role pulled / company went quiet |\n| `scam` | Fake listing or bad-faith recruiter |\n\n---\n\n### `list` \u2014 view applications\n\n```\npython3 src/rm.py list [--status STATUS]\n```\n\nShows all applications sorted by date, newest first. Statuses are colour-coded. Salary and resume variant are shown where set; industry is stored but not displayed (query directly via SQLite). Pass `--status` to filter.\n\n```bash\npython3 src/rm.py list\npython3 src/rm.py list --status applied\npython3 src/rm.py list --status interviewing\n```\n\n---\n\n### `docs` \u2014 manage documents attached to an application\n\n```\npython3 src/rm.py docs add <app_id> <path> [--type TYPE] [--label LABEL]\npython3 src/rm.py docs list <app_id>\npython3 src/rm.py docs rm <doc_id>\n```\n\nAttach resumes, cover letters, portfolios, or any other files to an application record. Multiple documents per application are supported.\n\n| Subcommand | Description |\n|---|---|\n| `docs add <app_id> <path>` | Attach a file path to an application |\n| `docs list <app_id>` | List all documents for an application |\n| `docs rm <doc_id>` | Remove a document entry (does not delete the file) |\n\n`--type` accepts: `resume`, `cover_letter`, `portfolio`, `writing_sample`, `other` (default: `other`)\n\n`--label` is an optional free-text tag, useful for versioning or context (e.g. `\"resume_v2\"`, `\"tailored fintech\"`).\n\n```bash\n# Attach a tailored resume and a cover letter\npython3 src/rm.py docs add 5 ~/resumes/resume_fintech_v2.pdf --type resume --label \"tailored fintech\"\npython3 src/rm.py docs add 5 ~/cover_letters/acme_cover.pdf --type cover_letter\n\n# List all docs for application #5\npython3 src/rm.py docs list 5\n\n# Remove a document entry\npython3 src/rm.py docs rm 3\n```\n\n---\n\n### `activity` \u2014 job search time from personal tracker\n\n```\npython3 src/rm.py activity [--days N]\n```\n\nReads time blocks categorised as **Job Search** or **LinkedIn** from the personal tracker (`../dada_science/personal_tracker/personal.db`) and shows them grouped by day with totals. Defaults to the last 14 days.\n\n```bash\npython3 src/rm.py activity\npython3 src/rm.py activity --days 30\n```\n\nRequires the personal tracker app to have been run at least once so its database exists.\n\n---\n\n## Database\n\nTwo tables in `data/applications.db`:\n\n- **`job_applications`** \u2014 one row per application\n- **`application_log`** \u2014 append-only audit trail; every `update` call writes here\n- **`application_documents`** \u2014 file paths attached to applications (resume, cover letter, etc.)\n\nTo inspect directly:\n\n```bash\nsqlite3 data/applications.db \"SELECT * FROM job_applications ORDER BY date_applied DESC;\"\nsqlite3 data/applications.db \"SELECT * FROM application_log WHERE application_id = 3;\"\n```\n",
     "tree": {
       "dirs": {
         "data": {
           "dirs": {},
           "files": [
+            "resume_ai_infra.tex",
             "resume_boeing_inspector.tex",
+            "resume_clark_nuber.tex",
             "resume_ds_analyst.tex",
+            "resume_finops.tex",
+            "resume_kc_parks_pia.tex",
+            "resume_kc_sw_ar.tex",
             "resume_remote_sensing_ds.tex",
-            "resume_sno_isle.tex"
+            "resume_salesforce_pds.tex",
+            "resume_sno_isle.tex",
+            "resume_terra_ai.tex",
+            "resume_uw_bi_dev.tex"
           ]
         },
         "src": {
-          "dirs": {},
+          "dirs": {
+            "templates": {
+              "dirs": {},
+              "files": [
+                "applications.html",
+                "base.html",
+                "log_fragment.html",
+                "search.html",
+                "uncovered.html"
+              ]
+            }
+          },
           "files": [
+            "app.py",
+            "pipeline.py",
             "rm.py",
             "search.py"
           ]
@@ -920,10 +948,17 @@ const fileStructure = {
     "tree": {
       "dirs": {},
       "files": [
-        "listener.py"
+        "graph_data.yaml",
+        "listener.py",
+        "seed_graph.py"
       ]
     },
-    "images": [],
+    "images": [
+      {
+        "local": "/home/simonhans/coding/portfolio/images/drawing/project_universe.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/drawing/function_listener/project_universe.png"
+      }
+    ],
     "local_base": "images/drawing/"
   },
   "trivia": {
@@ -959,11 +994,11 @@ const fileStructure = {
   },
   "wiki-index": {
     "name": "wiki-index",
-    "description": "Wiki-Index is a lightweight file indexing tool that helps teams navigate shared folders quickly.",
+    "description": "A lightweight static file browser. Point it at any folder, run one command, and get a browsable index you can host anywhere \u2014 GitHub Pages, an intranet server, or just open locally.",
     "tech": [],
     "github": "https://github.com/simonhansedasi/wiki-index",
     "branch": "main",
-    "readme": "# Organize Your Organization's Files\n\nWiki-Index is a lightweight file indexing tool that helps teams navigate shared folders quickly.  \nInstead of digging through endless directory trees, it creates a browsable index of your files.\n\n![Screenshot of File Index](img/index.png)\n\n<!-- ## Why Use Wiki-Index?\n\n- **Centralized Knowledge** \u2014 Build a single reference point for all your documents.  \n- **Fast Search** \u2014 Quickly locate files without guessing folder structures.  \n- **Portable** \u2014 Works on local machines, intranets, or lightweight servers.  \n- **Simple** \u2014 No heavy setup or database required.   -->\n\n## How It Works\n\n\n<!-- \n1. Point Wiki-Index at the root folder you want to index.  \n2. It scans your directories and generates a structured index in Markdown/HTML.  \n3. Open the index in your browser (or host it on GitHub Pages / your intranet) for easy navigation.   -->\n\n## Installation\n\nClone the repo:\n\n```bash\ngit clone https://github.com/yourusername/wiki-index.git\ncd wiki-index\n",
+    "readme": "# Wiki-Index\n\nA lightweight static file browser. Point it at any folder, run one command, and get a browsable index you can host anywhere \u2014 GitHub Pages, an intranet server, or just open locally.\n\nNo database. No backend. Just a Python script and two HTML files.\n\n![Screenshot of File Index](img/index.png)\n\n## How It Works\n\n1. Run `indexer.py` against your target folder \u2014 it writes a `scripts/file_structure.js` file containing the directory tree.\n2. Open `index.html` in a browser (or serve it statically) to browse the tree.\n3. Click any file to open it in `viewer.html`, which renders Markdown, displays images, shows code with syntax highlighting, and embeds PDFs.\n\n## Installation\n\n```bash\ngit clone https://github.com/yourusername/wiki-index.git\ncd wiki-index\n```\n\nNo dependencies beyond Python 3 and a browser.\n\n## Usage\n\n```bash\npython3 indexer.py --root /path/to/your/folder\n```\n\nThen open `index.html` in a browser.\n\n**Options:**\n\n| Flag | Default | Description |\n|------|---------|-------------|\n| `--root` | `tree/` | Directory to scan |\n| `--output` | `scripts/file_structure.js` | Where to write the generated JS |\n| `--url-root` | `/` | URL prefix for file links (needed for hosted deployments) |\n\n**Example \u2014 hosting on GitHub Pages:**\n\n```bash\npython3 indexer.py --root docs/ --url-root /wiki-index/docs/\n```\n\nThen commit and push. The index updates whenever you re-run the script.\n\n**Example \u2014 local intranet:**\n\n```bash\npython3 indexer.py --root /mnt/shared/wiki --url-root /wiki/\ncd /mnt/shared/wiki\npython3 -m http.server 8080\n```\n\n## File types supported\n\n- **Markdown** \u2014 rendered with [marked.js](https://marked.js.org/)\n- **Text / code** \u2014 plain display (`.txt`, `.py`, `.js`, `.sh`, `.json`, `.yaml`, `.csv`, `.tex`, and more)\n- **Images** \u2014 inline display (`.jpg`, `.png`, `.gif`, `.svg`, `.webp`)\n- **PDF** \u2014 embedded viewer\n- **Everything else** \u2014 download link\n\n## Auto-reload (optional)\n\nRun `watcher.py` instead of `indexer.py` to get automatic index regeneration whenever files change. The browser reloads itself within 5 seconds.\n\n```bash\npip install watchdog\npython3 watcher.py --root /path/to/your/folder --url-root /\n```\n\n`watcher.py` accepts the same flags as `indexer.py`. It runs the indexer once on startup, then watches for changes and reruns it automatically.\n\nTo run as a background service on Linux:\n\n```bash\n# edit wiki-index.service to set your WorkingDirectory and --root path, then:\nsudo cp wiki-index.service /etc/systemd/system/\nsudo systemctl enable --now wiki-index\n```\n\n## Why\n\nShared drives and wiki folders are hard to navigate. This gives any folder a clean browsable face without requiring a CMS, a database, or a running server.\n",
     "tree": {
       "dirs": {
         "scripts": {
@@ -984,7 +1019,9 @@ const fileStructure = {
         "Gemfile",
         "index.html",
         "indexer.py",
-        "viewer.html"
+        "viewer.html",
+        "watcher.py",
+        "wiki-index.service"
       ]
     },
     "images": [
@@ -1015,6 +1052,84 @@ const fileStructure = {
     "images": [],
     "local_base": "images/timer/"
   },
+  "ai_glue": {
+    "name": "ai_glue",
+    "description": "Drop-in AI observability and governance for OpenAI and Anthropic applications.",
+    "tech": [
+      "Python 3.7+",
+      "Flask",
+      "SQLite"
+    ],
+    "github": "https://github.com/simonhansedasi/ai_glue",
+    "branch": "main",
+    "readme": "# ai_glue\n\nDrop-in AI observability and governance for OpenAI and Anthropic applications.\n\n![ai_glue audit dashboard](docs/screenshot-audit.png)\n\n## What ai_glue gives you\n\n- Every AI call logged \u2014 provider, model, tokens, cost, latency, project, session\n- Spend visibility by project, team, and environment\n- PII detection with per-call flag review workflow\n- Hard governance rules \u2014 block unapproved models, enforce cost caps and rate limits\n- Multi-instance aggregation \u2014 dev, staging, and prod in one unified dashboard\n- Role-split views: engineering audit log, executive spend summary, per-instance breakdown\n- Add governance to existing apps with **one environment variable change** \u2014 no code rewrites\n\n## What ai_glue is not\n\nai_glue does not replace your AI stack. It has no opinion on prompts, agents, RAG pipelines, or orchestration. It sits between your applications and model providers to add governance, auditing, spend visibility, and policy enforcement. Think of it as a transparent proxy with a dashboard \u2014 not a framework.\n\n## Deployment models\n\n**Evaluating / self-hosted** \u2014 you are both the operator and the user. Clone it, add your own API key to `.env`, run it on your machine. The quickstart below covers this case.\n\n**Team deployment** \u2014 IT deploys one ai_glue instance on a shared server with the organization's API key in `.env`. Individual developers never touch an API key. They change one environment variable on their machine and everything is logged, governed, and visible on the shared dashboard.\n\n```\n                       \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\ndev laptop             \u2502  ai_glue server                      \u2502\nANTHROPIC_BASE_URL \u2500\u2500\u2500\u25ba\u2502  .env: ANTHROPIC_API_KEY=sk-org-...  \u2502\u2500\u2500\u25ba Anthropic API\n                       \u2502  dashboard: http://ai-glue.internal  \u2502\n                       \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n## Quickstart (local / evaluation)\n\n```bash\ngit clone https://github.com/simonhansedasi/ai_glue.git\ncd ai_glue\npip install -r requirements.txt\ncp .env.example .env              # add your API keys\ncp governance.yaml.example governance.yaml\npython examples/governance_demo.py   # no API keys needed\npython app.py                     # http://localhost:5010\n```\n\n## Two integration modes\n\n### Mode 1 \u2014 Proxy (zero code changes)\n\nPoint existing apps at ai_glue instead of the real provider. One environment variable per app:\n\n```bash\n# Anthropic\nANTHROPIC_BASE_URL=http://your-host:5010/proxy/anthropic\n\n# OpenAI\nOPENAI_BASE_URL=http://your-host:5010/proxy/openai/v1\n```\n\nEvery call is intercepted, logged, and governance-checked. The app receives the real response unchanged. Streaming is fully supported \u2014 the proxy passes the stream through and captures token counts and latency at the end.\n\nTag calls with optional headers for project and session labeling:\n```\nX-Aiglue-Project: hr-bot\nX-Aiglue-Session: user-123\n```\n\nIf no headers are present, calls fall back to `AIGLUE_DEFAULT_PROJECT` / `AIGLUE_DEFAULT_SESSION` from `.env`.\n\n### Mode 2 \u2014 Wrapper (new apps or when you control the code)\n\n```python\nfrom src import GluedClient\n\n# Anthropic \u2014 same API as anthropic.Anthropic()\nclient = GluedClient(\"anthropic\", session_id=\"user-123\", project=\"hr-bot\")\nresponse = client.messages.create(\n    model=\"claude-sonnet-4-6\",\n    max_tokens=512,\n    messages=[{\"role\": \"user\", \"content\": \"...\"}],\n)\n\n# OpenAI \u2014 same API as openai.OpenAI()\nclient = GluedClient(\"openai\", session_id=\"user-123\", project=\"support-bot\")\nresponse = client.chat.completions.create(\n    model=\"gpt-4o\",\n    max_tokens=512,\n    messages=[{\"role\": \"user\", \"content\": \"...\"}],\n)\n```\n\n## Governance\n\nEdit `governance.yaml` to configure rules. Changes apply immediately \u2014 no restart needed.\n\n```yaml\nmodel_allowlist:          # hard-block calls to unapproved models (403)\n  - claude-sonnet-4-6\n  - gpt-4o\n\npii_detection: true       # flag prompts containing emails, SSNs, phones, credit cards\n\npii_allowlist:            # exact strings that should never trigger a PII flag\n  - admin@yourcompany.com\n\nprojects:\n  hr-bot:\n    daily_cost_cap_usd: 5.00     # hard-block once daily spend hits cap\n    rate_limit_per_hour: 100     # hard-block sessions that exceed call frequency\n```\n\nPII detection is regex-based (not ML). Hard-blocking violations are never logged \u2014 the call was never made. PII flags are logged as warnings and do not block calls.\n\n**Security note**: `governance.yaml` becomes a sensitive file if you use the team API key mapping feature (see below), since it maps key prefixes to real project names. Treat it like `.env` in production \u2014 restrict filesystem permissions and do not commit it. `governance.yaml` is gitignored by default for this reason.\n\n## Dashboard\n\nAll three views draw from the same unified dataset merged across all instances.\n\n### `/` \u2014 Audit (engineers / team leads)\n\nFull call log. Every call from every instance in one table. Summary cards, daily charts, and by-project/by-model breakdowns are all merged across instances. Per-session drilldown shows individual turns, tool calls, and highlights flagged PII inline. Filters: `?project=X`, `?session=X`, `?flagged=1`.\n\n### `/executive` \u2014 Executive view (leadership)\n\nNon-technical. No session IDs, no model names. Cards: Total AI Spend, Projects Active, Conversations, Risk Flags. Charts: Spend by Project, Daily Spend trend. Unreviewed PII flags and governance blocks surface as a risk callout with a \"Mark all reviewed\" action.\n\n![ai_glue executive view](docs/screenshot-executive.png)\n\n### `/aggregate` \u2014 Per-instance breakdown\n\nOne panel per instance with its individual summary, by-project table, and by-model table. Useful for comparing dev vs. staging vs. prod activity side by side.\n\n![ai_glue aggregate view](docs/screenshot-aggregate.png)\n\n## Multi-instance aggregation\n\nRun one ai_glue instance per environment. A parent instance pulls `/api/summary` from each child and merges everything into a single unified view.\n\n```\nDev instance    \u2500\u2500\u2510\nStaging instance \u2500\u253c\u2500\u2500\u25ba Parent instance \u2500\u2500\u25ba unified /, /executive, /aggregate\nProd instance   \u2500\u2500\u2518\n```\n\nTo add a child \u2014 edit `governance.yaml` on the parent only, no code changes:\n\n```yaml\naggregator:\n  children:\n    - name: prod\n      url: http://prod-host:5010\n    - name: staging\n      url: http://staging-host:5010\n```\n\nSet `AIGLUE_INSTANCE_NAME` on each child so it appears with a meaningful label in parent views.\n\n## Per-team API key mapping\n\nIssue each team a synthetic key with a recognizable prefix. Teams swap their real provider key for it \u2014 no other changes needed. The proxy detects the prefix, tags all calls with the team's project name, and substitutes the real API key before forwarding. This enables centralized billing, per-team spend attribution, and chargeback models without distributing raw provider keys.\n\n```yaml\nteams:\n  sk-aiglue-eng:\n    name: engineering\n  sk-aiglue-marketing:\n    name: marketing\n```\n\nAdd spend caps or rate limits per team by adding the team name to `projects:` in `governance.yaml`.\n\n## What gets logged\n\n| Field | Description |\n|---|---|\n| ts | UTC timestamp |\n| provider | anthropic / openai |\n| model | exact model string |\n| session_id | caller-supplied, auto-detected, or default |\n| project | caller-supplied, auto-detected, or default |\n| input_tokens | from API response |\n| output_tokens | from API response |\n| cost_usd | estimated from token counts |\n| latency_ms | wall time |\n| prompt_hash | MD5 of prompt |\n| raw_prompt | full text (if AIGLUE_LOG_RAW=true) |\n| raw_response | full text (if AIGLUE_LOG_RAW=true) |\n| gov_flags | JSON array of warning strings |\n| error | exception message if call failed |\n| reviewed_at | timestamp when flags were acknowledged |\n\nSet `AIGLUE_LOG_RAW=false` in `.env` to store only the hash when prompt content is sensitive. Restrict filesystem permissions on `audit.db` in production \u2014 it contains call metadata and optionally raw prompts.\n\n## Training data export\n\nai_glue logs every prompt and response, which means your audit database doubles as a conversation dataset. The `/export/training` endpoint turns logged conversations into JSONL you can use for fine-tuning, content mining, or building provider-independent capability baselines.\n\nThis is particularly useful when a model you depend on is deprecated or sunsetted \u2014 if your conversations were logged through ai_glue, you have the raw material to fine-tune a replacement rather than starting from scratch.\n\n### Export a single conversation\n\nOn any session page (`/session/<id>`), click **Export JSONL** to download that conversation as a single-session JSONL record.\n\nVia URL directly:\n```\n/export/training?format=session&session=<session_id>\n```\n\n### Export all conversations for a project\n\nOn any project page (`/project/<name>`), click **Export all conversations** to download every session for that project.\n\nVia URL:\n```\n/export/training?format=session&project=<project_name>\n```\n\n### Output formats\n\n**`format=session`** \u2014 one JSONL line per full conversation, with alternating user/assistant turns. Compatible with most fine-tuning pipelines.\n\n```json\n{\n  \"session_id\": \"conv-a3f9b2\",\n  \"project\": \"support-bot\",\n  \"model\": \"claude-sonnet-4-6\",\n  \"messages\": [\n    {\"role\": \"user\", \"content\": \"How do I reset my password?\"},\n    {\"role\": \"assistant\", \"content\": \"You can reset your password by...\"},\n    {\"role\": \"user\", \"content\": \"I don't see that option.\"},\n    {\"role\": \"assistant\", \"content\": \"Try navigating to...\"}\n  ]\n}\n```\n\n**`format=turn`** (default) \u2014 one JSONL line per API call, as isolated prompt/completion pairs. Useful for token-level analysis or simpler fine-tuning setups.\n\n```json\n{\"prompt\": \"How do I reset my password?\", \"completion\": \"You can reset your password by...\", \"model\": \"claude-sonnet-4-6\", \"session_id\": \"conv-a3f9b2\", \"project\": \"support-bot\", \"ts\": \"2026-05-15 10:00:00\"}\n```\n\n### Filters\n\nAll filters can be combined:\n\n| Param | Example | Effect |\n|---|---|---|\n| `project` | `?project=hr-bot` | Only conversations from this project |\n| `session` | `?session=conv-abc` | Only this session |\n| `model` | `?model=gpt-4o` | Only calls made to this model |\n| `since` | `?since=2026-01-01` | Only calls on or after this date |\n| `exclude_flagged` | `?exclude_flagged=true` | Drop calls with PII or governance flags |\n\n### Notes\n\n- Calls are only exportable if `AIGLUE_LOG_RAW=true` (the default). Rows logged with `AIGLUE_LOG_RAW=false` are excluded from training exports.\n- The export queries the local instance's database only. Cross-instance export requires fetching from each child directly.\n- The user message for each turn is extracted from the end of the stored prompt string \u2014 the format is stable for standard single-user, single-assistant conversations.\n\n## Tests\n\n```bash\npytest tests/ -v \n```\n\n27 tests. No API keys required. All LLM calls are mocked.\n\n## Stack\n\n- Python 3.7+, Flask, SQLite\n- Chart.js (CDN, no build step)\n- Anthropic SDK, OpenAI SDK\n\n## Environment variables\n\n| Variable | Default | Description |\n|---|---|---|\n| ANTHROPIC_API_KEY | \u2014 | API key used by the server to forward calls. In team deployments, only the server's `.env` needs this \u2014 individual developers do not. |\n| OPENAI_API_KEY | \u2014 | Same as above for OpenAI. |\n| AIGLUE_DB | audit.db | Path to SQLite audit database |\n| AIGLUE_LOG_RAW | true | Store full prompt/response text |\n| AIGLUE_DEFAULT_PROJECT | proxy | Project label for untagged proxy calls |\n| AIGLUE_DEFAULT_SESSION | proxy | Session label for untagged proxy calls |\n| AIGLUE_INSTANCE_NAME | (AIGLUE_DEFAULT_PROJECT) | Label shown in parent aggregator views |\n\n## License\n\nMIT\n",
+    "tree": {
+      "dirs": {
+        "examples": {
+          "dirs": {},
+          "files": [
+            "anthropic_example.py",
+            "governance_demo.py",
+            "openai_example.py",
+            "proxy_example.py"
+          ]
+        },
+        "routes": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "dashboard.py",
+            "proxy.py"
+          ]
+        },
+        "src": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "costs.py",
+            "governance.py",
+            "logger.py",
+            "proxy.py",
+            "store.py"
+          ]
+        },
+        "static": {
+          "dirs": {},
+          "files": [
+            "style.css"
+          ]
+        },
+        "templates": {
+          "dirs": {},
+          "files": [
+            "aggregate.html",
+            "base.html",
+            "executive.html",
+            "index.html",
+            "project.html",
+            "session.html"
+          ]
+        },
+        "tests": {
+          "dirs": {},
+          "files": [
+            "test_proxy.py",
+            "test_proxy_routes.py"
+          ]
+        }
+      },
+      "files": [
+        "LICENSE",
+        "app.py",
+        "audit_log.csv",
+        "governance.yaml",
+        "governance.yaml.example",
+        "training_turn.jsonl"
+      ]
+    },
+    "images": [],
+    "local_base": "images/ai_glue/"
+  },
   "edasi_motlev": {
     "name": "edasi_motlev",
     "description": "",
@@ -1031,5 +1146,60 @@ const fileStructure = {
     },
     "images": [],
     "local_base": "images/edasi_motlev/"
+  },
+  "snotrac": {
+    "name": "snotrac",
+    "description": "Frequency-weighted transit accessibility and vulnerability mapping for Snohomish County, WA",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/snotrac",
+    "branch": "master",
+    "readme": "# Snotrac Transit Gap Analysis\n\n**Frequency-weighted transit accessibility and vulnerability mapping for Snohomish County, WA**\n\nBuilt as a volunteer data contribution to [Snotrac](https://www.gosnotrac.org), a community transit advocacy organization in Snohomish County.\n\n---\n\n## What This Does\n\nIdentifies census block groups where residents who most need transit (elderly, carless, unemployed, low-income) have the least access to it. Produces a county-wide map showing vulnerability, accessibility, and gap score side-by-side at block group resolution.\n\n**Final outputs:** county map, equity scatter, equity spine plot, 2D priority ranking, and a one-page policy brief with named neighborhoods (`data/outputs/policy_brief.md`).\n\n---\n\n## Repository Structure\n\n```\nsnotrac/\n\u251c\u2500\u2500 data/\n\u2502   \u251c\u2500\u2500 raw/\n\u2502   \u2502   \u251c\u2500\u2500 gtfs/                   # Community Transit GTFS feed (auto-downloaded)\n\u2502   \u2502   \u2514\u2500\u2500 osm/                    # OSMnx walk network cache (auto-populated)\n\u2502   \u251c\u2500\u2500 processed/                  # Intermediate parquet/gpkg files\n\u2502   \u2514\u2500\u2500 outputs/\n\u2502       \u251c\u2500\u2500 maps/                   # Final map PNGs\n\u2502       \u2514\u2500\u2500 snohomish_transit_gap_summary.md   # Non-technical one-pager\n\u251c\u2500\u2500 notebooks/\n\u2502   \u251c\u2500\u2500 01_gtfs_ingestion.ipynb     # Download GTFS, compute stop frequencies\n\u2502   \u251c\u2500\u2500 02_acs_vulnerability.ipynb  # Pull ACS data, build vulnerability index\n\u2502   \u251c\u2500\u2500 03_network_accessibility.ipynb  # Build OSM network, compute accessibility\n\u2502   \u251c\u2500\u2500 04_gap_analysis.ipynb       # Compute gap surface, QA plots\n\u2502   \u251c\u2500\u2500 05_zone_clustering.ipynb    # K-means zone clustering, label zones\n\u2502   \u251c\u2500\u2500 06_maps.ipynb               # Generate final county map\n\u2502   \u2514\u2500\u2500 07_brief.ipynb              # Geocode priority BGs \u2192 named places, write policy brief\n\u251c\u2500\u2500 src/transit_gaps/\n\u2502   \u251c\u2500\u2500 gtfs.py                     # GTFS loading and frequency computation\n\u2502   \u251c\u2500\u2500 network.py                  # OSMnx/pandana network build and cache\n\u2502   \u251c\u2500\u2500 accessibility.py            # Gravity-model scoring and gap formula\n\u2502   \u251c\u2500\u2500 vulnerability.py            # ACS pull and composite index\n\u2502   \u2514\u2500\u2500 viz.py                      # Map generation (plot_county_map)\n\u251c\u2500\u2500 environment.yml\n\u251c\u2500\u2500 setup.py\n\u251c\u2500\u2500 README.md\n\u2514\u2500\u2500 INSTRUCTIONS.md\n```\n\n---\n\n## Notebook Run Order\n\nRun in sequence \u2014 each notebook reads the outputs of the previous one.\n\n| # | Notebook | Key Output |\n|---|---|---|\n| 01 | `01_gtfs_ingestion` | `stop_frequencies.parquet` (1,680 stops) |\n| 02 | `02_acs_vulnerability` | `vulnerability_index.gpkg` (575 block groups) |\n| 03 | `03_network_accessibility` | `accessibility_scores.parquet` |\n| 04 | `04_gap_analysis` | `gap_surface.gpkg` |\n| 05 | `05_zone_clustering` | `zones.gpkg` (4 labeled zones) |\n| 06 | `06_maps` | `snohomish_transit_gaps.png` |\n| 07 | `07_brief` | `policy_brief.md` \u2014 named priority neighborhoods (Nominatim reverse geocode + TIGER fallback) + one-page non-technical brief |\n\n**Slow steps:** notebook 03 downloads the full Snohomish County OSM walk network (~5\u201310 min, cached after first run).\n\n---\n\n## Methodology\n\n### Vulnerability Index\n\nFour ACS 5-year 2023 indicators at block group level, each normalized county-wide to [0,1] and averaged with equal weights:\n\n| Indicator | ACS Variable | Notes |\n|---|---|---|\n| % elderly (65+) | B01001 age cols | Sum of 12 age-group columns |\n| Unemployment rate | B23025 | Unemployed / in labor force |\n| Zero-vehicle households | B25044 | Renter + owner no-vehicle / total occupied units |\n| Below poverty | C17002 | Under 1.0 income-to-poverty ratio / universe |\n\n> **Note on variable availability:** B18101 (disability), B08201 (vehicles), and B17026 (poverty ratio) are not available at block group level in the 2023 5-year ACS \u2014 they return null. The above variables are confirmed available at block group level.\n\n### Accessibility Score\n\nGravity model computed via pandana on the OSM pedestrian network:\n\n```\nA_i = \u03a3_j [ F_j \u00d7 exp(\u2212\u03b2 \u00d7 d_ij) ]\n```\n\n- `F_j` = trips/day at stop j (GTFS representative weekday)\n- `d_ij` = network walk distance in miles from block group centroid i to stop j\n- `\u03b2 = 4.0` (50% decay at 0.25 mi \u2014 calibrated for elderly/disabled walking tolerance)\n- Search radius: 1.5 miles\n\n### Gap Score\n\n```\ngap_score = vulnerability_index \u00d7 (1 \u2212 log_accessibility)\n```\n\n`log_accessibility = log(1 + raw_score) / log(1 + max_score)` \u2014 log-normalized rather than linearly normalized because the raw accessibility distribution is extremely right-skewed. Linear normalization collapses ~95% of block groups to near-zero, making the gap formula reduce to just the vulnerability index.\n\n### Equity Analysis (Notebook 04)\n\nBoth axes are min-max normalized to [0,1] for plotting (X = vulnerability, Y = accessibility). The **equity line** is the diagonal y = x \u2014 points below it are underserved (high need, low service).\n\n**Equity distance** \u2014 signed perpendicular distance from the equity line:\n\n```\nequity_distance = (vuln_n \u2212 acc_n) / \u221a2\n```\n\nPositive = below the line = underserved. Negative = above the line = over-served.\n\n**Combined priority score** \u2014 for campaign targeting, block groups are ranked by the mean of two normalized metrics: `gap_score` (absolute unmet need) and `equity_distance` (structural misalignment). These can disagree \u2014 a block group with high absolute need may sit closer to the equity line than one with moderate need but disproportionately low service. The combined score captures both dimensions.\n\n### Zone Clustering\n\nK-means on `[gap_score, centroid_x, centroid_y]`, k=4 selected by silhouette score (best: 0.40 at k=4). Zones labeled by rank on mean gap score, accessibility, and vulnerability \u2014 not by fixed thresholds, which fail when absolute values are below the threshold.\n\n---\n\n## Key Data Sources\n\n| Source | Detail |\n|---|---|\n| Community Transit GTFS | March 2026 feed \u2014 40 routes, 1,680 stops, 9,993 trips |\n| ACS 5-Year 2023 | Snohomish County block groups (FIPS 53061) via Census API |\n| OSM pedestrian network | Pulled via osmnx, cached to `data/raw/osm/snohomish_walk.graphml` |\n| TIGER/Web block group geometries | Via cenpy.tiger `tigerWMS_ACS2023`, layer `Census Block Groups` |\n\n---\n\n## Known Limitations\n\n- **No GTFS-Flex / specialized services** \u2014 Homage Senior Services shuttles, volunteer driver programs, and deviated route services are absent from the public GTFS feed. The gap analysis is conservative; actual coverage in some areas may be slightly higher.\n- **Weekday snapshot only** \u2014 service frequency is computed from a representative weekday. No weekend or evening analysis.\n- **Disability dropped from vulnerability index** \u2014 B18101 (disability) is not available at block group level from the Census API. Unemployment is used as a partial proxy for economic vulnerability.\n- **Static analysis** \u2014 no temporal trend, no before/after comparison.\n\n---\n\n## Contact\n\nSuleiny \u2014 suleiny@gosnotrac.org \u2014 [gosnotrac.org](https://www.gosnotrac.org)\n",
+    "tree": {
+      "dirs": {
+        "data": {
+          "dirs": {
+            "outputs": {
+              "dirs": {},
+              "files": [
+                "policy_brief.docx",
+                "snohomish_transit_gap_summary.docx"
+              ]
+            },
+            "processed": {
+              "dirs": {},
+              "files": [
+                "gap_surface.gpkg",
+                "pandana_network.h5",
+                "vulnerability_index.gpkg",
+                "zones.gpkg"
+              ]
+            }
+          },
+          "files": []
+        },
+        "src": {
+          "dirs": {
+            "transit_gaps": {
+              "dirs": {},
+              "files": [
+                "__init__.py",
+                "accessibility.py",
+                "gtfs.py",
+                "network.py",
+                "viz.py",
+                "vulnerability.py"
+              ]
+            }
+          },
+          "files": []
+        }
+      },
+      "files": [
+        "environment.yml",
+        "setup.py"
+      ]
+    },
+    "images": [],
+    "local_base": "images/snotrac/"
   }
 };

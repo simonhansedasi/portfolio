@@ -5,9 +5,17 @@ import re
 import shutil
 import subprocess
 
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 root = os.path.expanduser('~/coding')
 output = os.path.join(SCRIPT_DIR, 'scripts', 'file_structure.js')
+GRAPH_DATA_YAML = os.path.expanduser('~/coding/drawing/graph_data.yaml')
+GRAPH_DATA_JS   = os.path.join(SCRIPT_DIR, 'scripts', 'graph_data.js')
 IMAGES_OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'images')
 
 SKIP_DIRS = {
@@ -26,7 +34,7 @@ SKIP_EXTENSIONS = {
 
 IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
 
-SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io', 'OmaElu'}
+SKIP_REPOS = {'portfolio', 'dscience', 'simonhansedasi.github.io', 'OmaElu', 'rippleforge'}
 
 # Ordered by scientific/technical excitement.
 REPO_ORDER = [
@@ -36,6 +44,8 @@ REPO_ORDER = [
     'glacier_prethicktor_2',
     'sf_majick',
     'char_gen',
+    'strat_hacking',
+    'statistical_uniqueness',
     'dada_science',
     'game_ranking',
     'gov_inertia',
@@ -54,7 +64,9 @@ REPO_ORDER = [
 MAX_DEPTH = 3
 MAX_IMAGES = 4
 
-SUBPROJECTS = {}
+SUBPROJECTS = {
+    'dada_science': ['library_recommender', 'scheduling'],
+}
 
 # Images that live outside the repo tree (e.g. in a sibling repo).
 # src: absolute local path to the image file
@@ -431,6 +443,19 @@ def main():
     )
     print('Generated {}: {} projects, {} KB, {} images copied'.format(
         output, total, size_kb, img_count))
+
+    # Bake graph_data.yaml → graph_data.js
+    if HAS_YAML and os.path.exists(GRAPH_DATA_YAML):
+        with open(GRAPH_DATA_YAML) as f:
+            graph_data = yaml.safe_load(f)
+        with open(GRAPH_DATA_JS, 'w') as f:
+            f.write('const graphData = {};\n'.format(json.dumps(graph_data, indent=2)))
+        print('Generated {}'.format(GRAPH_DATA_JS))
+    else:
+        if not HAS_YAML:
+            print('Warning: pyyaml not installed — skipping graph_data.js (pip install pyyaml)')
+        else:
+            print('Warning: {} not found — skipping graph_data.js'.format(GRAPH_DATA_YAML))
 
 
 if __name__ == '__main__':

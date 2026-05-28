@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simon-Hans Edasi — Portfolio</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+  <script src="https://unpkg.com/layout-base@2.0.1/layout-base.js"></script>
+  <script src="https://unpkg.com/cose-base@2.2.0/cose-base.js"></script>
+  <script src="https://unpkg.com/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@4/marked.min.js"></script>
   <link rel="stylesheet" href="styles/styles.css">
 </head>
@@ -11,13 +15,49 @@
 
 <header>
   <h1>Simon-Hans Edasi</h1>
-  <p class="subtitle">Software &amp; Data Projects</p>
+  <p class="subtitle">Software &amp; Data Projects &mdash; click any node to explore</p>
 </header>
 
-<main id="cards"></main>
+<div id="main-content">
+  <div id="graph-canvas"></div>
 
+  <div id="legend">
+    <div class="legend-col">
+      <div class="legend-heading">Projects ●</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#4e9af1"></span>Research</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#c084fc"></span>Creative Tech</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#22c55e"></span>Pi Infrastructure</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#f472b6"></span>Creative Writing</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#fb923c"></span>Life / Personal</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#f59e0b"></span>Tools</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#14b8a6"></span>Civic</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#84cc16"></span>Hardware</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#06b6d4"></span>Art</div>
+      <div class="legend-item"><span class="swatch circle" style="background:#4b5563"></span>Shelved</div>
+    </div>
+    <div class="legend-col">
+      <div class="legend-heading">Concepts ◆</div>
+      <div class="legend-item"><span class="swatch diamond" style="background:#ff6b6b"></span>Theory</div>
+      <div class="legend-item"><span class="swatch diamond" style="background:#38bdf8"></span>Tech</div>
+      <div class="legend-item"><span class="swatch diamond" style="background:#34d399"></span>Research Domain</div>
+      <div class="legend-item"><span class="swatch diamond" style="background:#e879f9"></span>Creative</div>
+      <div class="legend-item"><span class="swatch diamond" style="background:#fbbf24"></span>Life</div>
+    </div>
+  </div>
+
+  <div id="detail-panel">
+    <div id="panel-header">
+      <span id="panel-title"></span>
+      <button id="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div id="panel-body"></div>
+  </div>
+</div>
+
+<script src="scripts/graph_data.js"></script>
 <script src="scripts/file_structure.js"></script>
-<script src="scripts/index.js"></script>
+<script src="scripts/graph.js"></script>
+<script src="scripts/panel.js"></script>
 
 </body>
 </html>
