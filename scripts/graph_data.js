@@ -84,7 +84,8 @@ const graphData = {
       "connects_to": [
         "cipt_theory",
         "causality",
-        "narrative"
+        "narrative",
+        "complex_systems"
       ]
     },
     {
