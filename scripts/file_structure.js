@@ -76,11 +76,18 @@ const fileStructure = {
             }
           },
           "files": [
-            "cover_letter.tex",
-            "paper.tex",
+            "Fig1.tiff",
+            "Fig2.tiff",
+            "Fig3A.tiff",
+            "Fig3B.tiff",
+            "Fig4.tiff",
+            "FigS1.tiff",
+            "JavaScript.tex",
+            "JavaScript_coverletter.tex",
+            "JavaScript_response.tex",
+            "JavaScript_supp.tex",
             "references.bib",
-            "run.sh",
-            "supplementary.tex"
+            "run.sh"
           ]
         },
         "KushCountry": {
@@ -124,11 +131,11 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/GeoGastronomy/JavaScript/Fig1.png",
+        "local": "images/GeoGastronomy/JavaScript/Fig1.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/GeoGastronomy/main/JavaScript/Fig1.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/GeoGastronomy/JavaScript/Fig4.png",
+        "local": "images/GeoGastronomy/JavaScript/Fig4.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/GeoGastronomy/main/JavaScript/Fig4.png"
       }
     ],
@@ -176,7 +183,7 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/glacier_prethicktor/discrepancy_boxplot.png",
+        "local": "images/glacier_prethicktor/discrepancy_boxplot.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/simonhansedasi.github.io/main/images/discrepancy_boxplot.png"
       }
     ],
@@ -233,7 +240,7 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/glacier_prethicktor_2/figures/bedmachine_vs_farinotti.png",
+        "local": "images/glacier_prethicktor_2/figures/bedmachine_vs_farinotti.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/glacier_prethicktor_2/main/figures/bedmachine_vs_farinotti.png"
       }
     ],
@@ -253,6 +260,7 @@ const fileStructure = {
         "data": {
           "dirs": {},
           "files": [
+            "rhoner_synthetic.csv",
             "whitepaper_funnel.csv",
             "whitepaper_results.csv",
             "whitepaper_summary.csv",
@@ -320,6 +328,7 @@ const fileStructure = {
       },
       "files": [
         "app.py",
+        "generate_rhoner_synthetic.py",
         "make_figures.py",
         "make_gate_figure.py",
         "pull_calibration.sh",
@@ -327,24 +336,25 @@ const fileStructure = {
         "run_experiment.py",
         "run_whitepaper.py",
         "setup.py",
-        "sf_majick_gui.service"
+        "sf_majick_gui.service",
+        "whitepaper.tex"
       ]
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/sf_majick/figures/fig0_gate_mechanism.png",
+        "local": "images/sf_majick/figures/fig0_gate_mechanism.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/sf_majick/main/figures/fig0_gate_mechanism.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/sf_majick/figures/fig1_winrate_paradox.png",
+        "local": "images/sf_majick/figures/fig1_winrate_paradox.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/sf_majick/main/figures/fig1_winrate_paradox.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/sf_majick/figures/fig2_revenue_distribution.png",
+        "local": "images/sf_majick/figures/fig2_revenue_distribution.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/sf_majick/main/figures/fig2_revenue_distribution.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/sf_majick/figures/fig3_funnel_shape.png",
+        "local": "images/sf_majick/figures/fig3_funnel_shape.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/sf_majick/main/figures/fig3_funnel_shape.png"
       }
     ],
@@ -399,19 +409,19 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/char_gen/attribute_correlation.png",
+        "local": "images/char_gen/attribute_correlation.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/char_gen/main/attribute_correlation.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/char_gen/chisq_resid_class_background.png",
+        "local": "images/char_gen/chisq_resid_class_background.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/char_gen/main/chisq_resid_class_background.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/char_gen/chisq_resid_species_background.png",
+        "local": "images/char_gen/chisq_resid_species_background.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/char_gen/main/chisq_resid_species_background.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/char_gen/chisq_resid_species_class.png",
+        "local": "images/char_gen/chisq_resid_species_class.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/char_gen/main/chisq_resid_species_class.png"
       }
     ],
@@ -428,7 +438,7 @@ const fileStructure = {
     ],
     "github": "https://github.com/simonhansedasi/strat_hacking",
     "branch": "master",
-    "readme": "# StratHacking\n\nMulti-game strategy simulation lab. Each game is a self-contained Python module. Simulate thousands of games and compare strategy win rates head-to-head.\n\n## Games\n\n### Spots\n\nDice-placement dog game. First to score 6 dogs wins. Bust risk (yard sum > 7) is the central tension.\n\n6 strategies from random baseline to exact bust-probability math. Key finding: `BustAwareStrategy` uses per-decision expected-value calculations; `FastAndLooseStrategy` accepts busts as the price of speed.\n\n### Monopoly\n\nNo trading, no auctions. Pure individual strategy: buy/build/jail/mortgage decisions. 5-player games have ~60% timeout rate \u2014 monopolies are hard to form without trading.\n\n5 strategies from always-buy to railroad-focused cash hoarder.\n\n### Yahtzee\n\nSingle-player scoring. Strategies compared by average total score across N independent games.\n\n| Strategy        | Avg   | Std  | Bonus% | Ytz/g |\n|-----------------|-------|------|--------|-------|\n| Random          | 45.7  | 18.1 |   0.0% |  0.00 |\n| Greedy          | 210.8 | 50.8 |   8.6% |  0.36 |\n| UpperBonusHunter| 160.2 | 40.6 |   4.4% |  0.18 |\n| YahtzeeHunter   | 155.2 | 66.1 |   2.4% |  0.58 |\n| Balanced        | 201.0 | 46.6 |  36.3% |  0.18 |\n\nGreedy wins on average. Balanced hits the upper bonus 4x more often. YahtzeeHunter has the highest variance.\n\n### Qwixx\n\nMultiplayer dice game (5-player head-to-head). Scoring is triangular: n crosses = n*(n+1)/2 points.\n\n| Strategy     | Avg  | Std  | Win%  | Pen/g |\n|--------------|------|------|-------|-------|\n| Random       |  7.0 |  9.5 |  7.2% |  2.31 |\n| Aggressive   |  9.0 | 10.4 |  6.7% |  2.53 |\n| Conservative |  6.0 |  8.9 |  3.4% |  2.55 |\n| LockHunter   |  3.4 | 13.3 |  7.1% |  3.01 |\n| Balanced     | 27.2 | 14.7 | 72.4% |  1.81 |\n\nBalanced dominates with 72.4% win rate. Key insight: consecutive crosses (gap=0) over jumping to higher positions. Triangular scoring means more total crosses beats any individual high-position cross.\n\n## Running simulations\n\n```python\nfrom qwixx.sim import simulate\nfrom qwixx.strategies import BalancedStrategy, AggressiveStrategy\n\nstats = simulate(\n    [lambda rng: BalancedStrategy(rng), lambda rng: AggressiveStrategy(rng)],\n    ['Balanced', 'Aggressive'],\n    n_games=20_000,\n)\nprint(stats)\n```\n\nOr run any game directly: `python -m yahtzee.sim`, `python -m qwixx.sim`, etc.\n\n## Stack\n\nPython, NumPy, matplotlib, pandas\n",
+    "readme": "# StratHacking\n\nMulti-game strategy simulation lab. Each game is a self-contained Python module. Simulate thousands of games and compare strategy win rates head-to-head.\n\n## Games\n\n### Spots\n\nDice-placement dog game. First to score 6 dogs wins. Bust risk (yard sum > 7) is the central tension.\n\n6 strategies from random baseline to exact bust-probability math. Key finding: `BustAwareStrategy` uses per-decision expected-value calculations; `FastAndLooseStrategy` accepts busts as the price of speed.\n\n### Monopoly\n\nNo trading, no auctions. Pure individual strategy: buy/build/jail/mortgage decisions. 5-player games have ~60% timeout rate \u2014 monopolies are hard to form without trading.\n\n5 strategies from always-buy to railroad-focused cash hoarder.\n\n### Yahtzee\n\nSingle-player scoring. Strategies compared by average total score across N independent games.\n\n| Strategy        | Avg   | Std  | Bonus% | Ytz/g |\n|-----------------|-------|------|--------|-------|\n| Random          | 45.7  | 18.1 |   0.0% |  0.00 |\n| Greedy          | 210.8 | 50.8 |   8.6% |  0.36 |\n| UpperBonusHunter| 160.2 | 40.6 |   4.4% |  0.18 |\n| YahtzeeHunter   | 155.2 | 66.1 |   2.4% |  0.58 |\n| Balanced        | 201.0 | 46.6 |  36.3% |  0.18 |\n\nGreedy wins on average. Balanced hits the upper bonus 4x more often. YahtzeeHunter has the highest variance.\n\n### Qwixx\n\nMultiplayer dice game (5-player head-to-head). Scoring is triangular: n crosses = n*(n+1)/2 points.\n\n| Strategy     | Avg  | Std  | Win%  | Pen/g |\n|--------------|------|------|-------|-------|\n| Random       |  7.0 |  9.5 |  7.2% |  2.31 |\n| Aggressive   |  9.0 | 10.4 |  6.7% |  2.53 |\n| Conservative |  6.0 |  8.9 |  3.4% |  2.55 |\n| LockHunter   |  3.4 | 13.3 |  7.1% |  3.01 |\n| Balanced     | 27.2 | 14.7 | 72.4% |  1.81 |\n\nBalanced dominates with 72.4% win rate. Key insight: consecutive crosses (gap=0) over jumping to higher positions. Triangular scoring means more total crosses beats any individual high-position cross.\n\n### Royal Game of Ur\n\n2-player race game (~2500 BCE). Round-robin tournament across 6 strategies.\n\n**Balanced dominates** (82% overall). Key insight: avoiding vulnerable shared-zone squares and prioritising captures compounds strongly. Safe > Aggressive: surviving without getting sent back matters more than capture attempts.\n\n### Viticulture\n\n4-player worker-placement wine-production game. Race to 25 VP: plant vines \u2192 harvest grapes \u2192 make wine \u2192 fill orders.\n\n| Strategy  | Win%  | Avg VP | Orders/g |\n|-----------|-------|--------|----------|\n| Random    | 0.5%  | 2.7    | 0.71     |\n| Expansion | 13.5% | 10.4   | 2.23     |\n| OrderRush | 18.2% | 11.9   | 3.67     |\n| Balanced  | 67.7% | 18.7   | 4.16     |\n\nBalanced dominates (67.7%). OrderRush beats Expansion by converting production to VP through orders rather than investing in infrastructure first.\n\n## Running simulations\n\n```python\nfrom qwixx.sim import simulate\nfrom qwixx.strategies import BalancedStrategy, AggressiveStrategy\n\nstats = simulate(\n    [lambda rng: BalancedStrategy(rng), lambda rng: AggressiveStrategy(rng)],\n    ['Balanced', 'Aggressive'],\n    n_games=20_000,\n)\nprint(stats)\n```\n\nOr run any game directly: `python -m yahtzee.sim`, `python -m qwixx.sim`, etc.\n\n## Stack\n\nPython, NumPy, matplotlib, pandas\n",
     "tree": {
       "dirs": {
         "monopoly": {
@@ -462,6 +472,26 @@ const fileStructure = {
             "sim.py",
             "strategies.py",
             "tricks.py"
+          ]
+        },
+        "ur": {
+          "dirs": {},
+          "files": [
+            "__init__.py",
+            "analysis.py",
+            "game.py",
+            "sim.py",
+            "strategies.py"
+          ]
+        },
+        "viticulture": {
+          "dirs": {},
+          "files": [
+            "analysis.py",
+            "cards.py",
+            "game.py",
+            "sim.py",
+            "strategies.py"
           ]
         },
         "yahtzee": {
@@ -594,7 +624,7 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/library_recommender/screenshot.png",
+        "local": "images/library_recommender/screenshot.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/dada_science/main/screenshot.png"
       }
     ],
@@ -726,9 +756,12 @@ const fileStructure = {
         "data": {
           "dirs": {},
           "files": [
+            "resume_3si_jde.tex",
             "resume_ai_infra.tex",
+            "resume_amazon_cde_ds.tex",
             "resume_boeing_inspector.tex",
             "resume_clark_nuber.tex",
+            "resume_dclimate_cyclops.tex",
             "resume_ds_analyst.tex",
             "resume_finops.tex",
             "resume_kc_parks_pia.tex",
@@ -736,6 +769,7 @@ const fileStructure = {
             "resume_pierce_county_rda.tex",
             "resume_remote_sensing_ds.tex",
             "resume_salesforce_pds.tex",
+            "resume_shipt_ds_geo.tex",
             "resume_sno_isle.tex",
             "resume_terra_ai.tex",
             "resume_uw_bi_dev.tex"
@@ -784,12 +818,20 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/alphabet_soup/eyeball.png",
+        "local": "images/alphabet_soup/eyeball.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/alphabet_soup/main/eyeball.png"
       },
       {
-        "local": "/home/simonhans/coding/portfolio/images/alphabet_soup/letter_uniqueness.png",
+        "local": "images/alphabet_soup/letter_uniqueness.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/alphabet_soup/main/letter_uniqueness.png"
+      },
+      {
+        "local": "images/alphabet_soup/solution_matrix.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/alphabet_soup/main/solution_matrix.png"
+      },
+      {
+        "local": "images/alphabet_soup/solution_sankey.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/alphabet_soup/main/solution_sankey.png"
       }
     ],
     "local_base": "images/alphabet_soup/"
@@ -956,7 +998,7 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/drawing/project_universe.png",
+        "local": "images/drawing/project_universe.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/drawing/function_listener/project_universe.png"
       }
     ],
@@ -964,7 +1006,7 @@ const fileStructure = {
   },
   "trivia": {
     "name": "trivia",
-    "description": "Web-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.",
+    "description": "Dark-themed multiple-choice trivia game \u2014 pulls questions live from the Open Trivia Database API.",
     "tech": [
       "Python",
       "Flask",
@@ -972,7 +1014,7 @@ const fileStructure = {
     ],
     "github": "https://github.com/simonhansedasi/trivia",
     "branch": "main",
-    "readme": "# trivia\n\nWeb-based trivia quiz game \u2014 random multiple-choice questions served from a local Flask backend.\n\n## What it does\n\nLoads a large JSON question bank and serves random questions via a Flask API. The frontend displays questions with multiple-choice options and a reveal-answer button. Questions are shuffled on each load.\n\n## Tech\n\nPython, Flask, HTML/CSS/JS\n\n## Run\n\n```bash\npython app.py   # starts on port 5005\n```\n\nOpen `http://localhost:5005` in your browser.\n",
+    "readme": "# trivia\n\nDark-themed multiple-choice trivia game \u2014 pulls questions live from the Open Trivia Database API.\n\n## What it does\n\nFetches random questions from opentdb.com with category and difficulty filters. Dark UI, readable in a car. Built as an alternative to using ChatGPT for road trip trivia.\n\n## Tech\n\nPython, Flask, HTML/CSS/JS\n\n## Run locally\n\n```bash\npython app.py   # http://localhost:5014\n```\n\n## Deploy\n\n```bash\n./deploy_do.sh  # rsync to DO, restarts trivia.service\n```\n\n## Live\n\nhttps://trivia.simonhansedasi.com\n",
     "tree": {
       "dirs": {
         "js": {
@@ -980,14 +1022,34 @@ const fileStructure = {
           "files": [
             "fetch_question.js"
           ]
+        },
+        "static": {
+          "dirs": {
+            "js": {
+              "dirs": {},
+              "files": [
+                "fetch_question.js"
+              ]
+            }
+          },
+          "files": []
+        },
+        "templates": {
+          "dirs": {},
+          "files": [
+            "index.html"
+          ]
         }
       },
       "files": [
         "Gemfile",
         "app.py",
+        "deploy_do.sh",
         "index.html",
         "main.py",
-        "trivia.py"
+        "nginx_trivia.conf",
+        "trivia.py",
+        "trivia.service"
       ]
     },
     "images": [],
@@ -1027,7 +1089,7 @@ const fileStructure = {
     },
     "images": [
       {
-        "local": "/home/simonhans/coding/portfolio/images/wiki-index/img/index.png",
+        "local": "images/wiki-index/img/index.png",
         "remote": "https://raw.githubusercontent.com/simonhansedasi/wiki-index/main/img/index.png"
       }
     ],
@@ -1045,9 +1107,20 @@ const fileStructure = {
     "branch": "main",
     "readme": "# timer\n\nBrowser-based time tracker for logging work sessions by project and task \u2014 no server required.\n\n## What it does\n\nStart, pause, and end work sessions with a single click. Tracks elapsed time per project/task, auto-saves sessions to `localStorage`, and exports daily logs as CSV. Fully self-contained in a single HTML file.\n\n## Tech\n\nHTML5, CSS3, JavaScript (vanilla)\n\n## Run\n\nOpen `index.html` in any browser. No install or server needed.\n",
     "tree": {
-      "dirs": {},
+      "dirs": {
+        "templates": {
+          "dirs": {},
+          "files": [
+            "index.html"
+          ]
+        }
+      },
       "files": [
-        "index.html"
+        "app.py",
+        "deploy_do.sh",
+        "index.html",
+        "nginx_timer.conf",
+        "timer.service"
       ]
     },
     "images": [],
@@ -1131,6 +1204,165 @@ const fileStructure = {
     "images": [],
     "local_base": "images/ai_glue/"
   },
+  "bleepulator": {
+    "name": "bleepulator",
+    "description": "FM-synthesized droid beeps for your Linux desktop. Replaces system notification",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/bleepulator",
+    "branch": "master",
+    "readme": "# Bleepulator\n\nFM-synthesized droid beeps for your Linux desktop. Replaces system notification\nsounds with a set of electronic chirps and warbles \u2014 no sampled audio, no\ncopyright issues, survives system updates.\n\n## Install\n\n### Ubuntu / Debian (recommended)\n\nDouble-click `bleepulator_1.0.1_all.deb`.\n\nOr from the terminal:\n\n```\nsudo dpkg -i bleepulator_1.0.1_all.deb\n```\n\nLog out and back in. Done.\n\n### Other distros (manual)\n\n```\ntar xzf bleepulator-1.0.1.tar.gz\nbash bleepulator-1.0.1/install.sh\n```\n\nLog out and back in for the login sound to take effect. All other sounds are\nactive immediately.\n\n## Preview\n\n```\ncanberra-gtk-play --id=\"dialog-error\"\ncanberra-gtk-play --id=\"desktop-login\"\n```\n\n## Sounds\n\n| Event | Character |\n|---|---|\n| bell | short upward zap |\n| dialog-error | sad two-part descending warble |\n| dialog-warning | three rapid staccato beeps |\n| dialog-information | cheerful ascending chirp |\n| message-new-instant | excited double chirp |\n| audio-volume-change | brief rising sweep |\n| battery-low | slow mournful wail |\n| window-attention-active | four rapid ascending pings |\n| complete | triumphant arpeggio |\n| trash-empty | short downward bloop |\n| desktop-login | full startup sequence |\n| desktop-logout | winding-down sequence |\n| window-close / minimize / maximize | short blips |\n\n## Uninstall\n\n**If installed via .deb:**\n\n```\nsudo apt remove bleepulator\ngsettings reset org.gnome.desktop.sound theme-name\n```\n\n**If installed manually:**\n\n```\nrm -rf ~/.local/share/sounds/bleepulator\nrm -rf ~/.local/share/sounds/Yaru\nrm -f  ~/.config/autostart/libcanberra-login-sound.desktop\ngsettings reset org.gnome.desktop.sound theme-name\ngsettings reset org.gnome.desktop.sound event-sounds\n```\n",
+    "tree": {
+      "dirs": {
+        "src": {
+          "dirs": {
+            "editor": {
+              "dirs": {},
+              "files": [
+                "app.py"
+              ]
+            }
+          },
+          "files": [
+            "build_dist.sh",
+            "generate_sounds.py",
+            "index.theme",
+            "install.sh"
+          ]
+        }
+      },
+      "files": [
+        "bleepulator_1.0.1_all.deb"
+      ]
+    },
+    "images": [],
+    "local_base": "images/bleepulator/"
+  },
+  "datacenter_siting": {
+    "name": "datacenter_siting",
+    "description": "Geospatial siting analysis quantifying data center land suitability across US states using",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/wa-datacenter-suitability",
+    "branch": "main",
+    "readme": "# Data Center Siting Suitability\n\nGeospatial siting analysis quantifying data center land suitability across US states using\nten publicly available indicator layers and two hard buildability gates.\nLive at [datacenters.simonhansedasi.com](https://datacenters.simonhansedasi.com).\n\n## The argument\n\nWashington's existing data center corridor (Quincy / East Wenatchee) is optimized for\none dimension \u2014 grid access \u2014 at the expense of water availability and community burden.\nThe Columbia Basin's water allocation is essentially fully subscribed; Grant County's own\nadministrator has stated that water and power are \"maxed out.\" Meanwhile, 25 data center\nprojects were canceled nationally in 2025 due to community opposition, up from 6 in 2024.\nThis tool makes those tradeoffs visible and quantifiable.\n\n## Quick start\n\n```bash\nconda env create -f environment.yml\nconda activate GrapeExpectations\n\n# State-wide atlas (fishnet grid)\npython scripts/run_pipeline.py WA\n\n# ZCTA study (ZIP Code resolution \u2014 for jurisdiction-scale studies)\npython zcta/run_zcta_study.py WA\n```\n\nSee [PIPELINE_GUIDE.md](PIPELINE_GUIDE.md) for full setup, step descriptions, and troubleshooting.\n\n## Product tiers\n\n| Tier | Geography | URL pattern | Use case |\n|---|---|---|---|\n| State atlas | 0.15 degree fishnet (~14 km) | `/wa/` | Public map, press, Steward briefings |\n| ZCTA study | ZIP Code Tabulation Areas | `/wa/study/` | Jurisdiction studies -- demographic data native to ZCTA |\n| City case study | Filtered ZCTA subset | `/wa/study/seattle/` | City-scoped report with policy context |\n| Parcel dossier | Individual land parcels | `/wa/study/grant/` | Site-specific leads for developers |\n\nThe fishnet atlas and ZCTA study use identical indicator definitions. The ZCTA advantage is\nmethodological: EJ burden and population exposure are native Census ZCTA data, so no spatial\njoin approximation is needed to assign tract-level demographics to grid cells.\n\n## Indicators\n\n| # | Score | Source | Type |\n|---|---|---|---|\n| 1 | tx_score | OSM HV transmission lines | Suitability |\n| 2 | water_score | Open-Meteo ERA5 30-yr precip | Suitability |\n| 3 | ej_score | Census ACS poverty + minority rate | Suitability |\n| 4 | seismic_score | USGS ASCE 7-22 PGA | Risk |\n| 5 | flood_score | FEMA NFHL flood zones | Risk |\n| 6 | contamination_score | EPA TRI facility proximity | Environmental |\n| 7 | waterway_score | OSM major rivers | Environmental |\n| 8 | geothermal_score | IHFC GHFDB 2024 heat flow | Opportunity |\n| 9 | flatness_score | SRTM1 terrain flatness | Hard gate |\n| 10 | protected_score | Esri Federal Lands + TIGER tribal | Hard gate |\n\nHard gates 9 and 10 are binary exclusions applied regardless of slider weights.\nAll other scores are normalized 0-1 (1 = most favorable).\n\n## Analysis grid (Washington State baseline)\n\n**Fishnet atlas:** 974 cells, 0.15-degree (~14 km), clipped to WA boundary.\nTwo hard gates remove 124 cells (12.7%), leaving 850 viable candidates.\n\n**ZCTA study:** 575 ZCTAs; median 94 km\u00b2 (0.3\u00d7 fishnet cell).\nUrban western WA has ZCTAs as small as 2 km\u00b2; eastern WA corridor ZCTAs are ~250-800 km\u00b2.\n\nKey findings (WA fishnet):\n- Quincy corridor: tx=0.988, water=0.189 \u2014 grid-optimal, water-constrained\n- Digital Realty proposed (Cascade foothills): composite=0.783 vs Quincy=0.599\n- Tri-Cities emerging cluster (Wallula Gap, Atlas Agro, Trammell Crow): water=0.000\n- Tukwila/HorizonIQ: water=0.739 but ej=0.109 \u2014 worst community burden of any cluster\n\n## Script pipeline\n\n`scripts/` runs any US state end-to-end. All 50 states defined in `scripts/config.py`.\n\n```bash\npython scripts/run_pipeline.py WA              # full run\npython scripts/run_pipeline.py OR --start 03   # resume from step 03\npython scripts/run_pipeline.py TX --only 06 07 # terrain + protected only\n```\n\n| Script | Outputs |\n|---|---|\n| 01_basemap.py | state.geojson, datacenters.geojson, transmission.geojson |\n| 02_indicators.py | Fishnet grid; tx_score, water_score, ej_score, pop_exposure_score |\n| 03_risk.py | seismic_score, flood_score |\n| 04_environment.py | contamination_score (EPA TRI), waterway_score (OSM rivers) |\n| 05_geothermal.py | geothermal_score (IHFC GHFDB 2024, bbox-filtered) |\n| 06_terrain.py | flatness_score (SRTM1, hard gate at 3% flat area) |\n| 07_protected.py | protected_score (Esri Federal Lands + TIGER tribal, gate at 25%) |\n\nOutput: `data/{STATE}/grid_scores.geojson`\n\n## ZCTA study pipeline\n\n`zcta/` runs a ZIP Code Tabulation Area resolution study for any state.\nSteps 03-07 from the main pipeline are reused via `DC_SUBDIR=zcta` env var.\n\n```bash\npython zcta/run_zcta_study.py WA\npython zcta/run_zcta_study.py WA --start 03   # resume after step 02\n```\n\n| Script | Role |\n|---|---|\n| zcta/02_zcta_indicators.py | ZCTA boundaries (Census 2020); tx_score, water_score, ej_score, pop_exposure_score |\n| scripts/03-07 | Reused unchanged \u2014 geometry-agnostic |\n\nOutput: `data/{STATE}/zcta/grid_scores.geojson`\n\nZCTA boundary source: Census 2020 500k cartographic boundaries.\nNo 2022/2023/2024 ZCTA boundary files exist \u2014 2020 is the current standard.\n\n## City case studies\n\nCity-scoped studies filter a state's ZCTA data to a defined set of ZIPs and add\npolicy/seismic context. Add a new city by adding an entry to `REGIONS` in `src/app.py`.\n\n**Seattle (WA)** \u2014 live at `/wa/study/seattle/`:\n- 29 city-limits ZCTAs, 0 hard-gated\n- Key within-city differentiators: EJ burden (spread 0.63), terrain flatness (spread 0.76)\n- Near-uniform within city: water availability (spread 0.01), seismic (spread 0.02)\n- Policy context: Seattle moratorium on new data centers >20 MW (April 2026)\n\n## Parcel dossiers\n\nParcel-level scoring fetches assessor data from county ArcGIS Open Data portals and\njoins it with ZCTA-level scores. Parcels inherit the ZCTA flatness and protection gates\nvia centroid spatial join. Scored on four dimensions: zcta_score, tx_score, acreage_score, vacant_score.\n\nScripts live in `parcels/`. Output: `data/{STATE}/parcels/`.\n\n**Grant County (WA)** \u2014 live at `/wa/study/grant/`:\n- 16,054 viable parcels (>=5 ac, non-residential, non-exempt)\n- Key finding: ZCTA 99135 (Wilbur/Almira, composite 0.695) scores above Quincy 98848\n  (0.567) due to lower community burden from existing DC saturation\n- DOR breakdown: 83 Ag Current Use (8,370), 91 Undeveloped (3,088), 81 Agriculture (876)\n\n**Tri-Cities (WA)** \u2014 live at `/wa/study/tri/` (Benton + Franklin counties):\n- 9,848 viable parcels (>=5 ac, non-residential); data from WA State Current_Parcels service\n- Water score = 0.000 across all ZCTAs \u2014 Columbia River junior rights fully subscribed\n- Transmission access among best in WA: BPA McNary-Ashe 500kV corridor, all ZCTAs tx > 0.86\n- Top parcels: large agricultural blocks (480-680 ac, DOR 83) in Kennewick/Pasco plain\n- Hanford Nuclear Reservation absent from dataset (DOE land not in county assessor rolls)\n- DOR breakdown: 83 Ag Current Use (6,259), 81 Agriculture (1,512), 91 Undeveloped (1,005)\n\n## Notebooks\n\n`notebooks/` contains the original exploratory notebooks for Washington State.\nThey share the same logic as the scripts but are cell-by-cell and WA-specific.\n\n## Setup notes\n\n- No GDAL required. Terrain uses `requests` + `numpy` to parse SRTM1 HGT binaries.\n- Census API key required for step 02 (free at census.gov/developers).\n  Set `CENSUS_API_KEY` in `~/.env` or as an environment variable.\n- IHFC 2024 shapefile required for step 05. Place at `data/raw/IHFC_2024_GHFDB.shp`.\n  Step 05 completes without it but sets geothermal_score = 0.5 (neutral).\n\n## Data sources\n\nAll publicly available, no proprietary data.\n\n| Source | Used for |\n|---|---|\n| Census TIGER 2022 | State boundaries, census tracts |\n| Census ZCTA 2020 cartographic boundaries | ZCTA study tier |\n| OSM Overpass API | Data centers, HV transmission, rivers |\n| EIA Form 860 (2023) | Power plant locations |\n| Census ACS 5-yr 2022 | Demographic burden (poverty + minority rate) |\n| Open-Meteo ERA5 archive | 30-yr mean annual precipitation |\n| USGS ASCE 7-22 API | Seismic hazard (PGA) |\n| FEMA NFHL REST API | Special Flood Hazard Areas |\n| EPA Envirofacts REST API (TRI_FACILITY) | Industrial facility proximity |\n| IHFC GHFDB 2024 | Geothermal heat flow boreholes |\n| NASA SRTM1 (AWS S3) | 30m digital elevation model |\n| Esri USA Federal Lands | NPS, USFWS, DoD, Forest Service boundaries |\n| Census TIGER AIANNH | Tribal land boundaries |\n",
+    "tree": {
+      "dirs": {
+        "data": {
+          "dirs": {
+            "WA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "raw": {
+              "dirs": {},
+              "files": [
+                "IHFC_2024_GHFDB.cpg",
+                "IHFC_2024_GHFDB.dbf",
+                "IHFC_2024_GHFDB.prj",
+                "IHFC_2024_GHFDB.qmd",
+                "IHFC_2024_GHFDB.shp",
+                "IHFC_2024_GHFDB.shx",
+                "acs_demog_wa.csv",
+                "datacenters.geojson",
+                "eia860_plants_wa.geojson",
+                "ghfdb_2024.rar",
+                "transmission_wa.geojson",
+                "wa_dem_utm.tif",
+                "wa_federal_lands.geojson",
+                "wa_heatflow.csv",
+                "wa_precip_coarse.csv",
+                "wa_seismic_sample.csv",
+                "wa_sfha.geojson",
+                "wa_srtm3.tif",
+                "wa_state.geojson",
+                "wa_tracts.geojson",
+                "wa_tribal_tiger.geojson"
+              ]
+            }
+          },
+          "files": []
+        },
+        "parcels": {
+          "dirs": {},
+          "files": [
+            "_quincy_check.py",
+            "grant_county.py",
+            "tri_cities.py"
+          ]
+        },
+        "scripts": {
+          "dirs": {
+            "zcta": {
+              "dirs": {},
+              "files": [
+                "02_zcta_indicators.py",
+                "run_zcta_study.py"
+              ]
+            }
+          },
+          "files": [
+            "01_basemap.py",
+            "02_indicators.py",
+            "03_risk.py",
+            "04_environment.py",
+            "05_geothermal.py",
+            "06_terrain.py",
+            "07_protected.py",
+            "08_aquifer.py",
+            "09_soil.py",
+            "10_soilprofile.py",
+            "config.py",
+            "run_pipeline.py"
+          ]
+        },
+        "src": {
+          "dirs": {},
+          "files": [
+            "app.py"
+          ]
+        },
+        "templates": {
+          "dirs": {},
+          "files": [
+            "case_study.html",
+            "index.html",
+            "parcel_study.html",
+            "study.html",
+            "survey.html"
+          ]
+        }
+      },
+      "files": [
+        "datacenter_siting.service",
+        "deploy_do.sh",
+        "deploy_hetzner.sh",
+        "environment.yml",
+        "manage_survey.py",
+        "nginx.conf",
+        "setup_env.sh"
+      ]
+    },
+    "images": [
+      {
+        "local": "images/datacenter_siting/static/img/terrain_flatness.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/wa-datacenter-suitability/main/static/img/terrain_flatness.png"
+      },
+      {
+        "local": "images/datacenter_siting/static/img/risk_layers.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/wa-datacenter-suitability/main/static/img/risk_layers.png"
+      },
+      {
+        "local": "images/datacenter_siting/static/img/risk_adjusted_validation.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/wa-datacenter-suitability/main/static/img/risk_adjusted_validation.png"
+      },
+      {
+        "local": "images/datacenter_siting/static/img/protected_land.png",
+        "remote": "https://raw.githubusercontent.com/simonhansedasi/wa-datacenter-suitability/main/static/img/protected_land.png"
+      }
+    ],
+    "local_base": "images/datacenter_siting/"
+  },
   "edasi_motlev": {
     "name": "edasi_motlev",
     "description": "",
@@ -1147,6 +1379,406 @@ const fileStructure = {
     },
     "images": [],
     "local_base": "images/edasi_motlev/"
+  },
+  "merascope": {
+    "name": "merascope",
+    "description": "National data center site suitability intelligence and permitting coordination platform.",
+    "tech": [],
+    "github": "https://github.com/simonhansedasi/merascope",
+    "branch": "master",
+    "readme": "# Merascope\n\nNational data center site suitability intelligence and permitting coordination platform.\nGIS-MCDA across 0.15-degree fishnet cells, 16 scored indicators, raw physical values\nincluded in every output for multi-scale renormalization.\n\nBuilt for three audiences:\n- **Builders** (developers evaluating sites) \u2014 Explorer map, workspace, portfolio screening\n- **Stewards** (lead regulatory agencies) \u2014 docket, case file, conditions negotiation, co-party coordination, evidentiary record export\n- **Co-parties** (invited agencies: tribes, counties, utilities, AG) \u2014 filtered docket, propose conditions, transparency into lead's review\n\nSame Score Promise: methodology is public and identical for all users. No party receives a different number.\n\n## Quick start\n\n```bash\n# Use the GrapeExpectations conda env (Python 3.7, geopandas 0.10.x)\nPYTHON=/home/simonhans/anaconda3/envs/GrapeExpectations/bin/python3\n\n# Run a single state end-to-end\n$PYTHON -u scripts/run_pipeline.py WA\n\n# Or run steps individually\n$PYTHON -u scripts/01_basemap.py WA\n$PYTHON -u scripts/02_indicators.py WA\n# ... through 10_soilprofile.py\n```\n\nSee [PIPELINE_GUIDE.md](PIPELINE_GUIDE.md) for full setup, step descriptions, and troubleshooting.\n\n## Indicators\n\n| # | Score | Source | Step |\n|---|---|---|---|\n| 1 | tx_score | OSM HV transmission lines (>=100kV) + EIA Form 860 plants | 02 |\n| 2 | water_score | PRISM 4km 30-yr annual precip normals (1991-2020) | 02 |\n| 3 | ej_score | Census ACS poverty + minority rate (EJScreen method) | 02 |\n| 4 | pop_exposure_score | Census ACS population density (1 = sparsest) | 02 |\n| 5 | seismic_score | USGS ASCE 7-22 PGA (1 = lowest hazard) | 03 |\n| 6 | flood_score | FEMA NFHL SFHA zones (binary: 1 = outside flood zone) | 03 |\n| 7 | contamination_score | EPA TRI facility proximity (1 = farthest) | 04 |\n| 8 | waterway_score | OSM major rivers proximity (1 = farthest) | 04 |\n| 9 | geothermal_score | IHFC GHFDB 2024 heat flow (1 = highest) | 05 |\n| 10 | flatness_score | SRTM1 flat fraction **[hard gate: <3% flat = 0]** | 06 |\n| 11 | slope_score | SRTM1 flat fraction continuous (no gate) | 06 |\n| 12 | protected_score | Esri Federal Lands + TIGER tribal **[hard gate: >25% = 0]** | 07 |\n| 13 | aquifer_score | USGS NWIS depth-to-water-table (1 = deepest) | 08 |\n| 14 | soil_score | SSURGO hydrologic group A-D (1 = tightest/lowest infiltration) | 09 |\n| 15 | soil_profile_score | SSURGO horizon composite: CaCO3 + ksat + clay | 10 |\n| 16 | ksat_score | SSURGO saturated hydraulic conductivity (1 = least permeable) | 10 |\n\nHard gates: only two remain.\n- **protected_score**: protected_frac > 0.25 sets score to 0; cell grayed on map\n- **flood_score**: flood_score = 0 blocks portfolio PASS\n\nTerrain (flatness_score, slope_score) is a scoring penalty, not a hard gate.\nAll scores normalized 0-1 within state (1 = most favorable for siting).\n\n### Raw columns\n\nEvery output GeoJSON also carries raw physical-value columns for multi-scale\nrenormalization without re-running the pipeline:\n\n| Column | Units | Added by |\n|---|---|---|\n| tx_dist_m | m to nearest HV line | step 02 |\n| ann_precip_mm | mm/yr (PRISM 30-yr normal) | step 02 |\n| pop_density | persons/km2 | step 02 |\n| seismic_pga_g | PGA (g) | step 03 |\n| tri_dist_m | m to nearest TRI facility | step 04 |\n| river_dist_m | m to nearest major river | step 04 |\n| heatflow_mwm2 | mW/m2 | step 05 |\n| flat_frac | fraction of cell pixels with slope < 5 deg | step 06 |\n| slope_mean_deg | mean slope in degrees | step 06 |\n| protected_frac | fraction of cell covered by protected land | step 07 |\n| aquifer_depth_ft | ft to water table (IDW from USGS wells) | step 08 |\n| ksat_mean_ums | \u00b5m/s saturated hydraulic conductivity | step 10 |\n\n## States completed\n\nAll 48 contiguous states complete (AK/HI excluded).\n\n| Schema | States | Raws |\n|---|---|---|\n| 10-raw (early) | WA OR TX CA NV UT ID MT AZ | no flat_frac/slope_mean_deg |\n| 12-raw (full) | CO WY NM ND SD NE KS OK MN IA MO AR LA MI WI IL IN KY TN MS GA OH AL FL SC NC VA WV PA NY NJ CT RI MA VT NH ME DE MD | full set |\n\nRetrofit early states with: `python scripts/patch_raws.py WA OR TX CA NV UT ID MT AZ`\n\n## Product surfaces\n\n### Builder surface (`#/builder`)\nWorkspace tab (saved cells, comparison panel), Status tab (CRM tracker per site: contacts/events/notes/pipeline), Portfolio screening (CSV upload of lat/lons, scored results with gate check). Builder can look up their case ID under \"My Application\" to see read-only case file with full transparency into conditions being negotiated.\n\n### Steward surface (`#/steward`)\nKanban docket across all stages. Case file: versioned findings, conditions negotiation (propose/accept/reject), co-party coordination, rebuttal clock, document chain, CSV exports. Impasse register (route to mediation). Mandated studies workbench (section checklists, live progress).\n\n### Co-party surface (`#/co-party`)\nFiltered docket \u2014 only shows cases where the agency is invited. Same case file as steward, propose-only permissions. Co-party conditions show as \"Pending lead approval\" until lead approves.\n\n### Agency directory\n95 pre-registered WA state agencies (39 counties, 31 tribes, 12 utilities, 8 state agencies, 5 federal) in `AGENCY_DIRECTORY` (`data.js`). Lead agency invites from searchable directory modal with type filters. Email fallback for unregistered agencies.\n\n### Multi-party permission model\n| Action | Lead (steward) | Co-party | Builder |\n|---|---|---|---|\n| See findings + conditions | yes | yes | yes |\n| Propose condition | yes | yes (pending lead approval) | no |\n| Approve/reject condition | yes | no | no |\n| Invite co-parties | yes | no | no |\n| Change stage | yes | no | no |\n| Export CSV | yes | yes | no |\n| File rebuttal | no | no | yes (Rebuttal Cycle stage only) |\n\n## Multi-scale architecture\n\nThree normalization windows are planned:\n\n1. **National** \u2014 one-time post-processing pass after all states complete; re-ranks every\n   cell using raw values against the national distribution.\n2. **State** \u2014 current output (0-1, within-state). Default view.\n3. **County / ZCTA / parcel** \u2014 dynamic re-ranking in the frontend using raw values; no\n   new pipeline work needed. Raw columns in every GeoJSON enable arbitrary re-normalization.\n\n## Frontend\n\nReact + Leaflet, served statically. Add a completed state to `merascope/map.jsx`:\n\n```js\nconst GRID_URLS = [\n  // existing states ...\n  'data/WY/grid_scores.geojson',  // add new state here\n];\n```\n\nDev server: `cd ~/coding/merascope && python3 server.py` (Flask, port 8877 \u2014 NOT python3 -m http.server; Flask provides /api/log and /api/export/* routes)\n\n## Repo structure\n\n```\nmerascope/\n  index.html              \u2014 React frontend entry point (Tom)\n  merascope/              \u2014 JSX, CSS, JS components\n  scripts/                \u2014 10-step pipeline + patch scripts\n    config.py             \u2014 State bboxes, FIPS, UTM zones for all 50 states\n    run_pipeline.py       \u2014 Orchestrator (calls steps 01-10 in sequence)\n    01_basemap.py         \u2014 State boundary, data centers, transmission, EIA plants\n    02_indicators.py      \u2014 Fishnet grid + tx, water, ej, pop_exposure scores\n    03_risk.py            \u2014 seismic, flood scores\n    04_environment.py     \u2014 contamination, waterway scores\n    05_geothermal.py      \u2014 geothermal score (IHFC heat flow)\n    06_terrain.py         \u2014 flatness, slope scores (SRTM1, tiled processing)\n    07_protected.py       \u2014 protected score (federal + tribal hard gate)\n    08_aquifer.py         \u2014 aquifer score (USGS NWIS depth to water)\n    09_soil.py            \u2014 soil score (SSURGO hydrologic group)\n    10_soilprofile.py     \u2014 soil_profile, ksat scores (SSURGO horizons)\n    patch_water_score.py  \u2014 retrofit PRISM water_score in-place\n    patch_raws.py         \u2014 retrofit raw physical columns on completed states\n  data/                   \u2014 generated GeoJSON + CSVs (not in git; rsync separately)\n  METHODS.md              \u2014 full indicator methodology with citations\n  PIPELINE_GUIDE.md       \u2014 running and troubleshooting the pipeline\n```\n\n## Data sources\n\nAll publicly available.\n\n| Source | Used for |\n|---|---|\n| Census TIGER 2022 | State boundaries, census tracts |\n| OSM Overpass API | Data centers, HV transmission lines, major rivers |\n| EIA Form 860 (2023) | Power plant locations |\n| Census ACS 5-yr 2022 | Demographic burden (poverty + minority rate), population |\n| PRISM Climate Group 4km 30-yr normals | Annual precipitation |\n| USGS ASCE 7-22 API | Seismic hazard (PGA) |\n| FEMA NFHL REST API | Special Flood Hazard Areas |\n| EPA Envirofacts REST API (TRI_FACILITY) | Industrial facility proximity |\n| IHFC GHFDB 2024 | Geothermal heat flow boreholes |\n| NASA SRTM1 (AWS S3) | 30m digital elevation model |\n| Esri USA Federal Lands | NPS, USFWS, DoD, Forest Service boundaries |\n| Census TIGER AIANNH | Tribal land boundaries |\n| USGS NWIS (post-2025 OGC API) | Depth to water table |\n| USDA NRCS SSURGO (SDM REST API) | Soil drainage class, horizon properties |\n",
+    "tree": {
+      "dirs": {
+        "data": {
+          "dirs": {
+            "AL": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "AR": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "AZ": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "CA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "CO": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "CT": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "DE": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "FL": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "GA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "IA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "ID": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "IL": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "IN": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "KS": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "KY": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "LA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MD": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "ME": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MI": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MN": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MO": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MS": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "MT": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NC": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "ND": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NE": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NH": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NJ": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NM": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NV": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "NY": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "OH": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "OK": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "OR": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "PA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "RI": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "SC": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "SD": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "TN": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "TX": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "UT": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "VA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "VT": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "WA": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "WI": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "WV": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "WY": {
+              "dirs": {},
+              "files": [
+                "grid_scores.geojson"
+              ]
+            },
+            "raw": {
+              "dirs": {},
+              "files": [
+                "IHFC_2024_GHFDB.cpg",
+                "IHFC_2024_GHFDB.dbf",
+                "IHFC_2024_GHFDB.prj",
+                "IHFC_2024_GHFDB.qmd",
+                "IHFC_2024_GHFDB.shp",
+                "IHFC_2024_GHFDB.shx",
+                "acs_demog_wa.csv",
+                "datacenters.geojson",
+                "eia860_plants_wa.geojson",
+                "ghfdb_2024.rar",
+                "transmission_wa.geojson",
+                "wa_dem_utm.tif",
+                "wa_federal_lands.geojson",
+                "wa_heatflow.csv",
+                "wa_precip_coarse.csv",
+                "wa_seismic_sample.csv",
+                "wa_sfha.geojson",
+                "wa_srtm3.tif",
+                "wa_state.geojson",
+                "wa_tracts.geojson",
+                "wa_tribal_tiger.geojson"
+              ]
+            }
+          },
+          "files": [
+            "prism_ppt_30yr.tif"
+          ]
+        },
+        "merascope": {
+          "dirs": {},
+          "files": [
+            "app.jsx",
+            "builder.jsx",
+            "builder2.jsx",
+            "coparty.jsx",
+            "data.js",
+            "explorer.jsx",
+            "factsheets.jsx",
+            "landing.jsx",
+            "map.jsx",
+            "misc.jsx",
+            "sitelab.jsx",
+            "steward.jsx",
+            "steward2.jsx",
+            "styles.css",
+            "tracker.jsx",
+            "tweaks-panel.jsx",
+            "ui.jsx"
+          ]
+        },
+        "parcels": {
+          "dirs": {},
+          "files": [
+            "_quincy_check.py",
+            "grant_county.py",
+            "tri_cities.py"
+          ]
+        },
+        "scripts": {
+          "dirs": {
+            "zcta": {
+              "dirs": {},
+              "files": [
+                "02_zcta_indicators.py",
+                "run_zcta_study.py"
+              ]
+            }
+          },
+          "files": [
+            "01_basemap.py",
+            "02_indicators.py",
+            "03_risk.py",
+            "04_environment.py",
+            "05_geothermal.py",
+            "06_terrain.py",
+            "07_protected.py",
+            "08_aquifer.py",
+            "09_soil.py",
+            "10_soilprofile.py",
+            "config.py",
+            "normalize_national.py",
+            "patch_raws.py",
+            "patch_water_score.py",
+            "run_pipeline.py"
+          ]
+        }
+      },
+      "files": [
+        "environment.yml",
+        "index.html",
+        "manage_survey.py",
+        "server.py",
+        "test_portfolio.csv"
+      ]
+    },
+    "images": [],
+    "local_base": "images/merascope/"
   },
   "snotrac": {
     "name": "snotrac",

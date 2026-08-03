@@ -112,7 +112,7 @@ def copy_to_portfolio(src_abs, repo_name, rel_in_repo):
     if dest_dir:
         os.makedirs(dest_dir, exist_ok=True)
     shutil.copy2(src_abs, dest_rel)
-    return dest_rel.replace(os.sep, '/')
+    return os.path.relpath(dest_rel, SCRIPT_DIR).replace(os.sep, '/')
 
 
 def copy_readme_images(readme_text, repo_path, repo_name):
